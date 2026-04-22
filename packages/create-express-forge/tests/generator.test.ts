@@ -16,6 +16,9 @@ const baseOpts: CliOptions = {
   database: 'none',
   logger: 'none',
   testing: 'none',
+  cache: 'none',
+  auth: 'none',
+  openapi: false,
   docker: false,
   installDeps: false,
 };

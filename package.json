@@ -13,14 +13,16 @@
     "release": "pnpm run build && pnpm run test && changeset publish",
     "docs:dev": "cd docs && pnpm run dev",
     "docs:build": "cd docs && pnpm run build",
-    "docs:preview": "cd docs && pnpm run preview"
+    "docs:preview": "cd docs && pnpm run preview",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.7",
+    "eslint": "^8.57.0",
+    "husky": "^9.1.7",
     "prettier": "^3.3.3",
     "turbo": "^2.0.9",
-    "typescript": "5.5.3",
-    "eslint": "^8.57.0"
+    "typescript": "5.5.3"
   },
   "packageManager": "pnpm@9.0.0",
   "engines": {

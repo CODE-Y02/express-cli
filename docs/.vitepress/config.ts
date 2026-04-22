@@ -36,6 +36,9 @@ export default defineConfig({
           { text: "Architecture Patterns", link: "/guide/architecture" },
           { text: "Project Structure", link: "/guide/structure" },
           { text: "Core Features", link: "/guide/features" },
+          { text: "Authentication", link: "/guide/auth" },
+          { text: "Caching", link: "/guide/caching" },
+          { text: "API Documentation", link: "/guide/openapi" },
         ],
       },
       {
