@@ -37,11 +37,11 @@ jobs:
         with:
           version: 9
 
-      - name: Install docs dependencies
-        run: cd docs && pnpm install --frozen-lockfile
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Build VitePress site
-        run: cd docs && pnpm run build
+        run: pnpm run docs:build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
