@@ -53,7 +53,9 @@ jobs:
           fi
 
       - name: Build with VitePress
-        run: pnpm run docs:build
+        run: |
+          pnpm run docs:build
+          touch docs/.vitepress/dist/.nojekyll
         env:
           VITEPRESS_BASE: ${{ steps.vars.outputs.BASE }}
         

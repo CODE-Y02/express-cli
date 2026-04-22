@@ -1,12 +1,15 @@
 import { defineConfig } from "vitepress";
 
-// Detect current version/branch from environment variable for multi-version support
+// Detect if we are running in GitHub Actions and set the base path accordingly
 const base = process.env.VITEPRESS_BASE || "/express-cli/";
 
 export default defineConfig({
   title: "Express Forge",
   description: "⚡ Production-ready Express backends in seconds",
   base: base,
+  
+  // This is critical for GitHub Pages
+  outDir: "./.vitepress/dist",
 
   head: [["link", { rel: "icon", href: `${base}logo.svg` }]],
 
