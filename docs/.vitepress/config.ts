@@ -26,25 +26,14 @@ export default defineConfig({
       {
         text: 'Architecture',
         items: [
-          { text: 'Modular Pattern', link: '/guide/modular' },
-          { text: 'Architecture vs MVC', link: '/guide/architecture' }
-        ]
-      },
-      {
-        text: 'Features',
-        items: [
-          { text: 'Error Handling', link: '/guide/error-handling' },
-          { text: 'Prisma ORM', link: '/guide/prisma' },
-          { text: 'Docker', link: '/guide/docker' },
-          { text: 'Testing', link: '/guide/testing' },
-          { text: 'Logging', link: '/guide/logging' }
+          { text: 'Modular vs MVC', link: '/guide/architecture' },
+          { text: 'Core Features', link: '/guide/features' }
         ]
       },
       {
         text: 'Reference',
         items: [
-          { text: 'CLI Options', link: '/reference/cli-options' },
-          { text: 'Environment Variables', link: '/reference/env-vars' }
+          { text: 'CLI Options', link: '/reference/cli-options' }
         ]
       }
     ],
