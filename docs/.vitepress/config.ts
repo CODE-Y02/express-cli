@@ -28,7 +28,6 @@ export default defineConfig({
         items: [
           { text: "What is Express Forge?", link: "/" },
           { text: "Getting Started", link: "/guide/getting-started" },
-          { text: "Roadmap", link: "/roadmap" },
         ],
       },
       {

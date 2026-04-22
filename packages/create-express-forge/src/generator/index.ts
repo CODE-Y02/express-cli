@@ -15,6 +15,9 @@ import { generateSequelize } from './features/sequelize.js';
 import { generateLogger } from './features/logger.js';
 import { generateTesting } from './features/testing.js';
 import { generateDocker } from './features/docker.js';
+import { generateAuth } from './features/auth.js';
+import { generateCache } from './features/cache.js';
+import { generateOpenApi } from './features/openapi.js';
 
 export async function generateProject(opts: CliOptions, targetDir: string): Promise<void> {
   const spinner = ora();
@@ -73,6 +76,24 @@ export async function generateProject(opts: CliOptions, targetDir: string): Prom
       spinner.start(chalk.dim('Adding Docker files...'));
       await generateDocker(opts, targetDir);
       spinner.succeed(chalk.green('Docker + docker-compose'));
+    }
+
+    if (opts.auth !== 'none') {
+      spinner.start(chalk.dim(`Configuring ${opts.auth} authentication...`));
+      await generateAuth(opts, targetDir);
+      spinner.succeed(chalk.green(`${opts.auth.toUpperCase()} Auth`));
+    }
+
+    if (opts.cache !== 'none') {
+      spinner.start(chalk.dim(`Configuring ${opts.cache} caching...`));
+      await generateCache(opts, targetDir);
+      spinner.succeed(chalk.green(`${opts.cache.toUpperCase()} Cache`));
+    }
+
+    if (opts.openapi) {
+      spinner.start(chalk.dim('Generating OpenAPI docs...'));
+      await generateOpenApi(opts, targetDir);
+      spinner.succeed(chalk.green('OpenAPI (Swagger)'));
     }
 
     if (opts.installDeps) {

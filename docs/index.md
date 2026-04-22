@@ -15,12 +15,6 @@ hero:
     - theme: alt
       text: Documentation
       link: /guide/architecture
-    - theme: alt
-      text: GitHub
-      link: https://github.com/CODE-Y02/express-cli
-    - theme: alt
-      text: 🚀 Roadmap
-      link: /roadmap
 
 features:
   - icon: ⚡
@@ -35,17 +29,22 @@ features:
   - icon: 💾
     title: Type-safe ORM
     details: First-class support for Prisma and Sequelize with pre-configured migrations.
-  - icon: 🐳
-    title: Docker Ready
-    details: Multi-stage Dockerfiles and docker-compose setups included for seamless deployment.
+  - icon: 🔐
+    title: Auth Scaffolding
+    details: Pre-configured JWT or Session-based authentication with best-practice security.
+  - icon: 📜
+    title: OpenAPI Docs
+    details: Automatically generated Swagger documentation from your Zod schemas and routes.
+  - icon: 🔴
+    title: Redis Caching
+    details: Built-in support for Redis and Node-Cache to boost your API performance.
   - icon: 🧪
     title: Quality Assured
     details: Pre-configured testing suites with Vitest or Jest, including example integration tests.
-  - icon: 🛡️
-    title: Enterprise Logic
-    details: Centralized error handling, custom ApiError class, and structured ApiResponse wrappers.
+  - icon: 🐳
+    title: Docker Ready
+    details: Multi-stage Dockerfiles and docker-compose setups included for seamless deployment.
 ---
-
 
 <div class="why-section">
 
@@ -106,21 +105,6 @@ features:
   transform: translateY(-2px);
 }
 
-.why-section h2 {
-  font-size: 2rem;
-  font-weight: 800;
-  margin-bottom: 24px;
-  background: var(--vp-home-hero-name-background);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-} 
-
- .why-section p {
-  font-size: 1.1rem;
-  color: var(--vp-c-text-2);
-  line-height: 1.6;
-} 
-
 .why-section h3 {
   margin-top: 48px;
   font-size: 1.5rem;
@@ -148,14 +132,6 @@ features:
 .why-section li:hover {
   transform: scale(1.02);
   border-color: var(--vp-c-brand-1);
-}
-
-.why-section li strong {
-  display: block;
-  margin-bottom: 8px;
-  color: var(--vp-c-brand-1);
-  font-size: 1.1rem;
-  font-weight: 700;
 }
 
 @media (max-width: 768px) {
