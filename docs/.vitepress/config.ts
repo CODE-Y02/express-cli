@@ -7,9 +7,6 @@ export default defineConfig({
   title: "Express Forge",
   description: "⚡ Production-ready Express backends in seconds",
   base: base,
-  
-  // This is critical for GitHub Pages
-  outDir: "./.vitepress/dist",
 
   head: [["link", { rel: "icon", href: `${base}logo.svg` }]],
 

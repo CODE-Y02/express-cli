@@ -2,19 +2,22 @@ name: Deploy Docs
 
 on:
   push:
-    branches:
-      - main
-      - next
-      - "v*"
+    branches: [main]
     paths:
       - 'docs/**'
       - '.github/workflows/docs.yml'
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -35,34 +38,23 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
         
-      - name: Determine Base Path
-        id: vars
-        run: |
-          BRANCH=${GITHUB_REF#refs/heads/}
-          if [ "$BRANCH" = "main" ]; then
-            echo "BASE=/express-cli/" >> $GITHUB_OUTPUT
-            echo "FOLDER=." >> $GITHUB_OUTPUT
-          elif [ "$BRANCH" = "next" ]; then
-            echo "BASE=/express-cli/next/" >> $GITHUB_OUTPUT
-            echo "FOLDER=next" >> $GITHUB_OUTPUT
-          elif [[ $BRANCH == v* ]]; then
-            # Extract major version, e.g., v1 from v1.x
-            VERSION=$(echo $BRANCH | cut -d'.' -f1)
-            echo "BASE=/express-cli/$VERSION/" >> $GITHUB_OUTPUT
-            echo "FOLDER=$VERSION" >> $GITHUB_OUTPUT
-          fi
-
       - name: Build with VitePress
-        run: |
-          pnpm run docs:build
-          touch docs/.vitepress/dist/.nojekyll
+        run: pnpm run docs:build
         env:
-          VITEPRESS_BASE: ${{ steps.vars.outputs.BASE }}
+          VITEPRESS_BASE: /express-cli/
         
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/.vitepress/dist
-          destination_dir: ${{ steps.vars.outputs.FOLDER }}
-          keep_files: true # CRITICAL: This keeps other versions alive!
+          path: docs/.vitepress/dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
