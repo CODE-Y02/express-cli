@@ -1,13 +1,14 @@
 import { defineConfig } from "vitepress";
 
+// Detect current version/branch from environment variable for multi-version support
+const base = process.env.VITEPRESS_BASE || "/express-cli/";
+
 export default defineConfig({
   title: "Express Forge",
   description: "⚡ Production-ready Express backends in seconds",
+  base: base,
 
-  // Important for GitHub Pages deployment
-  base: "/express-cli/",
-
-  head: [["link", { rel: "icon", href: "/express-cli/logo.svg" }]],
+  head: [["link", { rel: "icon", href: `${base}logo.svg` }]],
 
   themeConfig: {
     logo: "/logo.svg",
@@ -19,6 +20,14 @@ export default defineConfig({
     nav: [
       { text: "Guide", link: "/guide/getting-started" },
       { text: "Features", link: "/guide/features" },
+      {
+        text: "Versions",
+        items: [
+          { text: "Latest (v2.x)", link: "https://code-y02.github.io/express-cli/" },
+          { text: "Beta (Next)", link: "https://code-y02.github.io/express-cli/next/" },
+          { text: "Legacy (v1.x)", link: "https://code-y02.github.io/express-cli/v1/" },
+        ],
+      },
       { text: "Reference", link: "/reference/cli-options" },
     ],
 
@@ -28,7 +37,6 @@ export default defineConfig({
         items: [
           { text: "What is Express Forge?", link: "/" },
           { text: "Getting Started", link: "/guide/getting-started" },
-          { text: "Roadmap", link: "/roadmap" },
         ],
       },
       {
@@ -37,6 +45,9 @@ export default defineConfig({
           { text: "Architecture Patterns", link: "/guide/architecture" },
           { text: "Project Structure", link: "/guide/structure" },
           { text: "Core Features", link: "/guide/features" },
+          { text: "Authentication", link: "/guide/auth" },
+          { text: "Caching", link: "/guide/caching" },
+          { text: "API Documentation", link: "/guide/openapi" },
         ],
       },
       {
