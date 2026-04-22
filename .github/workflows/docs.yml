@@ -43,6 +43,9 @@ jobs:
       - name: Build VitePress site
         run: pnpm run docs:build
 
+      - name: Debug Build Output
+        run: ls -R docs/.vitepress/dist
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

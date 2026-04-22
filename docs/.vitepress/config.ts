@@ -4,7 +4,7 @@ export default defineConfig({
   title: 'create-express-forge',
   description: '⚡ Scaffold production-ready Express.js TypeScript backends in seconds',
   base: '/express-cli/',
-  cleanUrls: true,
+  // cleanUrls: true, // Disable this to troubleshoot routing issues on GitHub Pages
   lastUpdated: true,
 
   head: [
