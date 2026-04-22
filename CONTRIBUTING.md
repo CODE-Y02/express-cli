@@ -10,8 +10,8 @@ Thank you for contributing! 🎉
 ## Setup
 
 ```bash
-git clone https://github.com/CODE-Y02/create-express-forge
-cd create-express-forge
+git clone https://github.com/CODE-Y02/express-cli
+cd express-cli
 pnpm install
 pnpm run build
 ```
