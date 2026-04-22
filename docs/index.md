@@ -46,8 +46,6 @@ features:
     details: Multi-stage Dockerfiles and docker-compose setups included for seamless deployment.
 ---
 
-<div class="why-section">
-
 ### 🚀 Key Benefits
 
 - **Zero Configuration**: Sensible defaults that work out of the box.
@@ -57,14 +55,4 @@ features:
 
 ### 🛠 Built With
 
-<div class="tech-stack">
-  <span class="tech-badge">TypeScript</span>
-  <span class="tech-badge">Express.js</span>
-  <span class="tech-badge">Prisma</span>
-  <span class="tech-badge">Docker</span>
-  <span class="tech-badge">Vitest</span>
-  <span class="tech-badge">Zod</span>
-  <span class="tech-badge">Pino</span>
-</div>
-
-</div>
+TypeScript · Express.js · Prisma · Docker · Vitest · Zod · Pino

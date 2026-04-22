@@ -259,3 +259,52 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 0.8rem;
   }
 }
+
+/* Target standard Markdown elements on the Home layout */
+.VPHome .vp-doc h3 {
+  margin-top: 64px;
+  margin-bottom: 24px;
+  text-align: center;
+  font-size: 2rem;
+  background: var(--vp-home-hero-name-background);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.VPHome .vp-doc ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  list-style: none;
+  padding: 0;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.VPHome .vp-doc li {
+  background: var(--vp-c-bg-soft);
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid var(--vp-c-divider);
+  transition: all 0.3s ease;
+}
+
+.VPHome .vp-doc li:hover {
+  transform: translateY(-5px);
+  border-color: var(--vp-c-brand-1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.VPHome .vp-doc li strong {
+  display: block;
+  color: var(--vp-c-brand-1);
+  margin-bottom: 8px;
+}
+
+.VPHome .vp-doc p:last-child {
+  text-align: center;
+  font-weight: 700;
+  color: var(--vp-c-text-2);
+  margin-top: 32px;
+  letter-spacing: 0.1em;
+}
