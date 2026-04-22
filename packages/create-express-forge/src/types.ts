@@ -3,6 +3,8 @@ export type ORM = 'prisma' | 'sequelize' | 'none';
 export type Database = 'postgresql' | 'mysql' | 'sqlite' | 'none';
 export type LoggerLib = 'winston' | 'pino' | 'none';
 export type TestingLib = 'vitest' | 'jest' | 'none';
+export type CacheLib = 'redis' | 'node-cache' | 'none';
+export type AuthStrategy = 'jwt' | 'session' | 'none';
 
 export interface CliOptions {
   projectName: string;
@@ -11,6 +13,9 @@ export interface CliOptions {
   database: Database;
   logger: LoggerLib;
   testing: TestingLib;
+  cache: CacheLib;
+  auth: AuthStrategy;
+  openapi: boolean;
   docker: boolean;
   installDeps: boolean;
 }

@@ -121,8 +121,14 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
+/* Hero Buttons */
+.VPHero .actions {
+  justify-content: center !important;
+  gap: 12px !important;
+}
+
 /* Overflow & Clipping Prevention */
-* {
+.vp-doc p, .vp-doc li {
   overflow-wrap: break-word;
 }
 

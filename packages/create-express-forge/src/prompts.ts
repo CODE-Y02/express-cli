@@ -66,6 +66,26 @@ export async function runCLI(initialProjectName?: string) {
     ],
   });
 
+  const auth = await select<CliOptions['auth']>({
+    message: 'Authentication strategy:',
+    choices: [
+      { name: '🔐  JWT       (stateless, token-based — recommended)', value: 'jwt' },
+      { name: '🍪  Session   (stateful, cookie-based)', value: 'session' },
+      { name: '⬜  None', value: 'none' },
+    ],
+  });
+
+  const cache = await select<CliOptions['cache']>({
+    message: 'Caching layer:',
+    choices: [
+      { name: '🔴  Redis      (distributed, high-performance)', value: 'redis' },
+      { name: '💾  Node-Cache (simple, in-memory)', value: 'node-cache' },
+      { name: '⬜  None', value: 'none' },
+    ],
+  });
+
+  const openapi = await confirm({ message: 'Add OpenAPI (Swagger) documentation?', default: true });
+
   const docker = await confirm({ message: 'Add Docker + docker-compose?', default: true });
   const installDeps = await confirm({ message: 'Install dependencies now?', default: true });
 
@@ -76,6 +96,9 @@ export async function runCLI(initialProjectName?: string) {
     database,
     logger,
     testing,
+    auth,
+    cache,
+    openapi,
     docker,
     installDeps,
   };

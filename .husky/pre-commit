@@ -1,0 +1,14 @@
+pnpm run check-types
+pnpm run lint
+pnpm run build
+pnpm run test
+
+# 🚀 Mandatory Changeset Check
+# If files in packages/ are changed, a changeset MUST be included.
+if git diff --cached --name-only | grep -q "^packages/"; then
+  if ! git diff --cached --name-only | grep -q "^\.changeset/.*\.md$"; then
+    echo "❌ ERROR: You have modified packages but no changeset was found."
+    echo "💡 Please run 'pnpm changeset' to add one before committing."
+    exit 1
+  fi
+fi

@@ -1,7 +1,7 @@
 import type { CliOptions } from '../types.js';
 
 export function buildPackageJson(opts: CliOptions): object {
-  const { projectName, orm, database, logger, testing } = opts;
+  const { projectName, orm, database, logger, testing, cache, auth, openapi } = opts;
 
   const deps: Record<string, string> = {
     express: '^4.19.2',
@@ -56,6 +56,27 @@ export function buildPackageJson(opts: CliOptions): object {
     devDeps['@types/jest'] = '^29.5.12';
     devDeps['supertest'] = '^7.0.0';
     devDeps['@types/supertest'] = '^6.0.2';
+  }
+
+  if (cache === 'redis') {
+    deps['redis'] = '^4.6.14';
+  } else if (cache === 'node-cache') {
+    deps['node-cache'] = '^5.1.2';
+  }
+
+  if (auth === 'jwt') {
+    deps['jsonwebtoken'] = '^9.0.2';
+    devDeps['@types/jsonwebtoken'] = '^9.0.6';
+  } else if (auth === 'session') {
+    deps['express-session'] = '^1.18.0';
+    devDeps['@types/express-session'] = '^1.18.0';
+  }
+
+  if (openapi) {
+    deps['swagger-jsdoc'] = '^6.2.8';
+    deps['swagger-ui-express'] = '^5.0.1';
+    devDeps['@types/swagger-jsdoc'] = '^6.0.4';
+    devDeps['@types/swagger-ui-express'] = '^4.1.6';
   }
 
   const scripts: Record<string, string> = {
