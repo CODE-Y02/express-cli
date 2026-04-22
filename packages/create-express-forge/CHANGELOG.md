@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0
+
+### Major Changes
+
+- 3b31da8: v2
+
 ## 1.0.0
 
 ### Major Changes
