@@ -1,6 +1,6 @@
 {
   "name": "create-express-forge",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "⚡ Scaffold production-ready Express.js TypeScript backends in seconds",
   "license": "MIT",
   "type": "module",
@@ -15,14 +15,26 @@
     "url": "https://github.com/CODE-Y02/express-cli/issues"
   },
   "keywords": [
-    "express", "cli", "scaffold", "create-app",
-    "typescript", "prisma", "backend", "starter", "boilerplate", "nodejs"
+    "express",
+    "cli",
+    "scaffold",
+    "create-app",
+    "typescript",
+    "prisma",
+    "backend",
+    "starter",
+    "boilerplate",
+    "nodejs"
   ],
   "bin": {
     "create-express-forge": "./dist/index.js",
     "cef": "./dist/index.js"
   },
-  "files": ["dist", "README.md", "CHANGELOG.md"],
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
   "exports": {
     ".": "./dist/index.js"
   },
