@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.0
+
+### Major Changes
+
+- cfe08be: fix: resolve initial build and linting issues
+
+### Minor Changes
+
+- 5081374: Patch for prisma
+
 ## 0.1.0
 
 ### Minor Changes
