@@ -6,11 +6,23 @@ on:
       - main
       - next
       - "v*"
+    paths:
+      - 'packages/**'
+      - '.changeset/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/pipeline.yml'
   pull_request:
     branches:
       - main
       - next
       - "v*"
+    paths:
+      - 'packages/**'
+      - '.changeset/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/pipeline.yml'
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
