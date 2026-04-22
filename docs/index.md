@@ -18,6 +18,9 @@ hero:
     - theme: alt
       text: GitHub
       link: https://github.com/CODE-Y02/express-cli
+    - theme: alt
+      text: 🚀 Roadmap
+      link: /roadmap
 
 features:
   - icon: ⚡
@@ -38,6 +41,9 @@ features:
   - icon: 🧪
     title: Quality Assured
     details: Pre-configured testing suites with Vitest or Jest, including example integration tests.
+  - icon: 🛡️
+    title: Enterprise Logic
+    details: Centralized error handling, custom ApiError class, and structured ApiResponse wrappers.
 ---
 
 

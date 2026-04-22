@@ -55,26 +55,55 @@ jobs:
 
       - name: Version and Publish
         run: |
+          BRANCH=${GITHUB_REF#refs/heads/}
+          echo "🌿 Current branch: $BRANCH"
+          
+          # Setup git
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Determine Primary and Secondary NPM tags based on branch
+          TAG="latest"
+          EXTRA_TAG=""
+          
+          if [ "$BRANCH" = "next" ]; then
+            TAG="next"
+            EXTRA_TAG="beta"
+          elif [[ $BRANCH == v* ]]; then
+            TAG="legacy"
+          elif [ "$BRANCH" = "main" ]; then
+            TAG="latest"
+            EXTRA_TAG="stable"
+          fi
+          
+          echo "🏷️ Primary Tag: $TAG"
+          [ -n "$EXTRA_TAG" ] && echo "🏷️ Extra Tag: $EXTRA_TAG"
+
           # If there are changesets, version them and commit
           if [ "$(ls .changeset/*.md 2>/dev/null | grep -v 'README.md')" ]; then
             echo "🚀 Changesets found. Versioning..."
             
-            # Setup git
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            
             # Version packages
             pnpm changeset version
             
-            # Commit and push back to main (with [skip ci] to avoid loops)
+            # Commit and push back to current branch
             git add .
             git commit -m "chore(release): version packages [skip ci]"
-            git push origin main
+            git push origin $BRANCH
           fi
           
-          # Publish to NPM (only if not already published)
-          echo "📦 Publishing to NPM..."
-          pnpm run release
+          # Publish to NPM
+          echo "📦 Publishing to NPM with tag: $TAG"
+          pnpm changeset publish --tag $TAG
+
+          # Add extra tags if defined
+          if [ -n "$EXTRA_TAG" ]; then
+            echo "🏷️ Adding extra tag: $EXTRA_TAG"
+            # Loop through all packages and add the extra tag to the newly published version
+            pnpm -r exec sh -c 'npm dist-tag add $(node -p "require(\"./package.json\").name")@$(node -p "require(\"./package.json\").version") '$EXTRA_TAG || echo "⚠️ Could not add extra tag"
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+

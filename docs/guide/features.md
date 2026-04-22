@@ -43,3 +43,28 @@ Every Express Forge project handles `SIGTERM` and `SIGINT` signals correctly. Th
 2. Existing requests are finished.
 3. Database connections are closed cleanly.
 4. The process exits without data corruption.
+
+## 🛠️ Error Handling & Responses
+Express Forge enforces a consistent communication pattern between your API and clients.
+
+### Centralized Error Handling
+A global error middleware is the "safety net" for your application. It catches all errors and transforms them into structured JSON responses, handling `Zod` validation errors and custom `ApiError` instances automatically.
+
+### Custom `ApiError` Class
+Stop throwing generic strings. Use the built-in `ApiError` class to provide context, status codes, and operational flags:
+- `ApiError.notFound('User not found')`
+- `ApiError.unauthorized()`
+- `ApiError.badRequest('Invalid input', validationErrors)`
+
+### Standardized `ApiResponse`
+Ensure your frontend team always knows what to expect. Every success response follows a predictable schema:
+```json
+{
+  "success": true,
+  "message": "Operation successful",
+  "data": { ... }
+}
+```
+
+### Async Error Wrapper
+The provided `asyncHandler` utility eliminates the need for `try-catch` blocks in your controllers, automatically forwarding any promise rejections to the global error handler.
