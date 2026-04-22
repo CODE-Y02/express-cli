@@ -32,6 +32,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+          scope: '@repo'
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
@@ -55,8 +57,19 @@ jobs:
 
       - name: Version and Publish
         run: |
-          BRANCH=${GITHUB_REF#refs/heads/}
+          # Detect branch name correctly for both Push and PR
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BRANCH=${{ github.head_ref }}
+          else
+            BRANCH=${GITHUB_REF#refs/heads/}
+          fi
           echo "🌿 Current branch: $BRANCH"
+          
+          # 🛑 SKIP VERSIONING/PUBLISHING ON PULL REQUESTS OR DEV BRANCH
+          if [ "${{ github.event_name }}" = "pull_request" ] || [ "$BRANCH" = "dev" ]; then
+            echo "🔍 Pull Request or DEV branch detected. Skipping versioning and publishing logic."
+            exit 0
+          fi
           
           # Setup git
           git config user.name "github-actions[bot]"
@@ -105,5 +118,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
 
