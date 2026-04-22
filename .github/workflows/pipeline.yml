@@ -112,8 +112,8 @@ jobs:
           # Add extra tags if defined
           if [ -n "$EXTRA_TAG" ]; then
             echo "🏷️ Adding extra tag: $EXTRA_TAG"
-            # Loop through all packages and add the extra tag to the newly published version
-            pnpm -r exec sh -c 'npm dist-tag add $(node -p "require(\"./package.json\").name")@$(node -p "require(\"./package.json\").version") '$EXTRA_TAG || echo "⚠️ Could not add extra tag"
+            # Loop through all packages and add the extra tag to the newly published version (skipping private packages)
+            pnpm -r exec sh -c 'if [ "$(node -p "require(\"./package.json\").private")" != "true" ]; then npm dist-tag add $(node -p "require(\"./package.json\").name")@$(node -p "require(\"./package.json\").version") '$EXTRA_TAG'; fi' || echo "⚠️ Could not add extra tag"
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
