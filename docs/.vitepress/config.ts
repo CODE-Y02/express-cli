@@ -3,12 +3,12 @@ import { defineConfig } from 'vitepress';
 export default defineConfig({
   title: 'create-express-forge',
   description: '⚡ Scaffold production-ready Express.js TypeScript backends in seconds',
-  base: '/create-express-forge/',
+  base: '/express-cli/',
   cleanUrls: true,
   lastUpdated: true,
 
   head: [
-    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/create-express-forge/logo.svg' }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/express-cli/logo.svg' }],
     ['meta', { name: 'theme-color', content: '#7C3AED' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: 'create-express-forge' }],
@@ -26,15 +26,15 @@ export default defineConfig({
         text: 'v0.1.x',
         items: [
           { text: 'v0.1.x (current)', link: '/' },
-          { text: 'Changelog', link: 'https://github.com/CODE-Y02/create-express-forge/blob/main/packages/create-express-forge/CHANGELOG.md' },
+          { text: 'Changelog', link: 'https://github.com/CODE-Y02/express-cli/blob/main/packages/create-express-forge/CHANGELOG.md' },
         ],
       },
       {
         text: 'Links',
         items: [
           { text: 'npm', link: 'https://www.npmjs.com/package/create-express-forge' },
-          { text: 'GitHub', link: 'https://github.com/CODE-Y02/create-express-forge' },
-          { text: 'Issues', link: 'https://github.com/CODE-Y02/create-express-forge/issues' },
+          { text: 'GitHub', link: 'https://github.com/CODE-Y02/express-cli' },
+          { text: 'Issues', link: 'https://github.com/CODE-Y02/express-cli/issues' },
         ],
       },
     ],
@@ -79,7 +79,7 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/CODE-Y02/create-express-forge' },
+      { icon: 'github', link: 'https://github.com/CODE-Y02/express-cli' },
       { icon: 'npm', link: 'https://www.npmjs.com/package/create-express-forge' },
     ],
 
@@ -93,7 +93,7 @@ export default defineConfig({
     },
 
     editLink: {
-      pattern: 'https://github.com/CODE-Y02/create-express-forge/edit/main/docs/:path',
+      pattern: 'https://github.com/CODE-Y02/express-cli/edit/main/docs/:path',
       text: 'Edit this page on GitHub',
     },
   },

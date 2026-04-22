@@ -7,12 +7,12 @@
   "author": "Yatharth Lakhate (https://code-y02.github.io/)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CODE-Y02/create-express-forge.git",
+    "url": "git+https://github.com/CODE-Y02/express-cli.git",
     "directory": "packages/create-express-forge"
   },
-  "homepage": "https://github.com/CODE-Y02/create-express-forge#readme",
+  "homepage": "https://github.com/CODE-Y02/express-cli#readme",
   "bugs": {
-    "url": "https://github.com/CODE-Y02/create-express-forge/issues"
+    "url": "https://github.com/CODE-Y02/express-cli/issues"
   },
   "keywords": [
     "express", "cli", "scaffold", "create-app",

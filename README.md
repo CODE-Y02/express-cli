@@ -3,7 +3,7 @@
 > ⚡ Scaffold production-ready Express.js TypeScript backends in seconds
 
 [![npm version](https://img.shields.io/npm/v/create-express-forge.svg)](https://www.npmjs.com/package/create-express-forge)
-[![CI](https://github.com/CODE-Y02/create-express-forge/actions/workflows/ci.yml/badge.svg)](https://github.com/CODE-Y02/create-express-forge/actions)
+[![CI](https://github.com/CODE-Y02/express-cli/actions/workflows/pipeline.yml/badge.svg)](https://github.com/CODE-Y02/express-cli/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## Quick Start
