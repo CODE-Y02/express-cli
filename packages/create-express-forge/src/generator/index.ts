@@ -82,8 +82,13 @@ export async function generateProject(opts: CliOptions, targetDir: string): Prom
 
       if (opts.orm === 'prisma') {
         spinner.start(chalk.dim('Generating Prisma client...'));
-        await execa('npx', ['prisma', 'generate'], { cwd: targetDir });
-        spinner.succeed(chalk.green('Prisma client generated'));
+        try {
+          await execa('npx', ['prisma', 'generate'], { cwd: targetDir });
+          spinner.succeed(chalk.green('Prisma client generated'));
+        } catch (err) {
+          spinner.warn(chalk.yellow('Prisma client generation skipped (network/env issue)'));
+          console.log(chalk.dim('  You can run "npx prisma generate" manually once your network is stable.'));
+        }
       }
     }
 

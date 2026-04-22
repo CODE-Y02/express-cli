@@ -7,7 +7,32 @@ export async function generatePrisma(opts: CliOptions, dir: string): Promise<voi
   const dbUrl = opts.database === 'sqlite' ? 'file:./dev.db' : opts.database === 'mysql' ? 'mysql://user:password@localhost:3306/mydb' : 'postgresql://user:password@localhost:5432/mydb';
 
   await writeFile(path.join(dir, 'prisma', 'schema.prisma'),
-    `generator client {\n  provider = "prisma-client-js"\n}\n\ndatasource db {\n  provider = "${provider}"\n  url      = env("DATABASE_URL")\n}\n\nmodel User {\n  id        String   @id @default(cuid())\n  name      String\n  email     String   @unique\n  password  String\n  role      Role     @default(USER)\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n  @@map("users")\n}\n\nenum Role {\n  USER\n  ADMIN\n}\n`);
+    `generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x", "debian-openssl-3.0.x", "linux-musl", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "${provider}"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("users")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+`);
 
   await writeFile(path.join(dir, 'prisma', 'seed.ts'),
     `import { PrismaClient } from '@prisma/client';\nconst prisma = new PrismaClient();\nasync function main() {\n  console.log('🌱 Seeding...');\n  // add seed data here\n  console.log('✅ Done');\n}\nmain().catch(console.error).finally(() => prisma.$disconnect());\n`);
