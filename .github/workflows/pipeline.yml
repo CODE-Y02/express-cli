@@ -107,7 +107,18 @@ jobs:
           
           # Publish to NPM
           echo "📦 Publishing to NPM with tag: $TAG"
-          pnpm changeset publish --tag $TAG
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > .npmrc
+          
+          # We use a subshell to catch if publish is skipped or fails
+          if pnpm changeset publish --tag $TAG; then
+            echo "✅ Publish successful"
+          else
+            echo "⚠️ Publish skipped or failed. Force-updating tags for safety..."
+          fi
+
+          # 🚀 CRITICAL FIX: Always ensure the primary tag points to the current version
+          # This handles the case where v2.0.0 was already published to 'next' and now we need it on 'latest'
+          pnpm -r exec sh -c 'if [ "$(node -p "require(\"./package.json\").private")" != "true" ]; then npm dist-tag add $(node -p "require(\"./package.json\").name")@$(node -p "require(\"./package.json\").version") '$TAG'; fi' || echo "⚠️ Could not update primary tag"
 
           # Add extra tags if defined
           if [ -n "$EXTRA_TAG" ]; then
