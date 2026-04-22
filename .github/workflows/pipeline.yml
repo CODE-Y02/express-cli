@@ -53,13 +53,28 @@ jobs:
       - name: Test
         run: pnpm run test
 
-      - name: Create Release PR or Publish
-        id: changesets
-        uses: changesets/action@v1
-        with:
-          publish: pnpm run release
-          commit: "chore(release): version packages"
-          title: "chore(release): version packages"
+      - name: Version and Publish
+        run: |
+          # If there are changesets, version them and commit
+          if [ "$(ls .changeset/*.md 2>/dev/null | grep -v 'README.md')" ]; then
+            echo "🚀 Changesets found. Versioning..."
+            
+            # Setup git
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            
+            # Version packages
+            pnpm changeset version
+            
+            # Commit and push back to main (with [skip ci] to avoid loops)
+            git add .
+            git commit -m "chore(release): version packages [skip ci]"
+            git push origin main
+          fi
+          
+          # Publish to NPM (only if not already published)
+          echo "📦 Publishing to NPM..."
+          pnpm run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
