@@ -3,9 +3,14 @@ name: Release
 on:
   push:
     branches:
-      - main       # stable  → npm tag: latest
-      - "v*"       # patches → npm tag: latest
-      - next       # beta    → npm tag: next
+      - main
+      - next
+      - "v*"
+  pull_request:
+    branches:
+      - main
+      - next
+      - "v*"
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
@@ -41,6 +46,9 @@ jobs:
 
       - name: Type check
         run: pnpm run check-types
+
+      - name: Lint
+        run: pnpm run lint
 
       - name: Test
         run: pnpm run test
