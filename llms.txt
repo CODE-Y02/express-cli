@@ -1,0 +1,32 @@
+# create-express-forge
+
+> CLI to scaffold production-ready Express.js TypeScript backends
+
+## Repository
+
+- GitHub: https://github.com/CODE-Y02/create-express-forge
+- npm: https://www.npmjs.com/package/create-express-forge
+
+## Package Manager
+
+pnpm@9 with Turborepo
+
+## Published Packages
+
+- `create-express-forge` — The CLI scaffolder
+
+## Key Files
+
+- ARCHITECTURE.md — Full architecture documentation
+- AGENTS.md — AI agent instructions
+- CONTRIBUTING.md — How to contribute
+- packages/create-express-forge/src/types.ts — All CLI option types
+- packages/create-express-forge/src/generator/index.ts — Generator orchestrator
+
+## What It Generates
+
+Express.js + TypeScript backends with:
+Zod env validation, centralized error handling, request validation middleware,
+ApiError class, ApiResponse helpers, asyncHandler, helmet, cors, rate limiter,
+graceful shutdown, optional Prisma/Sequelize ORM, Winston/Pino logger,
+Vitest/Jest testing, Docker + docker-compose

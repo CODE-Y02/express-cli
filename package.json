@@ -1,0 +1,28 @@
+{
+  "name": "create-express-forge",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+    "check-types": "turbo run check-types",
+    "test": "turbo run test",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "pnpm run build && pnpm run test && changeset publish",
+    "docs:dev": "cd docs && pnpm run dev",
+    "docs:build": "cd docs && pnpm run build",
+    "docs:preview": "cd docs && pnpm run preview"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.7",
+    "prettier": "^3.3.3",
+    "turbo": "^2.0.9",
+    "typescript": "5.5.3"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=18"
+  }
+}
