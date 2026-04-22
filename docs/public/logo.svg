@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7c4dff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00e5ff;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Hammer/Anvil stylized icon -->
+  <path fill="url(#grad1)" d="M416 128h-64V64a32 32 0 0 0-32-32H192a32 32 0 0 0-32 32v64H96a64 64 0 0 0-64 64v64a64 64 0 0 0 64 64h32v128a32 32 0 0 0 32 32h192a32 32 0 0 0 32-32V320h32a64 64 0 0 0 64-64v-64a64 64 0 0 0-64-64zM192 64h128v64H192zm160 384H160V320h192zM416 256h-32V192h32zM96 256V192h32v64z"/>
+  <!-- Lightning bolt overlay -->
+  <path fill="#fff" d="M288 160l-96 128h64l-32 96 128-160h-64l32-64z"/>
+</svg>

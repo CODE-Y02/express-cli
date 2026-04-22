@@ -1,25 +1,45 @@
 # Core Features
 
-`create-express-forge` comes packed with production-ready features.
+Express Forge comes packed with everything you need to build robust APIs.
 
-## 🛡 Error Handling
+## 🛡️ TypeScript First
+Type safety is at the core of Express Forge. Every scaffolded project includes:
+- Strict TypeScript configuration.
+- Path aliases (e.g., `@modules/users`).
+- Type-safe environment variables.
+- Zod integration for request validation.
 
-- **Centralized Middleware**: A single place to handle all your application errors.
-- **ApiError Class**: Custom error class for consistent API responses.
-- **Async Wrapper**: No more `try/catch` in every route.
+## 💾 Database Integration
+Choose your favorite ORM and get started instantly:
+- **Prisma**: Modern ORM with auto-generated client and type-safe queries.
+- **Sequelize**: The most popular traditional ORM for Node.js.
+- **Migrations**: Pre-configured scripts to handle database schema changes.
 
-## 🔷 Database & ORM
+## 🧪 Testing Suite
+Don't ship broken code. Express Forge sets up a complete testing environment:
+- **Vitest/Jest**: Choose your favorite test runner.
+- **Supertest**: For high-level API integration tests.
+- **Example Tests**: Every scaffolded project includes example unit and integration tests.
 
-- **Prisma**: Type-safe ORM with auto-generated client.
-- **Sequelize**: Reliable and mature ORM for SQL databases.
-- **Seeding**: Pre-configured seeding scripts.
+## 🐳 Docker Support
+Ship to production with confidence:
+- **Multi-stage Build**: Optimized Dockerfiles for smaller production images.
+- **Docker Compose**: Includes a `docker-compose.yml` with a database setup for local development.
 
-## 🐳 Docker
+## 🔐 Security Best Practices
+Stay secure by default with pre-configured industry standards:
+- **Helmet**: Automatically sets security-related HTTP headers to protect against common vulnerabilities.
+- **CORS**: Flexible Cross-Origin Resource Sharing configuration.
+- **Rate Limiting**: Integrated `express-rate-limit` to prevent brute-force attacks and DDoS.
+- **Dotenv & Zod**: Every environment variable is validated on startup. If a variable is missing or malformed, the app fails fast with a clear error message.
 
-- **Multi-stage Builds**: Small and secure production images.
-- **Docker Compose**: Ready-to-use setup with your choice of database.
+## 📝 Logging & Monitoring
+- **Pino/Winston**: High-performance, structured logging. Pino is used by default for its extreme speed and JSON output, which is perfect for log aggregators like ELK or Datadog.
+- **Health Checks**: A standard `/health` endpoint is included, providing uptime, memory usage, and database connectivity status.
 
-## 🧪 Testing
-
-- **Vitest**: Blazing fast, ESM-native testing.
-- **Jest**: The industry standard for JavaScript testing.
+## 🧱 Graceful Shutdown
+Every Express Forge project handles `SIGTERM` and `SIGINT` signals correctly. This ensures that:
+1. No new requests are accepted.
+2. Existing requests are finished.
+3. Database connections are closed cleanly.
+4. The process exits without data corruption.

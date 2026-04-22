@@ -1,50 +1,67 @@
-import { defineConfig } from 'vitepress';
+import { defineConfig } from "vitepress";
 
 export default defineConfig({
-  title: 'create-express-forge',
-  description: '⚡ Production-ready Express backends in seconds',
-  
+  title: "Express Forge",
+  description: "⚡ Production-ready Express backends in seconds",
+
   // Important for GitHub Pages deployment
-  base: '/express-cli/',
-  
+  base: "/express-cli/",
+
+  head: [["link", { rel: "icon", href: "/express-cli/logo.svg" }]],
+
   themeConfig: {
-    logo: '/logo.svg',
-    
+    logo: "/logo.svg",
+
+    search: {
+      provider: "local",
+    },
+
     nav: [
-      { text: 'Guide', link: '/guide/getting-started' },
-      { text: 'Reference', link: '/reference/cli-options' },
-      { text: 'GitHub', link: 'https://github.com/CODE-Y02/express-cli' }
+      { text: "Guide", link: "/guide/getting-started" },
+      { text: "Features", link: "/guide/features" },
+      { text: "Reference", link: "/reference/cli-options" },
     ],
 
     sidebar: [
       {
-        text: 'Introduction',
+        text: "Introduction",
         items: [
-          { text: 'Getting Started', link: '/guide/getting-started' }
-        ]
+          { text: "What is Express Forge?", link: "/" },
+          { text: "Getting Started", link: "/guide/getting-started" },
+        ],
       },
       {
-        text: 'Architecture',
+        text: "Core Concepts",
         items: [
-          { text: 'Modular vs MVC', link: '/guide/architecture' },
-          { text: 'Core Features', link: '/guide/features' }
-        ]
+          { text: "Architecture Patterns", link: "/guide/architecture" },
+          { text: "Project Structure", link: "/guide/structure" },
+          { text: "Core Features", link: "/guide/features" },
+        ],
       },
       {
-        text: 'Reference',
+        text: "Advanced",
         items: [
-          { text: 'CLI Options', link: '/reference/cli-options' }
-        ]
-      }
+          { text: "Deployment", link: "/guide/deployment" },
+          { text: "Testing Strategy", link: "/guide/testing" },
+          { text: "Troubleshooting", link: "/guide/troubleshooting" },
+        ],
+      },
+      {
+        text: "Reference",
+        items: [
+          { text: "CLI Options", link: "/reference/cli-options" },
+          { text: "Configuration", link: "/reference/config" },
+        ],
+      },
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/CODE-Y02/express-cli' }
+      { icon: "github", link: "https://github.com/CODE-Y02/express-cli" },
     ],
 
     footer: {
-      message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2026 Yatharth Lakhate'
-    }
-  }
+      message: "Released under the MIT License.",
+      copyright: "Copyright © 2026 Yatharth Lakhate",
+    },
+  },
 });
