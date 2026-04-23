@@ -5,7 +5,12 @@ Express Forge integrates **Swagger UI** to provide interactive, live documentati
 ## Getting Started
 
 If you enabled OpenAPI during scaffolding, your documentation is available at:
-`http://localhost:3000/docs`
+
+- **Swagger UI**: `http://localhost:3000/docs` (Interactive)
+- **OpenAPI Spec**: `http://localhost:3000/docs.json` (Raw JSON)
+
+> [!TIP]
+> The `/docs.json` endpoint is always available for external tools (like Postman), even if you chose to disable the Swagger UI during scaffolding.
 
 ## Configuration
 

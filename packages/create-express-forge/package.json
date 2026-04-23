@@ -43,7 +43,8 @@
     "build": "tsup",
     "check-types": "tsc --noEmit",
     "lint": "eslint . --max-warnings 0",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:smoke": "vitest run tests/smoke.integration.test.ts"
   },
   "dependencies": {
     "@inquirer/prompts": "^7.1.0",

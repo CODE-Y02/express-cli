@@ -10,16 +10,41 @@ npm create express-forge my-api
 npx cef my-api          # short alias
 ```
 
-## Options
+## Features
 
-| Prompt | Choices |
-|--------|---------|
-| Architecture | `modular` · `mvc` |
-| ORM | `prisma` · `sequelize` · `none` |
-| Database | `postgresql` · `mysql` · `sqlite` · `none` |
-| Logger | `winston` · `pino` · `none` |
-| Testing | `vitest` · `jest` · `none` |
-| Docker | yes / no |
+- **🚀 Multiple Architectures**: Modular (feature-based) or MVC patterns.
+- **🔐 Flexible Auth**: JWT authentication with selectable storage (**HttpOnly Cookies** or **Headers**).
+- **📦 Package Manager Choice**: Support for **npm**, **pnpm**, **yarn**, and **bun**.
+- **📜 OpenAPI Documentation**: Automated Swagger generation with an optional UI and security integration.
+- **🪵 Advanced Logging**: Choice of Winston or Pino with pre-configured transports.
+- **⚡ Fast Scaffolding**: Use the `-y, --yes` flag to scaffold instantly with recommended defaults.
+- **🐳 Docker Ready**: Optional Docker and docker-compose configuration.
+- **✅ Type-Safe**: Centralized environment validation using **Zod**.
+
+## Quick Start
+
+```bash
+npx create-express-forge@latest [project-name]
+```
+
+Or for instant scaffolding:
+
+```bash
+npx create-express-forge@latest [project-name] --yes
+```
+
+## Development & Testing
+
+### Unit Tests
+```bash
+pnpm test
+```
+
+### Integration (Smoke) Test
+Verifies the CLI by scaffolding a full project, type-checking it, and building it.
+```bash
+pnpm test:smoke
+```
 
 ## What's included in every generated project
 

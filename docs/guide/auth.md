@@ -6,12 +6,15 @@ Express Forge provides two battle-tested authentication strategies: **JWT** (JSO
 
 ### 🔐 JWT (Stateless)
 The modern standard for web APIs. Highly scalable and perfect for mobile apps and SPAs.
-- **Middleware**: `src/middlewares/auth.middleware.ts`
-- **Config**: Set `JWT_SECRET` in your `.env`.
+- **Middleware**: `src/middleware/auth.ts`
+- **Storage Options**:
+  - **🍪 Cookie**: More secure against XSS. Uses `httpOnly` and `secure` flags.
+  - **📨 Header**: Standard `Authorization: Bearer <token>`. Recommended for mobile apps.
+- **Config**: Set `JWT_SECRET` and `JWT_EXPIRES_IN` in your `.env`.
 
 ### 🍪 Session (Stateful)
 Traditional cookie-based authentication. Excellent for server-side rendered apps or when you need built-in session management.
-- **Middleware**: `src/middlewares/auth.middleware.ts`
+- **Middleware**: `src/middleware/auth.ts`
 - **Config**: Set `SESSION_SECRET` in your `.env`.
 
 ## Using the Auth Middleware
@@ -19,11 +22,11 @@ Traditional cookie-based authentication. Excellent for server-side rendered apps
 To protect a route, simply add the `auth` middleware to your route definition.
 
 ```typescript
-import { auth } from '../middlewares/auth.middleware.js';
-import { userController } from '../controllers/user.controller.js';
+import { auth } from '../middleware/auth.js';
+import { todosController } from '../modules/todos/todos.controller.js';
 
 // Protected route
-router.get('/profile', auth, userController.getProfile);
+router.get('/', auth, todosController.getTodos);
 ```
 
 ## Accessing the User

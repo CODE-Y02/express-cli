@@ -4,6 +4,9 @@ import type { CliOptions } from '../types.js';
 
 export function tplEnvConfig(opts: CliOptions): string {
   const hasDb = opts.orm !== 'none' && opts.database !== 'none';
+  const isJwt = opts.auth === 'jwt';
+  const isSession = opts.auth === 'session';
+
   return `import { z } from 'zod';
 
 const envSchema = z.object({
@@ -12,10 +15,12 @@ const envSchema = z.object({
   CORS_ORIGIN: z.string().default('*'),
   RATE_LIMIT_WINDOW_MS: z.coerce.number().default(900_000),
   RATE_LIMIT_MAX: z.coerce.number().default(100),
-${hasDb ? "  DATABASE_URL: z.string().min(1, 'DATABASE_URL is required')," : "  // DATABASE_URL: z.string(),"}
+${hasDb ? `  DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),` : "  // DATABASE_URL: z.string(),"}
+${isJwt ? `  JWT_SECRET: z.string().min(1, 'JWT_SECRET is required'),\n  JWT_EXPIRES_IN: z.string().default('1d'),` : ''}${isSession ? `  SESSION_SECRET: z.string().min(1, 'SESSION_SECRET is required'),` : ''}
 });
 
 const parsed = envSchema.safeParse(process.env);
+
 if (!parsed.success) {
   console.error('\\n❌ Invalid environment variables:');
   console.error(JSON.stringify(parsed.error.format(), null, 2));
@@ -85,13 +90,14 @@ export function tplErrorHandler(): string {
   return `import type { Request, Response, NextFunction } from 'express';
 import { ZodError } from 'zod';
 import { ApiError } from '../utils/ApiError.js';
+import { env } from '../config/env.js';
 
 /**
  * Global centralized error handler — must be the LAST middleware registered.
  * Handles: ApiError, ZodError, and unknown errors.
  */
 export const errorHandler = (err: Error, _req: Request, res: Response, _next: NextFunction): void => {
-  const isDev = process.env.NODE_ENV === 'development';
+  const isDev = env.NODE_ENV === 'development';
 
   if (err instanceof ApiError) {
     res.status(err.statusCode).json({
@@ -173,6 +179,52 @@ declare module 'express' {
     user?: { id: string; email: string; role: string };
   }
 }
+`;
+}
+
+export function tplAppTs(opts: CliOptions): string {
+  const isModular = opts.pattern === 'modular';
+  const hasSwagger = opts.openapi;
+  const needsCookies = opts.jwtStorage === 'cookie' || opts.auth === 'session';
+
+  return `import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import compression from 'compression';
+${needsCookies ? "import cookieParser from 'cookie-parser';" : ''}
+import { env } from './config/env.js';
+import { rateLimiter } from './middleware/rateLimiter.js';
+import { notFound } from './middleware/notFound.js';
+import { errorHandler } from './middleware/errorHandler.js';
+${hasSwagger ? "import { setupSwagger } from './docs/swagger.js';" : ''}
+${isModular ? `import { healthRouter } from './modules/health/health.routes.js';
+import { todosRouter } from './modules/todos/todos.routes.js';
+${opts.auth === 'jwt' ? "import { authRouter } from './modules/auth/auth.routes.js';" : ''}` : "import { router } from './routes/index.js';"}
+
+const app = express();
+
+app.use(helmet());
+app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
+${needsCookies ? 'app.use(cookieParser());' : ''}
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true }));
+app.use(compression());
+app.use(rateLimiter);
+
+${hasSwagger ? 'setupSwagger(app);' : ''}
+
+${
+  isModular
+    ? `app.use('/api/health', healthRouter);
+app.use('/api/v1/todos', todosRouter);
+${opts.auth === 'jwt' ? "app.use('/api/v1/auth', authRouter);" : ''}`
+    : "app.use('/api/v1', router);"
+}
+
+app.use(notFound);
+app.use(errorHandler);
+
+export { app };
 `;
 }
 
