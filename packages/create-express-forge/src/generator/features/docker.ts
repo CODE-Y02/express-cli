@@ -33,19 +33,97 @@ CMD ["node", "dist/server.js"]
     `node_modules\ndist\n.env\n*.log\nlogs/\ncoverage\n.git\n.turbo\n`);
 
   const dbService = buildDbService(opts.database);
-  const depends = hasDb ? `\n    depends_on:\n      db:\n        condition: service_healthy` : '';
-  const volumes = hasDb ? `\nvolumes:\n  db_data:\n` : '';
+  const redisService = opts.cache === 'redis' ? buildRedisService() : '';
+  
+  const dependsOn: string[] = [];
+  if (hasDb) dependsOn.push('db');
+  if (opts.cache === 'redis') dependsOn.push('redis');
+
+  const dependsOnTpl = dependsOn.length > 0 
+    ? `\n    depends_on:${dependsOn.map(s => `\n      ${s}:\n        condition: service_healthy`).join('')}`
+    : '';
+
+  const volumes: string[] = [];
+  if (hasDb) volumes.push('  db_data:');
+  if (opts.cache === 'redis') volumes.push('  redis_data:');
+
+  const volumesTpl = volumes.length > 0
+    ? `\nvolumes:\n${volumes.join('\n')}\n`
+    : '';
 
   await writeFile(path.join(dir, 'docker-compose.yml'),
-    `version: '3.9'\n\nservices:\n  app:\n    build: .\n    restart: unless-stopped\n    ports:\n      - "\${PORT:-3000}:3000"\n    env_file: .env\n    environment:\n      NODE_ENV: \${NODE_ENV:-development}${depends}\n${hasDb ? dbService : ''}${volumes}`);
+    `version: '3.9'
+
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "\${PORT:-3000}:3000"
+    env_file: .env
+    environment:
+      NODE_ENV: \${NODE_ENV:-development}${dependsOnTpl}
+${dbService}${redisService}${volumesTpl}`);
 }
 
 function buildDbService(db: string): string {
   if (db === 'postgresql') {
-    return `\n  db:\n    image: postgres:16-alpine\n    restart: unless-stopped\n    environment:\n      POSTGRES_USER: \${POSTGRES_USER:-user}\n      POSTGRES_PASSWORD: \${POSTGRES_PASSWORD:-password}\n      POSTGRES_DB: \${POSTGRES_DB:-mydb}\n    ports:\n      - "5432:5432"\n    volumes:\n      - db_data:/var/lib/postgresql/data\n    healthcheck:\n      test: ["CMD-SHELL", "pg_isready -U \${POSTGRES_USER:-user}"]\n      interval: 10s\n      timeout: 5s\n      retries: 5\n`;
+    return `
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: \${POSTGRES_USER:-user}
+      POSTGRES_PASSWORD: \${POSTGRES_PASSWORD:-password}
+      POSTGRES_DB: \${POSTGRES_DB:-mydb}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \${POSTGRES_USER:-user}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+`;
   }
   if (db === 'mysql') {
-    return `\n  db:\n    image: mysql:8.0\n    restart: unless-stopped\n    environment:\n      MYSQL_ROOT_PASSWORD: \${MYSQL_ROOT_PASSWORD:-root}\n      MYSQL_DATABASE: \${MYSQL_DATABASE:-mydb}\n      MYSQL_USER: \${MYSQL_USER:-user}\n      MYSQL_PASSWORD: \${MYSQL_PASSWORD:-password}\n    ports:\n      - "3306:3306"\n    volumes:\n      - db_data:/var/lib/mysql\n    healthcheck:\n      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]\n      interval: 10s\n      timeout: 5s\n      retries: 5\n`;
+    return `
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: \${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: \${MYSQL_DATABASE:-mydb}
+      MYSQL_USER: \${MYSQL_USER:-user}
+      MYSQL_PASSWORD: \${MYSQL_PASSWORD:-password}
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+`;
   }
   return '';
+}
+
+function buildRedisService(): string {
+  return `
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+`;
 }

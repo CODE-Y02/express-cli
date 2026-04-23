@@ -24,8 +24,8 @@ export function buildPackageJson(opts: CliOptions): object {
   };
 
   if (orm === 'prisma') {
-    deps['@prisma/client'] = '^5.16.0';
-    devDeps['prisma'] = '^5.16.0';
+    deps['@prisma/client'] = '^6.0.0';
+    devDeps['prisma'] = '^6.0.0';
   } else if (orm === 'sequelize') {
     deps['sequelize'] = '^6.37.3';
     deps['sequelize-typescript'] = '^2.1.6';
@@ -62,6 +62,11 @@ export function buildPackageJson(opts: CliOptions): object {
     deps['redis'] = '^4.6.14';
   } else if (cache === 'node-cache') {
     deps['node-cache'] = '^5.1.2';
+  }
+
+  if (auth === 'jwt' || auth === 'session') {
+    deps['bcrypt'] = '^5.1.1';
+    devDeps['@types/bcrypt'] = '^5.0.2';
   }
 
   if (auth === 'jwt') {
