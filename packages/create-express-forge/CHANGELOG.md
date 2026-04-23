@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.0.0
+
+### Major Changes
+
+- e1e588f: ## Added
+  - Support for multiple package managers (npm, pnpm, yarn, bun).
+  - JWT authentication with HttpOnly Cookie and Header options.
+  - Swagger UI integration for interactive API documentation.
+
+  ## Fixed
+  - Minor fixes and improvements in the CLI scaffolding process.
+
 ## 2.0.0
 
 ### Major Changes
