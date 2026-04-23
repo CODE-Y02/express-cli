@@ -42,6 +42,14 @@ jobs:
         run: pnpm run docs:build
         env:
           VITEPRESS_BASE: /express-cli/
+      
+      - name: Create .nojekyll
+        run: touch docs/.vitepress/dist/.nojekyll
+
+      - name: Debug Output
+        run: |
+          echo "Listing build output directory:"
+          ls -R docs/.vitepress/dist
         
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

@@ -1,7 +1,8 @@
 import { defineConfig } from "vitepress";
 
 // Detect if we are running in GitHub Actions and set the base path accordingly
-const base = process.env.VITEPRESS_BASE || "/express-cli/";
+const rawBase = process.env.VITEPRESS_BASE || "/express-cli/";
+const base = rawBase.endsWith("/") ? rawBase : `${rawBase}/`;
 
 export default defineConfig({
   title: "Express Forge",
@@ -11,7 +12,7 @@ export default defineConfig({
   head: [["link", { rel: "icon", href: `${base}logo.svg` }]],
 
   themeConfig: {
-    logo: "/logo.svg",
+    logo: `${base}logo.svg`,
 
     search: {
       provider: "local",
