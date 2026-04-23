@@ -17,14 +17,14 @@ export function displayBanner(): void {
   console.log();
 }
 
-export function displaySuccess(projectName: string, installDeps: boolean): void {
+export function displaySuccess(projectName: string, packageManager: string, installDeps: boolean): void {
   console.log();
   console.log(chalk.bold.green('  ✅  Project scaffolded successfully!\n'));
   console.log(chalk.bold('  Next steps:\n'));
   console.log(chalk.cyan(`    cd ${projectName}`));
-  if (!installDeps) console.log(chalk.cyan('    pnpm install'));
+  if (!installDeps) console.log(chalk.cyan(`    ${packageManager} install`));
   console.log(chalk.cyan('    cp .env.example .env'));
-  console.log(chalk.cyan('    npm run dev\n'));
+  console.log(chalk.cyan(`    ${packageManager} run dev\n`));
   console.log(chalk.dim('  Happy coding! 🚀\n'));
 }
 

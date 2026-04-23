@@ -7,7 +7,15 @@ Express Forge is designed to get you up and running with a production-grade Expr
 The fastest way to create a new project is using `npx`. You don't even need to install the CLI globally!
 
 ```bash
-npx create-express-forge
+npx create-express-forge@latest [project-name]
+```
+
+### Instant Scaffolding
+
+If you want to skip the prompts and use the recommended defaults, use the `--yes` flag:
+
+```bash
+npx create-express-forge@latest my-api --yes
 ```
 
 ## Step-by-Step Guide

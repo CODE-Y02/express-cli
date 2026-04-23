@@ -24,6 +24,7 @@ export async function generateBaseFiles(opts: CliOptions, dir: string): Promise<
       skipLibCheck: true,
       declaration: true,
       sourceMap: true,
+      ...(opts.importAlias ? { baseUrl: '.', paths: { '@/*': ['src/*'] } } : {}),
       ...(orm === 'sequelize' ? { experimentalDecorators: true, emitDecoratorMetadata: true } : {}),
     },
     include: ['src/**/*'],
@@ -48,12 +49,18 @@ export async function generateBaseFiles(opts: CliOptions, dir: string): Promise<
     'RATE_LIMIT_MAX=100',
     '',
     ...(hasDb ? ['# Database', `DATABASE_URL="${dbExampleUrl(database)}"`, ''] : []),
+    ...(opts.auth === 'jwt'
+      ? ['# JWT Auth', 'JWT_SECRET=your_super_secret_jwt_key_change_me', 'JWT_EXPIRES_IN=1d', '']
+      : []),
+    ...(opts.auth === 'session'
+      ? ['# Session Auth', 'SESSION_SECRET=your_session_secret_key_change_me', '']
+      : []),
   ];
   await writeFile(path.join(dir, '.env.example'), envLines.join('\n'));
   await writeFile(path.join(dir, '.env'), envLines.join('\n'));
 
   await writeFile(
     path.join(dir, 'README.md'),
-    `# ${projectName}\n\n> Scaffolded with [create-express-forge](https://github.com/CODE-Y02/create-express-forge)\n\n## Stack\n\n- TypeScript + Express.js\n- Zod validation\n${orm === 'prisma' ? `- Prisma ORM + ${database}\n` : ''}${orm === 'sequelize' ? `- Sequelize ORM + ${database}\n` : ''}${logger !== 'none' ? `- ${logger} logger\n` : ''}${testing !== 'none' ? `- ${testing} tests\n` : ''}${docker ? '- Docker + docker-compose\n' : ''}\n## Quick Start\n\n\`\`\`bash\ncp .env.example .env\n${orm === 'prisma' ? 'npm run db:migrate\n' : ''}npm run dev\n\`\`\`\n`,
+    `# ${projectName}\n\n> Scaffolded with [create-express-forge](https://github.com/CODE-Y02/create-express-forge)\n\n## Stack\n\n- TypeScript + Express.js\n- Zod validation\n${orm === 'prisma' ? `- Prisma ORM + ${database}\n` : ''}${orm === 'sequelize' ? `- Sequelize ORM + ${database}\n` : ''}${logger !== 'none' ? `- ${logger} logger\n` : ''}${testing !== 'none' ? `- ${testing} tests\n` : ''}${docker ? '- Docker + docker-compose\n' : ''}\n## Quick Start\n\n\`\`\`bash\ncp .env.example .env\n${orm === 'prisma' ? `${opts.packageManager === 'npm' ? 'npm run' : opts.packageManager} db:migrate\n` : ''}${opts.packageManager} run dev\n\`\`\`\n`,
   );
 }

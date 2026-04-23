@@ -4,7 +4,7 @@ import { writeFile } from '../../utils/file.js';
 import {
   tplEnvConfig, tplApiError, tplApiResponse, tplAsyncHandler,
   tplErrorHandler, tplNotFound, tplRateLimiter, tplValidate,
-  tplExpressTypes, tplServerTs,
+  tplExpressTypes, tplServerTs, tplAppTs,
 } from '../templates.js';
 
 export async function generateModularStructure(opts: CliOptions, dir: string): Promise<void> {
@@ -22,25 +22,70 @@ export async function generateModularStructure(opts: CliOptions, dir: string): P
 
   // Health module
   await writeFile(path.join(src, 'modules', 'health', 'health.routes.ts'),
-    `import { Router } from 'express';\nimport { getHealth } from './health.controller.js';\nconst router = Router();\nrouter.get('/', getHealth);\nexport { router as healthRouter };\n`);
+    `import { Router } from 'express';\nimport { getHealth } from './health.controller.js';\nconst router = Router();\n/**\n * @openapi\n * /api/health:\n *   get:\n *     tags:\n *       - Health\n *     description: Responds if the app is up and running\n *     responses:\n *       200:\n *         description: App is up and running\n */\nrouter.get('/', getHealth);\nexport { router as healthRouter };\n`);
   await writeFile(path.join(src, 'modules', 'health', 'health.controller.ts'),
     `import type { Request, Response } from 'express';\nimport { ApiResponse } from '../../utils/ApiResponse.js';\nexport const getHealth = (_req: Request, res: Response) =>\n  ApiResponse.success(res, { status: 'ok', timestamp: new Date().toISOString() }, 'Service healthy');\n`);
 
-  // Users module
-  await writeFile(path.join(src, 'modules', 'users', 'users.schema.ts'),
-    `import { z } from 'zod';\n\nexport const createUserSchema = z.object({\n  body: z.object({\n    name: z.string().min(2),\n    email: z.string().email(),\n    password: z.string().min(8),\n  }),\n});\n\nexport const updateUserSchema = z.object({\n  params: z.object({ id: z.string().uuid() }),\n  body: z.object({ name: z.string().min(2).optional(), email: z.string().email().optional() }),\n});\n\nexport type CreateUserDto = z.infer<typeof createUserSchema>['body'];\nexport type UpdateUserDto = z.infer<typeof updateUserSchema>['body'];\n`);
+  // Todos module
+  await writeFile(path.join(src, 'modules', 'todos', 'todos.schema.ts'),
+    `import { z } from 'zod';\n\nexport const createTodoSchema = z.object({\n  body: z.object({\n    title: z.string().min(1).max(100),\n    description: z.string().max(500).optional(),\n  }),\n});\n\nexport const updateTodoSchema = z.object({\n  params: z.object({ id: z.string() }),\n  body: z.object({\n    title: z.string().min(1).max(100).optional(),\n    description: z.string().max(500).optional(),\n    completed: z.boolean().optional(),\n  }),\n});\n\nexport type CreateTodoDto = z.infer<typeof createTodoSchema>['body'];\nexport type UpdateTodoDto = z.infer<typeof updateTodoSchema>['body'];\n`);
 
-  await writeFile(path.join(src, 'modules', 'users', 'users.service.ts'),
-    `import { ApiError } from '../../utils/ApiError.js';\n\nconst store: Array<{ id: string; name: string; email: string }> = [];\n\nexport const UsersService = {\n  findAll: async () => store,\n  findById: async (id: string) => {\n    const user = store.find((u) => u.id === id);\n    if (!user) throw ApiError.notFound('User not found');\n    return user;\n  },\n  create: async (data: { name: string; email: string; password: string }) => {\n    if (store.find((u) => u.email === data.email)) throw ApiError.conflict('Email already registered');\n    const user = { id: crypto.randomUUID(), name: data.name, email: data.email };\n    store.push(user);\n    return user;\n  },\n  update: async (id: string, data: Partial<{ name: string; email: string }>) => {\n    const user = store.find((u) => u.id === id);\n    if (!user) throw ApiError.notFound('User not found');\n    Object.assign(user, data);\n    return user;\n  },\n  remove: async (id: string) => {\n    const idx = store.findIndex((u) => u.id === id);\n    if (idx === -1) throw ApiError.notFound('User not found');\n    store.splice(idx, 1);\n  },\n};\n`);
+  await writeFile(path.join(src, 'modules', 'todos', 'todos.service.ts'),
+    `import { ApiError } from '../../utils/ApiError.js';\n\nexport interface Todo { id: string; title: string; description?: string; completed: boolean; userId: string; }\n\nconst store: Todo[] = [];\n\nexport const TodosService = {\n  findAll: async (userId: string) => store.filter(t => t.userId === userId),\n  findById: async (id: string, userId: string) => {\n    const todo = store.find((t) => t.id === id && t.userId === userId);\n    if (!todo) throw ApiError.notFound('Todo not found');\n    return todo;\n  },\n  create: async (data: Omit<Todo, 'id'>) => {\n    const todo = { id: Math.random().toString(36).substring(7), ...data };\n    store.push(todo);\n    return todo;\n  },\n  update: async (id: string, userId: string, data: Partial<Todo>) => {\n    const todo = store.find((t) => t.id === id && t.userId === userId);\n    if (!todo) throw ApiError.notFound('Todo not found');\n    Object.assign(todo, data);\n    return todo;\n  },\n  remove: async (id: string, userId: string) => {\n    const idx = store.findIndex((t) => t.id === id && t.userId === userId);\n    if (idx === -1) throw ApiError.notFound('Todo not found');\n    store.splice(idx, 1);\n  },\n};\n`);
 
-  await writeFile(path.join(src, 'modules', 'users', 'users.controller.ts'),
-    `import type { Request, Response } from 'express';\nimport { asyncHandler } from '../../utils/asyncHandler.js';\nimport { ApiResponse } from '../../utils/ApiResponse.js';\nimport { UsersService } from './users.service.js';\nimport type { CreateUserDto, UpdateUserDto } from './users.schema.js';\n\nexport const getUsers = asyncHandler(async (_req, res: Response) => ApiResponse.success(res, await UsersService.findAll(), 'Users fetched'));\nexport const getUserById = asyncHandler(async (req: Request, res: Response) => ApiResponse.success(res, await UsersService.findById(req.params.id ?? '')));\nexport const createUser = asyncHandler(async (req: Request, res: Response) => ApiResponse.created(res, await UsersService.create(req.body as CreateUserDto), 'User created'));\nexport const updateUser = asyncHandler(async (req: Request, res: Response) => ApiResponse.success(res, await UsersService.update(req.params.id ?? '', req.body as UpdateUserDto), 'User updated'));\nexport const deleteUser = asyncHandler(async (req: Request, res: Response) => { await UsersService.remove(req.params.id ?? ''); return ApiResponse.noContent(res); });\n`);
+  await writeFile(path.join(src, 'modules', 'todos', 'todos.controller.ts'),
+    `import type { Request, Response } from 'express';\nimport { asyncHandler } from '../../utils/asyncHandler.js';\nimport { ApiResponse } from '../../utils/ApiResponse.js';\nimport { TodosService } from './todos.service.js';\nimport type { CreateTodoDto, UpdateTodoDto } from './todos.schema.js';\n\nexport const getTodos = asyncHandler(async (req, res: Response) => {\n  const todos = await TodosService.findAll(req.user?.id || 'guest');\n  return ApiResponse.success(res, todos, 'Todos fetched');\n});\n\nexport const getTodoById = asyncHandler(async (req: Request, res: Response) => {\n  const todo = await TodosService.findById(req.params.id || '', req.user?.id || 'guest');\n  return ApiResponse.success(res, todo);\n});\n\nexport const createTodo = asyncHandler(async (req: Request, res: Response) => {\n  const todo = await TodosService.create({ ...(req.body as CreateTodoDto), completed: false, userId: req.user?.id || 'guest' });\n  return ApiResponse.created(res, todo, 'Todo created');\n});\n\nexport const updateTodo = asyncHandler(async (req: Request, res: Response) => {\n  const todo = await TodosService.update(req.params.id || '', req.user?.id || 'guest', req.body as UpdateTodoDto);\n  return ApiResponse.success(res, todo, 'Todo updated');\n});\n\nexport const deleteTodo = asyncHandler(async (req: Request, res: Response) => {\n  await TodosService.remove(req.params.id || '', req.user?.id || 'guest');\n  return ApiResponse.noContent(res);\n});\n`);
 
-  await writeFile(path.join(src, 'modules', 'users', 'users.routes.ts'),
-    `import { Router } from 'express';\nimport { getUsers, getUserById, createUser, updateUser, deleteUser } from './users.controller.js';\nimport { validate } from '../../middleware/validate.js';\nimport { createUserSchema, updateUserSchema } from './users.schema.js';\n\nconst router = Router();\nrouter.get('/', getUsers);\nrouter.get('/:id', getUserById);\nrouter.post('/', validate(createUserSchema), createUser);\nrouter.patch('/:id', validate(updateUserSchema), updateUser);\nrouter.delete('/:id', deleteUser);\nexport { router as usersRouter };\n`);
+  await writeFile(path.join(src, 'modules', 'todos', 'todos.routes.ts'),
+    `import { Router } from 'express';\nimport { getTodos, getTodoById, createTodo, updateTodo, deleteTodo } from './todos.controller.js';\nimport { validate } from '../../middleware/validate.js';\nimport { createTodoSchema, updateTodoSchema } from './todos.schema.js';\n${opts.auth !== 'none' ? "import { auth } from '../../middleware/auth.middleware.js';\n" : ""}
+const router = Router();
+${opts.auth !== 'none' ? 'router.use(auth);' : ''}
 
-  await writeFile(path.join(src, 'app.ts'),
-    `import express from 'express';\nimport cors from 'cors';\nimport helmet from 'helmet';\nimport compression from 'compression';\nimport { env } from './config/env.js';\nimport { rateLimiter } from './middleware/rateLimiter.js';\nimport { notFound } from './middleware/notFound.js';\nimport { errorHandler } from './middleware/errorHandler.js';\nimport { healthRouter } from './modules/health/health.routes.js';\nimport { usersRouter } from './modules/users/users.routes.js';\n\nconst app = express();\napp.use(helmet());\napp.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));\napp.use(express.json({ limit: '10mb' }));\napp.use(express.urlencoded({ extended: true }));\napp.use(compression());\napp.use(rateLimiter);\napp.use('/api/health', healthRouter);\napp.use('/api/v1/users', usersRouter);\napp.use(notFound);\napp.use(errorHandler);\nexport { app };\n`);
+/**
+ * @openapi
+ * /api/v1/todos:
+ *   get:
+ *     tags:
+ *       - Todos
+ *     responses:
+ *       200:
+ *         description: Success
+ *   post:
+ *     tags:
+ *       - Todos
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [title]
+ *             properties:
+ *               title:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Created
+ */
+router.get('/', getTodos);
+router.get('/:id', getTodoById);
+router.post('/', validate(createTodoSchema), createTodo);
+router.patch('/:id', validate(updateTodoSchema), updateTodo);
+router.delete('/:id', deleteTodo);
+export { router as todosRouter };\n`);
+
+  if (opts.auth === 'jwt') {
+    await writeFile(path.join(src, 'modules', 'auth', 'auth.schema.ts'),
+      `import { z } from 'zod';\nexport const loginSchema = z.object({ body: z.object({ email: z.string().email(), password: z.string().min(8) }) });\n`);
+    await writeFile(path.join(src, 'modules', 'auth', 'auth.controller.ts'),
+      `import type { Request, Response } from 'express';\nimport jwt from 'jsonwebtoken';\nimport { asyncHandler } from '../../utils/asyncHandler.js';\nimport { ApiResponse } from '../../utils/ApiResponse.js';\nimport { env } from '../../config/env.js';\n\nexport const login = asyncHandler(async (req, res) => {\n  // Demo logic: accept any valid email/password\n  const token = jwt.sign({ email: req.body.email }, env.JWT_SECRET, { expiresIn: env.JWT_EXPIRES_IN as any });\n  ${opts.jwtStorage === 'cookie' ? "res.cookie('token', token, { httpOnly: true, secure: env.NODE_ENV === 'production' });\n  return ApiResponse.success(res, { token }, 'Logged in successfully');" : "return ApiResponse.success(res, { token }, 'Logged in successfully');"}\n});\n`);
+    await writeFile(path.join(src, 'modules', 'auth', 'auth.routes.ts'),
+      `import { Router } from 'express';\nimport { login } from './auth.controller.js';\nimport { validate } from '../../middleware/validate.js';\nimport { loginSchema } from './auth.schema.js';\nconst router = Router();\n/**\n * @openapi\n * /api/v1/auth/login:\n *   post:\n *     tags:\n *       - Auth\n *     requestBody:\n *       required: true\n *       content:\n *         application/json:\n *           schema:\n *             type: object\n *             required: [email, password]\n *             properties:\n *               email:\n *                 type: string\n *               password:\n *                 type: string\n *     responses:\n *       200:\n *         description: Logged in successfully\n */\nrouter.post('/login', validate(loginSchema), login);\nexport { router as authRouter };\n`);
+  }
+
+  await writeFile(path.join(src, 'app.ts'), tplAppTs(opts));
 
   await writeFile(path.join(src, 'server.ts'), tplServerTs(opts.logger));
 }
