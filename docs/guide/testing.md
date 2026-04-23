@@ -47,3 +47,14 @@ describe('GET /health', () => {
   });
 });
 ```
+ 
+---
+
+## 🛠 Contributing: CLI Smoke Testing
+
+If you are contributing to the `create-express-forge` CLI itself, you should run the automated smoke test to verify your changes. This test scaffolds a project, runs a full TypeScript type-check, and builds the resulting app.
+
+```bash
+cd packages/create-express-forge
+pnpm run test:smoke
+```

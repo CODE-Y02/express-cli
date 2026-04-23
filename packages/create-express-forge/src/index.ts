@@ -11,11 +11,12 @@ const program = new Command();
 
 program
   .name('create-express-forge')
-  .description('⚡ Scaffold production-ready Express.js TypeScript backends')
+  .description('⚡ Scaffold production-ready Express.js TypeScript backends in seconds')
   .version(pkg.version)
+  .option('-y, --yes', 'Use default options for all prompts')
   .argument('[project-name]', 'Name of the project')
-  .action(async (projectName?: string) => {
-    await runCLI(projectName);
+  .action(async (projectName?: string, options?: { yes?: boolean }) => {
+    await runCLI(projectName, options?.yes);
   });
 
 program.parse(process.argv);

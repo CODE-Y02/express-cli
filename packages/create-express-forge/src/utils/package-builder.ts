@@ -67,9 +67,15 @@ export function buildPackageJson(opts: CliOptions): object {
   if (auth === 'jwt') {
     deps['jsonwebtoken'] = '^9.0.2';
     devDeps['@types/jsonwebtoken'] = '^9.0.6';
+    if (opts.jwtStorage === 'cookie') {
+      deps['cookie-parser'] = '^1.4.6';
+      devDeps['@types/cookie-parser'] = '^1.4.7';
+    }
   } else if (auth === 'session') {
     deps['express-session'] = '^1.18.0';
+    deps['cookie-parser'] = '^1.4.6';
     devDeps['@types/express-session'] = '^1.18.0';
+    devDeps['@types/cookie-parser'] = '^1.4.7';
   }
 
   if (openapi) {

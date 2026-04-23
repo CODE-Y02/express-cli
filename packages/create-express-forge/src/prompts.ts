@@ -4,8 +4,32 @@ import type { CliOptions } from './types.js';
 import { displayBanner } from './utils/display.js';
 import { generateProject } from './generator/index.js';
 
-export async function runCLI(initialProjectName?: string) {
+export async function runCLI(initialProjectName?: string, skipPrompts = false) {
   displayBanner();
+
+  if (skipPrompts) {
+    const projectName = initialProjectName ?? 'my-express-app';
+    const options: CliOptions = {
+      projectName,
+      pattern: 'modular',
+      orm: 'prisma',
+      database: 'postgresql',
+      packageManager: 'npm',
+      logger: 'winston',
+      testing: 'vitest',
+      auth: 'jwt',
+      jwtStorage: 'cookie',
+      cache: 'redis',
+      importAlias: true,
+      openapi: true,
+      openapiUI: true,
+      docker: true,
+      installDeps: true,
+    };
+    const targetDir = path.resolve(process.cwd(), projectName);
+    await generateProject(options, targetDir);
+    return;
+  }
 
   const projectName =
     initialProjectName ??
@@ -17,6 +41,16 @@ export async function runCLI(initialProjectName?: string) {
           ? true
           : 'Use lowercase letters, numbers, hyphens, or underscores',
     }));
+  
+  const packageManager = await select<CliOptions['packageManager']>({
+    message: 'Package manager:',
+    choices: [
+      { name: '📦  npm', value: 'npm' },
+      { name: '🚀  pnpm', value: 'pnpm' },
+      { name: '🧶  yarn', value: 'yarn' },
+      { name: '🍞  bun', value: 'bun' },
+    ],
+  });
 
   const pattern = await select<CliOptions['pattern']>({
     message: 'Architecture pattern:',
@@ -75,6 +109,17 @@ export async function runCLI(initialProjectName?: string) {
     ],
   });
 
+  const jwtStorage =
+    auth === 'jwt'
+      ? await select<CliOptions['jwtStorage']>({
+          message: 'JWT storage location:',
+          choices: [
+            { name: '🍪  Cookie    (more secure against XSS)', value: 'cookie' },
+            { name: '📨  Header    (Authorization: Bearer <token>)', value: 'header' },
+          ],
+        })
+      : undefined;
+
   const cache = await select<CliOptions['cache']>({
     message: 'Caching layer:',
     choices: [
@@ -84,7 +129,13 @@ export async function runCLI(initialProjectName?: string) {
     ],
   });
 
+  const importAlias = await confirm({ message: 'Configure import alias (@/)?', default: true });
+
   const openapi = await confirm({ message: 'Add OpenAPI (Swagger) documentation?', default: true });
+
+  const openapiUI = openapi
+    ? await confirm({ message: 'Add Swagger UI for documentation?', default: true })
+    : false;
 
   const docker = await confirm({ message: 'Add Docker + docker-compose?', default: true });
   const installDeps = await confirm({ message: 'Install dependencies now?', default: true });
@@ -94,11 +145,15 @@ export async function runCLI(initialProjectName?: string) {
     pattern,
     orm,
     database,
+    packageManager,
     logger,
     testing,
     auth,
+    jwtStorage,
     cache,
+    importAlias,
     openapi,
+    openapiUI,
     docker,
     installDeps,
   };

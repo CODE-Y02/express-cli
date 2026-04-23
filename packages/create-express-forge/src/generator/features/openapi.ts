@@ -28,6 +28,18 @@ const options: swaggerJsdoc.Options = {
         description: 'Development server',
       },
     ],
+    components: {
+      securitySchemes: {
+        ${
+          opts.auth === 'jwt'
+            ? opts.jwtStorage === 'cookie'
+              ? "cookieAuth: { type: 'apiKey', in: 'cookie', name: 'token' }"
+              : "bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }"
+            : ''
+        }
+      }
+    },
+    ${opts.auth === 'jwt' ? `security: [{ ${opts.jwtStorage === 'cookie' ? "'cookieAuth'" : "'bearerAuth'"}: [] }],` : ''}
   },
   apis: ['./src/app.ts', './src/modules/**/*.routes.ts', './src/routes/**/*.ts'],
 };
@@ -35,8 +47,16 @@ const options: swaggerJsdoc.Options = {
 const specs = swaggerJsdoc(options);
 
 export const setupSwagger = (app: Express) => {
-  app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
+  // Always expose the OpenAPI spec as JSON for debugging or external tools
+  app.get('/docs.json', (_req, res) => res.json(specs));
+
+  ${
+    opts.openapiUI
+      ? `app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
   console.log('📜 API Docs available at http://localhost:3000/docs');
+  console.log('📜 API Spec available at http://localhost:3000/docs.json');`
+      : `console.log('📜 API Spec available at http://localhost:3000/docs.json (UI disabled)');`
+  }
 };
 `
   );

@@ -5,9 +5,15 @@ Express Forge comes packed with everything you need to build robust APIs.
 ## 🛡️ TypeScript First
 Type safety is at the core of Express Forge. Every scaffolded project includes:
 - Strict TypeScript configuration.
-- Path aliases (e.g., `@modules/users`).
-- Type-safe environment variables.
-- Zod integration for request validation.
+- Path aliases (e.g., `@/config/env`).
+- Type-safe environment variables via **Zod**.
+- Automated scaffolding with your choice of **npm**, **pnpm**, **yarn**, or **bun**.
+
+## 🔐 Flexible Authentication
+Scaffold a complete authentication system with a single choice:
+- **JWT Authentication**: Choose between **HttpOnly Cookies** (recommended for web) or **Bearer Headers** (recommended for mobile/API clients).
+- **Session Auth**: Battle-tested session management for stateful applications.
+- **Protected Routes**: Every boilerplate includes a protected resource showing you exactly how to use the auth middleware.
 
 ## 💾 Database Integration
 Choose your favorite ORM and get started instantly:
@@ -36,6 +42,12 @@ Stay secure by default with pre-configured industry standards:
 ## 📝 Logging & Monitoring
 - **Pino/Winston**: High-performance, structured logging. Pino is used by default for its extreme speed and JSON output, which is perfect for log aggregators like ELK or Datadog.
 - **Health Checks**: A standard `/health` endpoint is included, providing uptime, memory usage, and database connectivity status.
+
+## 📜 OpenAPI Documentation
+Never let your documentation get out of sync:
+- **Swagger UI**: Integrated UI to explore and test your API endpoints directly from the browser.
+- **Auto-generated Spec**: The CLI generates a `docs.json` endpoint that is always up-to-date with your code's JSDoc annotations.
+- **Security Schemas**: Pre-configured security definitions for your chosen auth strategy (Cookie or Bearer).
 
 ## 🧱 Graceful Shutdown
 Every Express Forge project handles `SIGTERM` and `SIGINT` signals correctly. This ensures that:
