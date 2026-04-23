@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.1.0
+
+### Minor Changes
+
+- 958dbbf: Fix Incossitancy issues
+
 ## 3.0.0
 
 ### Major Changes
