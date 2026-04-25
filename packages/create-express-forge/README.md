@@ -17,8 +17,6 @@ Searching for an **Express TypeScript starter**? Most boilerplates are either to
 Create your new project instantly:
 ```bash
 npx create-express-forge@latest my-api
-# or using the short alias
-npx cef@latest my-api
 ```
 
 ---
