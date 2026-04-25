@@ -1,0 +1,3 @@
+---
+"create-express-forge": minor
+---

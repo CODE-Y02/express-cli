@@ -1,13 +1,13 @@
 import { input, select, confirm } from '@inquirer/prompts';
 import path from 'path';
-import type { CliOptions } from './types.js';
+import type { CliOptions, Pattern, ORM, Database, PackageManager, LoggerLib, TestingLib, AuthStrategy, JwtStorage, CacheLib } from './types.js';
 import { displayBanner } from './utils/display.js';
 import { generateProject } from './generator/index.js';
 
-export async function runCLI(initialProjectName?: string, skipPrompts = false) {
+export async function runCLI(initialProjectName?: string, cmdOptions: Record<string, string | boolean | undefined> = {}) {
   displayBanner();
 
-  if (skipPrompts) {
+  if (cmdOptions.yes) {
     const projectName = initialProjectName ?? 'my-express-app';
     const options: CliOptions = {
       projectName,
@@ -52,7 +52,7 @@ export async function runCLI(initialProjectName?: string, skipPrompts = false) {
     ],
   });
 
-  const pattern = await select<CliOptions['pattern']>({
+  const pattern = cmdOptions.pattern ?? await select<CliOptions['pattern']>({
     message: 'Architecture pattern:',
     choices: [
       { name: '📦  Modular  — feature-based modules (recommended)', value: 'modular' },
@@ -60,7 +60,7 @@ export async function runCLI(initialProjectName?: string, skipPrompts = false) {
     ],
   });
 
-  const orm = await select<CliOptions['orm']>({
+  const orm = cmdOptions.orm ?? await select<CliOptions['orm']>({
     message: 'ORM / Database layer:',
     choices: [
       { name: '🔷  Prisma      (type-safe, modern — recommended)', value: 'prisma' },
@@ -69,7 +69,7 @@ export async function runCLI(initialProjectName?: string, skipPrompts = false) {
     ],
   });
 
-  const database: CliOptions['database'] =
+  const database: CliOptions['database'] = (cmdOptions.db as Database) ?? (
     orm !== 'none'
       ? await select<CliOptions['database']>({
           message: 'Database:',
@@ -80,9 +80,9 @@ export async function runCLI(initialProjectName?: string, skipPrompts = false) {
             { name: '⬜  None (configure later)', value: 'none' },
           ],
         })
-      : 'none';
+      : 'none');
 
-  const logger = await select<CliOptions['logger']>({
+  const logger = cmdOptions.logger ?? await select<CliOptions['logger']>({
     message: 'Logger:',
     choices: [
       { name: '🪵  Winston   (feature-rich, transport-based)', value: 'winston' },
@@ -91,7 +91,7 @@ export async function runCLI(initialProjectName?: string, skipPrompts = false) {
     ],
   });
 
-  const testing = await select<CliOptions['testing']>({
+  const testing = cmdOptions.test ?? await select<CliOptions['testing']>({
     message: 'Testing framework:',
     choices: [
       { name: '⚡  Vitest   (fast, ESM-native — recommended)', value: 'vitest' },
@@ -100,7 +100,7 @@ export async function runCLI(initialProjectName?: string, skipPrompts = false) {
     ],
   });
 
-  const auth = await select<CliOptions['auth']>({
+  const auth = cmdOptions.auth ?? await select<CliOptions['auth']>({
     message: 'Authentication strategy:',
     choices: [
       { name: '🔐  JWT       (stateless, token-based — recommended)', value: 'jwt' },
@@ -109,7 +109,7 @@ export async function runCLI(initialProjectName?: string, skipPrompts = false) {
     ],
   });
 
-  const jwtStorage =
+  const jwtStorage = cmdOptions.jwtStorage ?? (
     auth === 'jwt'
       ? await select<CliOptions['jwtStorage']>({
           message: 'JWT storage location:',
@@ -118,9 +118,9 @@ export async function runCLI(initialProjectName?: string, skipPrompts = false) {
             { name: '📨  Header    (Authorization: Bearer <token>)', value: 'header' },
           ],
         })
-      : undefined;
+      : undefined);
 
-  const cache = await select<CliOptions['cache']>({
+  const cache = cmdOptions.cache ?? await select<CliOptions['cache']>({
     message: 'Caching layer:',
     choices: [
       { name: '🔴  Redis      (distributed, high-performance)', value: 'redis' },
@@ -129,28 +129,28 @@ export async function runCLI(initialProjectName?: string, skipPrompts = false) {
     ],
   });
 
-  const importAlias = await confirm({ message: 'Configure import alias (@/)?', default: true });
+  const importAlias = cmdOptions.importAlias !== undefined ? cmdOptions.importAlias === 'true' : await confirm({ message: 'Configure import alias (@/)?', default: true });
 
-  const openapi = await confirm({ message: 'Add OpenAPI (Swagger) documentation?', default: true });
+  const openapi = cmdOptions.openapi !== undefined ? cmdOptions.openapi === 'true' : await confirm({ message: 'Add OpenAPI (Swagger) documentation?', default: true });
 
   const openapiUI = openapi
-    ? await confirm({ message: 'Add Swagger UI for documentation?', default: true })
+    ? (cmdOptions.openapiUI !== undefined ? cmdOptions.openapiUI === 'true' : await confirm({ message: 'Add Swagger UI for documentation?', default: true }))
     : false;
 
-  const docker = await confirm({ message: 'Add Docker + docker-compose?', default: true });
-  const installDeps = await confirm({ message: 'Install dependencies now?', default: true });
+  const docker = cmdOptions.docker !== undefined ? cmdOptions.docker === 'true' : await confirm({ message: 'Add Docker + docker-compose?', default: true });
+  const installDeps = cmdOptions.install !== undefined ? cmdOptions.install === 'true' : await confirm({ message: 'Install dependencies now?', default: true });
 
   const options: CliOptions = {
     projectName,
-    pattern,
-    orm,
-    database,
-    packageManager,
-    logger,
-    testing,
-    auth,
-    jwtStorage,
-    cache,
+    pattern: pattern as Pattern,
+    orm: orm as ORM,
+    database: database as Database,
+    packageManager: packageManager as PackageManager,
+    logger: logger as LoggerLib,
+    testing: testing as TestingLib,
+    auth: auth as AuthStrategy,
+    jwtStorage: jwtStorage as JwtStorage,
+    cache: cache as CacheLib,
     importAlias,
     openapi,
     openapiUI,

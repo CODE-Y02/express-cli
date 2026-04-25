@@ -12,17 +12,17 @@ export async function generateCache(opts: CliOptions, targetDir: string): Promis
     await fs.writeFile(
       path.join(cacheDir, 'index.ts'),
       `import { createClient } from 'redis';
-import { logger } from '../logger/index.js';
+${opts.logger === 'none' ? '' : "import { logger } from '../logger/index.js';"}
 
 const client = createClient({
   url: process.env.REDIS_URL || 'redis://localhost:6379'
 });
 
-client.on('error', (err) => logger.error('Redis Client Error', err));
+client.on('error', (err) => ${opts.logger === 'none' ? "console.error('Redis Client Error', err)" : "logger.error('Redis Client Error', err)"});
 
 export const connectRedis = async () => {
   await client.connect();
-  logger.info('🔴 Redis connected successfully');
+  ${opts.logger === 'none' ? "console.info('🔴 Redis connected successfully');" : "logger.info('🔴 Redis connected successfully');"}
 };
 
 export const cache = {
@@ -42,11 +42,11 @@ export const cache = {
     await fs.writeFile(
       path.join(cacheDir, 'index.ts'),
       `import NodeCache from 'node-cache';
-import { logger } from '../logger/index.js';
+${opts.logger === 'none' ? '' : "import { logger } from '../logger/index.js';"}
 
 const nodeCache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
 
-logger.info('💾 In-memory cache initialized');
+${opts.logger === 'none' ? "console.info('💾 In-memory cache initialized');" : "logger.info('💾 In-memory cache initialized');"}
 
 export const cache = {
   get: async (key: string) => nodeCache.get(key) as string | undefined,

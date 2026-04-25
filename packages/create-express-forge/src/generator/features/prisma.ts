@@ -16,9 +16,9 @@ datasource db {
   provider = "${provider}"
   url      = env("DATABASE_URL")
 }
-
+${opts.auth !== 'none' ? `
 model User {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   name      String
   email     String   @unique
   password  String
@@ -31,14 +31,14 @@ model User {
 enum Role {
   USER
   ADMIN
-}
+}` : ''}
 `);
 
   await writeFile(path.join(dir, 'prisma', 'seed.ts'),
     `import { PrismaClient } from '@prisma/client';\nconst prisma = new PrismaClient();\nasync function main() {\n  console.log('🌱 Seeding...');\n  // add seed data here\n  console.log('✅ Done');\n}\nmain().catch(console.error).finally(() => prisma.$disconnect());\n`);
 
   await writeFile(path.join(dir, 'src', 'config', 'database.ts'),
-    `import { PrismaClient } from '@prisma/client';\n\ndeclare global { var __prisma: PrismaClient | undefined; } // eslint-disable-line no-var\n\nexport const prisma =\n  globalThis.__prisma ??\n  new PrismaClient({\n    log: process.env.NODE_ENV === 'development' ? ['query', 'warn', 'error'] : ['error'],\n  });\n\nif (process.env.NODE_ENV !== 'production') globalThis.__prisma = prisma;\n`);
+    `import { PrismaClient } from '@prisma/client';\n\nexport const prisma = new PrismaClient({\n  log: process.env.NODE_ENV === 'development' ? ['query', 'warn', 'error'] : ['error'],\n});\n`);
 
   // Patch .env with correct DATABASE_URL
   const { readFile, writeFile: fsWrite } = await import('fs/promises');

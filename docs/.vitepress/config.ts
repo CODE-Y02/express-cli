@@ -9,7 +9,14 @@ export default defineConfig({
   description: "⚡ Production-ready Express backends in seconds",
   base: base,
 
-  head: [["link", { rel: "icon", href: `${base}logo.svg` }]],
+  head: [
+    ["link", { rel: "icon", href: `${base}logo.svg` }],
+    ["meta", { name: "keywords", content: "express, typescript, nodejs, backend, api, generator, scaffold, prisma, sequelize, architecture, mvc, modular, rest-api, server-boilerplate" }],
+    ["meta", { name: "author", content: "Yatharth Lakhate" }],
+    ["meta", { property: "og:type", content: "website" }],
+    ["meta", { property: "og:title", content: "Express Forge | The Ultimate Express + TypeScript Generator" }],
+    ["meta", { property: "og:description", content: "Scaffold production-ready Express.js TypeScript backends in seconds with built-in Auth, ORM, and OpenAPI support." }],
+  ],
 
   themeConfig: {
     logo: `${base}logo.svg`,

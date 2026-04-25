@@ -161,7 +161,10 @@ import { ApiError } from '../utils/ApiError.js';
 export const validate = (schema: AnyZodObject) =>
   async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
     try {
-      await schema.parseAsync({ body: req.body, query: req.query, params: req.params });
+      const validated = await schema.parseAsync({ body: req.body, query: req.query, params: req.params });
+      req.body = validated.body;
+      req.query = validated.query;
+      req.params = validated.params;
       next();
     } catch (err) {
       if (err instanceof ZodError) next(ApiError.badRequest('Validation failed', err.errors));
@@ -192,24 +195,28 @@ import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
 ${needsCookies ? "import cookieParser from 'cookie-parser';" : ''}
+${opts.auth === 'session' ? "import session from 'express-session';" : ''}
 import { env } from './config/env.js';
 import { rateLimiter } from './middleware/rateLimiter.js';
+${opts.logger === 'pino' ? "import { httpLogger } from './middleware/httpLogger.js';" : ''}
 import { notFound } from './middleware/notFound.js';
 import { errorHandler } from './middleware/errorHandler.js';
 ${hasSwagger ? "import { setupSwagger } from './docs/swagger.js';" : ''}
 ${isModular ? `import { healthRouter } from './modules/health/health.routes.js';
 import { todosRouter } from './modules/todos/todos.routes.js';
-${opts.auth === 'jwt' ? "import { authRouter } from './modules/auth/auth.routes.js';" : ''}` : "import { router } from './routes/index.js';"}
+${opts.auth !== 'none' ? "import { authRouter } from './modules/auth/auth.routes.js';" : ''}` : "import { router } from './routes/index.js';"}
 
 const app = express();
 
 app.use(helmet());
 app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
 ${needsCookies ? 'app.use(cookieParser());' : ''}
+${opts.auth === 'session' ? "app.use(session({ secret: env.SESSION_SECRET, resave: false, saveUninitialized: false }));" : ''}
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(compression());
 app.use(rateLimiter);
+${opts.logger === 'pino' ? 'app.use(httpLogger);' : ''}
 
 ${hasSwagger ? 'setupSwagger(app);' : ''}
 
@@ -217,7 +224,7 @@ ${
   isModular
     ? `app.use('/api/health', healthRouter);
 app.use('/api/v1/todos', todosRouter);
-${opts.auth === 'jwt' ? "app.use('/api/v1/auth', authRouter);" : ''}`
+${opts.auth !== 'none' ? "app.use('/api/v1/auth', authRouter);" : ''}`
     : "app.use('/api/v1', router);"
 }
 
