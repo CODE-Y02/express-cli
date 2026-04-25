@@ -48,7 +48,6 @@ export async function generateMvcStructure(opts: CliOptions, dir: string): Promi
 
   if (opts.auth === 'jwt') {
     await writeFile(path.join(src, 'schemas', 'auth.schema.ts'),
-    await writeFile(path.join(src, 'schemas', 'auth.schema.ts'),
       `import { z } from 'zod';\nexport const loginSchema = z.object({ body: z.object({ email: z.string().email(), password: z.string().min(8) }) });\n`);
     await writeFile(path.join(src, 'controllers', 'auth.controller.ts'),
       `import type { Request, Response } from 'express';\nimport jwt from 'jsonwebtoken';\nimport { asyncHandler } from '../utils/asyncHandler.js';\nimport { ApiResponse } from '../utils/ApiResponse.js';\nimport { env } from '../config/env.js';\n\nexport const login = asyncHandler(async (req, res) => {\n  // Demo logic: accept any valid email/password\n  const token = jwt.sign({ email: req.body.email }, env.JWT_SECRET, { expiresIn: env.JWT_EXPIRES_IN as jwt.SignOptions['expiresIn'] });\n  ${opts.jwtStorage === 'cookie' ? "res.cookie('token', token, { httpOnly: true, secure: env.NODE_ENV === 'production' });\n  return ApiResponse.success(res, { token }, 'Logged in successfully');" : "return ApiResponse.success(res, { token }, 'Logged in successfully');"}\n});\n`);
