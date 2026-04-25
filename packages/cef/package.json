@@ -5,6 +5,14 @@
   "bin": {
     "cef": "index.js"
   },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "echo 'No build needed for wrapper'",
+    "lint": "echo 'No lint needed for wrapper'",
+    "test": "echo 'No test needed for wrapper'"
+  },
   "type": "module",
   "repository": {
     "type": "git",
