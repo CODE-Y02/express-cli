@@ -98,15 +98,15 @@ export async function generateProject(opts: CliOptions, targetDir: string): Prom
 
     if (opts.installDeps) {
       spinner.start(chalk.dim(`Installing dependencies with ${opts.packageManager}...`));
-      const installCmd = opts.packageManager === 'yarn' ? 'install' : 'install';
-      await execa(opts.packageManager, [installCmd], { cwd: targetDir });
+      await execa(opts.packageManager, ['install'], { cwd: targetDir });
       spinner.succeed(chalk.green('Dependencies installed'));
 
       if (opts.orm === 'prisma') {
         spinner.start(chalk.dim('Generating Prisma client...'));
         try {
-          const npxCmd = opts.packageManager === 'bun' ? 'bunx' : opts.packageManager === 'pnpm' ? 'pnpx' : 'npx';
-          await execa(npxCmd, ['prisma', 'generate'], { cwd: targetDir });
+          const npxCmd = opts.packageManager === 'bun' ? 'bunx' : opts.packageManager === 'pnpm' ? 'pnpm' : 'npx';
+          const args = opts.packageManager === 'pnpm' ? ['exec', 'prisma', 'generate'] : ['prisma', 'generate'];
+          await execa(npxCmd, args, { cwd: targetDir });
           spinner.succeed(chalk.green('Prisma client generated'));
         } catch (err) {
           spinner.warn(chalk.yellow('Prisma client generation skipped (network/env issue)'));

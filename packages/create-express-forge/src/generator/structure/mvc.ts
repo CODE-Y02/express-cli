@@ -6,9 +6,11 @@ import {
   tplErrorHandler, tplNotFound, tplRateLimiter, tplValidate,
   tplExpressTypes, tplServerTs, tplAppTs,
 } from '../templates.js';
+import { TemplateManager } from '../../utils/template-manager.js';
 
 export async function generateMvcStructure(opts: CliOptions, dir: string): Promise<void> {
   const src = path.join(dir, 'src');
+  const tm = new TemplateManager(opts);
 
   await writeFile(path.join(src, 'config', 'env.ts'), tplEnvConfig(opts));
   await writeFile(path.join(src, 'types', 'express.d.ts'), tplExpressTypes());
@@ -19,6 +21,9 @@ export async function generateMvcStructure(opts: CliOptions, dir: string): Promi
   await writeFile(path.join(src, 'middleware', 'notFound.ts'), tplNotFound());
   await writeFile(path.join(src, 'middleware', 'rateLimiter.ts'), tplRateLimiter());
   await writeFile(path.join(src, 'middleware', 'validate.ts'), tplValidate());
+  if (opts.auth !== 'none') {
+    await writeFile(path.join(src, 'middleware', 'auth.middleware.ts'), tm.renderAuthMiddleware(1));
+  }
 
   await writeFile(path.join(src, 'schemas', 'todo.schema.ts'),
     `import { z } from 'zod';\nexport const createTodoSchema = z.object({ body: z.object({ title: z.string().min(1).max(100), description: z.string().max(500).optional() }) });\nexport const updateTodoSchema = z.object({ params: z.object({ id: z.string() }), body: z.object({ title: z.string().min(1).max(100).optional(), description: z.string().max(500).optional(), completed: z.boolean().optional() }) });\nexport type CreateTodoDto = z.infer<typeof createTodoSchema>['body'];\nexport type UpdateTodoDto = z.infer<typeof updateTodoSchema>['body'];\n`);
@@ -42,6 +47,7 @@ export async function generateMvcStructure(opts: CliOptions, dir: string): Promi
     `import { Router } from 'express';\nimport { getTodos, getTodoById, createTodo, updateTodo, deleteTodo } from '../controllers/todo.controller.js';\nimport { validate } from '../middleware/validate.js';\nimport { createTodoSchema, updateTodoSchema } from '../schemas/todo.schema.js';\n${opts.auth !== 'none' ? "import { auth } from '../middleware/auth.middleware.js';\n" : ""}const router = Router();\n${opts.auth !== 'none' ? 'router.use(auth);\n' : ''}/**\n * @openapi\n * /api/v1/todos:\n *   get:\n *     tags:\n *       - Todos\n *     responses:\n *       200:\n *         description: Success\n *   post:\n *     tags:\n *       - Todos\n *     requestBody:\n *       required: true\n *       content:\n *         application/json:\n *           schema:\n *             type: object\n *             required: [title]\n *             properties:\n *               title:\n *                 type: string\n *               description:\n *                 type: string\n *     responses:\n *       201:\n *         description: Created\n */\nrouter.get('/', getTodos);\nrouter.get('/:id', getTodoById);\nrouter.post('/', validate(createTodoSchema), createTodo);\nrouter.patch('/:id', validate(updateTodoSchema), updateTodo);\nrouter.delete('/:id', deleteTodo);\nexport { router as todoRouter };\n`);
 
   if (opts.auth === 'jwt') {
+    await writeFile(path.join(src, 'schemas', 'auth.schema.ts'),
     await writeFile(path.join(src, 'schemas', 'auth.schema.ts'),
       `import { z } from 'zod';\nexport const loginSchema = z.object({ body: z.object({ email: z.string().email(), password: z.string().min(8) }) });\n`);
     await writeFile(path.join(src, 'controllers', 'auth.controller.ts'),

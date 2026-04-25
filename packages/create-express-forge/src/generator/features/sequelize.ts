@@ -4,10 +4,25 @@ import { writeFile } from '../../utils/file.js';
 
 export async function generateSequelize(opts: CliOptions, dir: string): Promise<void> {
   const dialect = opts.database === 'mysql' ? 'mysql' : opts.database === 'sqlite' ? 'sqlite' : 'postgres';
+  
   await writeFile(path.join(dir, '.sequelizerc'),
-    `const path = require('path');\nmodule.exports = {\n  config: path.resolve('src', 'config', 'sequelize.cjs'),\n  'models-path': path.resolve('src', 'models'),\n  'seeders-path': path.resolve('db', 'seeders'),\n  'migrations-path': path.resolve('db', 'migrations'),\n};\n`);
+    `const path = require('path');
+module.exports = {
+  config: path.resolve('src', 'config', 'sequelize.cjs'),
+  'models-path': path.resolve('src', 'models'),
+  'seeders-path': path.resolve('db', 'seeders'),
+  'migrations-path': path.resolve('db', 'migrations'),
+};
+`);
+
   await writeFile(path.join(dir, 'src', 'config', 'sequelize.cjs'),
-    `module.exports = {\n  development: { use_env_variable: 'DATABASE_URL', dialect: '${dialect}', logging: console.log },\n  test: { use_env_variable: 'DATABASE_URL', dialect: '${dialect}', logging: false },\n  production: { use_env_variable: 'DATABASE_URL', dialect: '${dialect}', logging: false },\n};\n`);
+    `module.exports = {
+  development: { use_env_variable: 'DATABASE_URL', dialect: '${dialect}', logging: console.log },
+  test: { use_env_variable: 'DATABASE_URL', dialect: '${dialect}', logging: false },
+  production: { use_env_variable: 'DATABASE_URL', dialect: '${dialect}', logging: false },
+};
+`);
+
   await writeFile(path.join(dir, 'src', 'config', 'database.ts'),
     `import { Sequelize } from 'sequelize-typescript';\nimport { env } from './env.js';\n${opts.auth !== 'none' ? "import { User } from '../models/User.js';\n" : ""}export const sequelize = new Sequelize(env.DATABASE_URL, { dialect: '${dialect}' as const, logging: env.NODE_ENV === 'development' ? console.log : false, models: [${opts.auth !== 'none' ? 'User' : ''}] });\nexport async function connectDB() { await sequelize.authenticate(); console.log('✅ Database connected'); }\n`);
   

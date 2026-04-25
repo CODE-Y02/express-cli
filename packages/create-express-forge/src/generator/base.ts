@@ -55,6 +55,9 @@ export async function generateBaseFiles(opts: CliOptions, dir: string): Promise<
     ...(opts.auth === 'session'
       ? ['# Session Auth', 'SESSION_SECRET=your_session_secret_key_change_me', '']
       : []),
+    ...(opts.cache === 'redis'
+      ? ['# Redis Cache', 'REDIS_URL="redis://localhost:6379"', '']
+      : []),
   ];
   await writeFile(path.join(dir, '.env.example'), envLines.join('\n'));
   await writeFile(path.join(dir, '.env'), envLines.join('\n'));

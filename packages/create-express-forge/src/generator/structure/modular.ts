@@ -6,9 +6,11 @@ import {
   tplErrorHandler, tplNotFound, tplRateLimiter, tplValidate,
   tplExpressTypes, tplServerTs, tplAppTs,
 } from '../templates.js';
+import { TemplateManager } from '../../utils/template-manager.js';
 
 export async function generateModularStructure(opts: CliOptions, dir: string): Promise<void> {
   const src = path.join(dir, 'src');
+  const tm = new TemplateManager(opts);
 
   await writeFile(path.join(src, 'config', 'env.ts'), tplEnvConfig(opts));
   await writeFile(path.join(src, 'types', 'express.d.ts'), tplExpressTypes());
@@ -19,6 +21,9 @@ export async function generateModularStructure(opts: CliOptions, dir: string): P
   await writeFile(path.join(src, 'middleware', 'notFound.ts'), tplNotFound());
   await writeFile(path.join(src, 'middleware', 'rateLimiter.ts'), tplRateLimiter());
   await writeFile(path.join(src, 'middleware', 'validate.ts'), tplValidate());
+  if (opts.auth !== 'none') {
+    await writeFile(path.join(src, 'middleware', 'auth.middleware.ts'), tm.renderAuthMiddleware(1));
+  }
 
   // Health module
   await writeFile(path.join(src, 'modules', 'health', 'health.routes.ts'),
@@ -77,6 +82,7 @@ router.delete('/:id', deleteTodo);
 export { router as todosRouter };\n`);
 
   if (opts.auth === 'jwt') {
+    await writeFile(path.join(src, 'modules', 'auth', 'auth.schema.ts'),
     await writeFile(path.join(src, 'modules', 'auth', 'auth.schema.ts'),
       `import { z } from 'zod';\nexport const loginSchema = z.object({ body: z.object({ email: z.string().email(), password: z.string().min(8) }) });\n`);
     await writeFile(path.join(src, 'modules', 'auth', 'auth.controller.ts'),
