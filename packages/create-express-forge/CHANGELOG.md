@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.3.2
+
+### Patch Changes
+
+- 1bf6660: Removed CEF package alias as its not avaialbe
+
 ## 3.3.0
 
 ### Minor Changes

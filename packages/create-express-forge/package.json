@@ -1,6 +1,6 @@
 {
   "name": "create-express-forge",
-  "version": "3.3.1",
+  "version": "3.3.2",
   "description": "⚡ Scaffold production-ready Express.js TypeScript backends in seconds",
   "license": "MIT",
   "type": "module",
