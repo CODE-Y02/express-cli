@@ -28,15 +28,8 @@ export default defineConfig({
     nav: [
       { text: "Guide", link: "/guide/getting-started" },
       { text: "Features", link: "/guide/features" },
-      {
-        text: "Versions",
-        items: [
-          { text: "Latest (v2.x)", link: "https://code-y02.github.io/express-cli/" },
-          { text: "Beta (Next)", link: "https://code-y02.github.io/express-cli/next/" },
-          { text: "Legacy (v1.x)", link: "https://code-y02.github.io/express-cli/v1/" },
-        ],
-      },
       { text: "Reference", link: "/reference/cli-options" },
+      { text: "⭐ Star on GitHub", link: "https://github.com/CODE-Y02/express-cli" },
     ],
 
     sidebar: [

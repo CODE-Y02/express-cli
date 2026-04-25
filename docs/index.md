@@ -13,8 +13,8 @@ hero:
       text: Get Started
       link: /guide/getting-started
     - theme: alt
-      text: Documentation
-      link: /guide/architecture
+      text: ⭐ Star on GitHub
+      link: https://github.com/CODE-Y02/express-cli
 
 features:
   - icon: ⚡
@@ -56,3 +56,9 @@ features:
 ### 🛠 Built With
 
 TypeScript · Express.js · Prisma · Docker · Vitest · Zod · Pino
+
+---
+
+### ❤️ Support the Project
+
+If Express Forge has saved you time, please consider giving us a star on [GitHub](https://github.com/CODE-Y02/express-cli)! It helps us reach more developers and continue improving the project.
