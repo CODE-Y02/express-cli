@@ -1,6 +1,6 @@
 {
   "name": "create-express-forge",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "⚡ Scaffold production-ready Express.js TypeScript backends in seconds",
   "license": "MIT",
   "type": "module",
@@ -16,15 +16,21 @@
   },
   "keywords": [
     "express",
+    "typescript",
+    "nodejs",
+    "backend-api",
+    "express-typescript-boilerplate",
+    "rest-api-starter",
     "cli",
     "scaffold",
-    "create-app",
-    "typescript",
     "prisma",
-    "backend",
-    "starter",
-    "boilerplate",
-    "nodejs"
+    "sequelize",
+    "docker",
+    "swagger-openapi",
+    "pino-logger",
+    "winston",
+    "vitest",
+    "server-template"
   ],
   "bin": {
     "create-express-forge": "./dist/index.js",

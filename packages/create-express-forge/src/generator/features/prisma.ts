@@ -26,9 +26,9 @@ datasource db {
   provider = "${provider}"
   url      = env("DATABASE_URL")
 }
-
+${opts.auth !== 'none' ? `
 model User {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   name      String
   email     String   @unique
   password  String
@@ -56,7 +56,7 @@ model Todo {
 enum Role {
   USER
   ADMIN
-}
+}` : ''}
 `);
 
   await writeFile(path.join(dir, 'prisma', 'seed.ts'),
@@ -93,20 +93,7 @@ main()
 `);
 
   await writeFile(path.join(dir, 'src', 'config', 'database.ts'),
-    `import { PrismaClient } from '@prisma/client';
-
-declare global {
-  var __prisma: PrismaClient | undefined;
-}
-
-export const prisma =
-  globalThis.__prisma ??
-  new PrismaClient({
-    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
-  });
-
-if (process.env.NODE_ENV !== 'production') globalThis.__prisma = prisma;
-`);
+    `import { PrismaClient } from '@prisma/client';\n\nexport const prisma = new PrismaClient({\n  log: process.env.NODE_ENV === 'development' ? ['query', 'warn', 'error'] : ['error'],\n});\n`);
 
   // Patch .env with correct DATABASE_URL if init didn't do it right or we want to ensure our format
   const { readFile, writeFile: fsWrite } = await import('fs/promises');

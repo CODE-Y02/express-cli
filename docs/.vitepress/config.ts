@@ -9,7 +9,14 @@ export default defineConfig({
   description: "⚡ Production-ready Express backends in seconds",
   base: base,
 
-  head: [["link", { rel: "icon", href: `${base}logo.svg` }]],
+  head: [
+    ["link", { rel: "icon", href: `${base}logo.svg` }],
+    ["meta", { name: "keywords", content: "express, typescript, nodejs, backend, api, generator, scaffold, prisma, sequelize, architecture, mvc, modular, rest-api, server-boilerplate" }],
+    ["meta", { name: "author", content: "Yatharth Lakhate" }],
+    ["meta", { property: "og:type", content: "website" }],
+    ["meta", { property: "og:title", content: "Express Forge | The Ultimate Express + TypeScript Generator" }],
+    ["meta", { property: "og:description", content: "Scaffold production-ready Express.js TypeScript backends in seconds with built-in Auth, ORM, and OpenAPI support." }],
+  ],
 
   themeConfig: {
     logo: `${base}logo.svg`,
@@ -21,15 +28,8 @@ export default defineConfig({
     nav: [
       { text: "Guide", link: "/guide/getting-started" },
       { text: "Features", link: "/guide/features" },
-      {
-        text: "Versions",
-        items: [
-          { text: "Latest (v2.x)", link: "https://code-y02.github.io/express-cli/" },
-          { text: "Beta (Next)", link: "https://code-y02.github.io/express-cli/next/" },
-          { text: "Legacy (v1.x)", link: "https://code-y02.github.io/express-cli/v1/" },
-        ],
-      },
       { text: "Reference", link: "/reference/cli-options" },
+      { text: "⭐ Star on GitHub", link: "https://github.com/CODE-Y02/express-cli" },
     ],
 
     sidebar: [

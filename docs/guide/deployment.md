@@ -29,6 +29,7 @@ Most modern PaaS platforms will automatically detect the `Dockerfile` or the `st
 1. Connect your GitHub repository.
 2. Configure your environment variables (copy from `.env`).
 3. Set the build command to `npm run build` (if not using Docker).
+   > **Note for Prisma users**: The generated `package.json` includes a `postinstall: "prisma generate"` script, which ensures your Prisma client is generated automatically before the build step on most PaaS platforms.
 4. Set the start command to `npm start`.
 
 ## 🛡️ Production Checklist

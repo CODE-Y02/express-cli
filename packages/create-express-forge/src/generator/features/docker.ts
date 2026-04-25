@@ -5,21 +5,27 @@ import { writeFile } from '../../utils/file.js';
 export async function generateDocker(opts: CliOptions, dir: string): Promise<void> {
   const hasDb = opts.orm !== 'none' && opts.database !== 'none' && opts.database !== 'sqlite';
 
+  const pm = opts.packageManager;
+  const pmInstallGlobal = pm === 'pnpm' ? 'RUN npm install -g pnpm\n' : pm === 'bun' ? 'RUN npm install -g bun\n' : '';
+  const pmInstallCmd = pm === 'pnpm' ? 'RUN pnpm install --frozen-lockfile' : pm === 'yarn' ? 'RUN yarn install --frozen-lockfile' : pm === 'bun' ? 'RUN bun install --frozen-lockfile' : 'RUN npm ci';
+  const pmProdInstallCmd = pm === 'pnpm' ? 'RUN pnpm install --frozen-lockfile --prod' : pm === 'yarn' ? 'RUN yarn install --production --frozen-lockfile' : pm === 'bun' ? 'RUN bun install --frozen-lockfile --production' : 'RUN npm ci --omit=dev && npm cache clean --force';
+  const pmRunBuild = pm === 'pnpm' ? 'pnpm run build' : pm === 'yarn' ? 'yarn run build' : pm === 'bun' ? 'bun run build' : 'npm run build';
+
   await writeFile(path.join(dir, 'Dockerfile'),
     `# ── Stage 1: Builder ─────────────────────────────────────────────────────────
 FROM node:20-alpine AS builder
 WORKDIR /app
-COPY package*.json ./
-RUN npm ci
+${pmInstallGlobal}COPY package.json pnpm-lock.yaml* yarn.lock* bun.lock* package-lock.json* ./
+${pmInstallCmd}
 COPY . .
-RUN npm run build
-${opts.orm === 'prisma' ? 'RUN npx prisma generate\n' : ''}
+RUN ${pmRunBuild}
+${opts.orm === 'prisma' ? `RUN ${pm === 'bun' ? 'bunx' : pm === 'pnpm' ? 'pnpx' : 'npx'} prisma generate\n` : ''}
 # ── Stage 2: Production ───────────────────────────────────────────────────────
 FROM node:20-alpine AS production
 WORKDIR /app
 ENV NODE_ENV=production
-COPY package*.json ./
-RUN npm ci --omit=dev && npm cache clean --force
+${pmInstallGlobal}COPY package.json pnpm-lock.yaml* yarn.lock* bun.lock* package-lock.json* ./
+${pmProdInstallCmd}
 COPY --from=builder /app/dist ./dist
 ${opts.orm === 'prisma' ? 'COPY --from=builder /app/prisma ./prisma\nCOPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma\n' : ''}
 EXPOSE 3000
