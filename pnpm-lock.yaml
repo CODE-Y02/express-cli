@@ -36,12 +36,6 @@ importers:
         specifier: ^3.4.31
         version: 3.5.33(typescript@5.5.3)
 
-  packages/cef:
-    dependencies:
-      create-express-forge:
-        specifier: workspace:*
-        version: link:../create-express-forge
-
   packages/create-express-forge:
     dependencies:
       '@inquirer/prompts':
