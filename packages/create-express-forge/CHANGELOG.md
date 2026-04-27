@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.1.0
+
+### Minor Changes
+
+- 3f3aa68: fix linting issues with package
+
 ## 4.0.0
 
 ### Major Changes
