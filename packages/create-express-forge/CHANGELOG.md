@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.1.1
+
+### Patch Changes
+
+- 3752d64: fix build issues
+
 ## 4.1.0
 
 ### Minor Changes
