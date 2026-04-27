@@ -12,12 +12,24 @@ try {
   <% if (it.logger !== 'none') { %>logger.info('✅ Database connected');<% } %>
 } catch (err) {
   <% if (it.logger !== 'none') { %>logger.error('❌ Database connection failed', err);<% } %>
-  process.exit(1);
+  if (env.NODE_ENV === 'production') {
+    process.exit(1);
+  }
+  <% if (it.logger !== 'none') { %>logger.warn('⚠️  Continuing in development mode without database');<% } %>
 }
 <% } %>
-<% if (it.orm === 'sequelize') { %>
-import { connectDB } from './config/database.js';
-await connectDB();
+
+<% if (it.cache === 'redis') { %>
+import { connectRedis } from './cache/index.js';
+try {
+  await connectRedis();
+} catch (err) {
+  <% if (it.logger !== 'none') { %>logger.error('❌ Redis connection failed', err);<% } %>
+  if (env.NODE_ENV === 'production') {
+    process.exit(1);
+  }
+  <% if (it.logger !== 'none') { %>logger.warn('⚠️  Continuing in development mode without Redis');<% } %>
+}
 <% } %>
 
 const server = app.listen(env.PORT, () => {

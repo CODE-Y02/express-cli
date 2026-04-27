@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   api:
     build: .
@@ -15,9 +14,15 @@ services:
 <% if (it.cache === 'redis') { %>
       - REDIS_URL=redis://redis:6379
 <% } %>
+<% if ((it.database !== 'sqlite' && it.database !== 'none') || it.cache === 'redis') { %>
     depends_on:
-<% if (it.database !== 'sqlite' && it.database !== 'none') { %>      - db<% } %>
-<% if (it.cache === 'redis') { %>      - redis<% } %>
+<% if (it.database !== 'sqlite' && it.database !== 'none') { %>
+      - db
+<% } %>
+<% if (it.cache === 'redis') { %>
+      - redis
+<% } %>
+<% } %>
 
 <% if (it.database === 'postgresql') { %>
   db:
@@ -51,6 +56,11 @@ services:
       - "6379:6379"
 <% } %>
 
+<% if (it.database !== 'sqlite' && it.database !== 'none') { %>
 volumes:
-<% if (it.database === 'postgresql') { %>  pgdata:<% } %>
-<% if (it.database === 'mysql') { %>  mysqldata:<% } %>
+<% if (it.database === 'postgresql') { %>
+  pgdata:
+<% } else if (it.database === 'mysql') { %>
+  mysqldata:
+<% } %>
+<% } %>
