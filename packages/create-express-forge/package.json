@@ -37,6 +37,7 @@
   },
   "files": [
     "dist",
+    "templates",
     "README.md",
     "CHANGELOG.md"
   ],
@@ -47,7 +48,7 @@
     "dev": "tsx src/index.ts",
     "build": "tsup",
     "check-types": "tsc --noEmit",
-    "lint": "eslint . --max-warnings 0",
+    "lint": "biome lint .",
     "test": "vitest run",
     "test:smoke": "vitest run tests/smoke.integration.test.ts"
   },
@@ -55,14 +56,15 @@
     "@inquirer/prompts": "^7.1.0",
     "chalk": "^5.3.0",
     "commander": "^12.1.0",
+    "eta": "^3.5.0",
     "execa": "^9.3.0",
     "fs-extra": "^11.2.0",
-    "ora": "^8.1.1"
+    "ora": "^8.1.1",
+    "pkg-types": "^1.2.0"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
+    "@repo/lint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "eslint": "^8.57.0",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^20.14.0",
     "tsup": "^8.1.0",

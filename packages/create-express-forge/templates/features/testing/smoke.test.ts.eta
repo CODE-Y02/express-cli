@@ -1,0 +1,9 @@
+import request from 'supertest';
+import { app } from '../src/app.js';
+
+describe('Smoke Test', () => {
+  it('should return 404 for unknown route', async () => {
+    const res = await request(app).get('/api/unknown-route-123');
+    expect(res.status).toBe(404);
+  });
+});

@@ -1,0 +1,56 @@
+version: '3.8'
+services:
+  api:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+<% if (it.database === 'postgresql') { %>
+      - DATABASE_URL=postgresql://user:password@db:5432/mydb
+<% } else if (it.database === 'mysql') { %>
+      - DATABASE_URL=mysql://user:password@db:3306/mydb
+<% } %>
+<% if (it.cache === 'redis') { %>
+      - REDIS_URL=redis://redis:6379
+<% } %>
+    depends_on:
+<% if (it.database !== 'sqlite' && it.database !== 'none') { %>      - db<% } %>
+<% if (it.cache === 'redis') { %>      - redis<% } %>
+
+<% if (it.database === 'postgresql') { %>
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+<% } else if (it.database === 'mysql') { %>
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: mydb
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql
+<% } %>
+
+<% if (it.cache === 'redis') { %>
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+<% } %>
+
+volumes:
+<% if (it.database === 'postgresql') { %>  pgdata:<% } %>
+<% if (it.database === 'mysql') { %>  mysqldata:<% } %>

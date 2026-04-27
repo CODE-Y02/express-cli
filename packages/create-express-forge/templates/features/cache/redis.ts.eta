@@ -1,0 +1,12 @@
+import { createClient } from 'redis';
+import { env } from '../config/env.js';
+<% if (it.logger !== 'none') { %>import { logger } from '../logger/index.js';<% } %>
+
+export const redisClient = createClient({ url: env.REDIS_URL });
+
+redisClient.on('error', (err) => <% if (it.logger !== 'none') { %>logger.error('Redis Client Error', err)<% } else { %>console.error('Redis Client Error', err)<% } %>);
+redisClient.on('connect', () => <% if (it.logger !== 'none') { %>logger.info('✅ Redis connected')<% } else { %>console.log('✅ Redis connected')<% } %>);
+
+export async function connectRedis() {
+  await redisClient.connect();
+}

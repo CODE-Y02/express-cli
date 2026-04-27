@@ -1,69 +1,83 @@
-import path from 'path';
-import type { CliOptions } from '../types.js';
-import { writeFile, writeJson } from '../utils/file.js';
+import path from "node:path";
+import type { CliOptions } from "../types.js";
+import type { TemplateManager } from "../utils/template-manager.js";
 
-function dbExampleUrl(db: string): string {
-  if (db === 'mysql') return 'mysql://user:password@localhost:3306/mydb';
-  if (db === 'sqlite') return 'file:./dev.db';
-  return 'postgresql://user:password@localhost:5432/mydb';
-}
+export async function generateBaseFiles(
+  _opts: CliOptions,
+  dir: string,
+  tmpl: TemplateManager,
+): Promise<void> {
+  const src = path.join(dir, "src");
 
-export async function generateBaseFiles(opts: CliOptions, dir: string): Promise<void> {
-  const { orm, database, logger, testing, docker, projectName } = opts;
-  const hasDb = orm !== 'none' && database !== 'none';
-
-  await writeJson(path.join(dir, 'tsconfig.json'), {
-    compilerOptions: {
-      target: 'ES2022',
-      module: 'NodeNext',
-      moduleResolution: 'NodeNext',
-      outDir: './dist',
-      rootDir: './src',
-      strict: true,
-      esModuleInterop: true,
-      skipLibCheck: true,
-      declaration: true,
-      sourceMap: true,
-      ...(opts.importAlias ? { baseUrl: '.', paths: { '@/*': ['src/*'] } } : {}),
-      ...(orm === 'sequelize' ? { experimentalDecorators: true, emitDecoratorMetadata: true } : {}),
-    },
-    include: ['src/**/*'],
-    exclude: ['node_modules', 'dist', '**/*.test.ts'],
-  });
-
-  await writeFile(
-    path.join(dir, '.gitignore'),
-    `node_modules/\ndist/\n.env\n*.log\nlogs/\ncoverage/\n.DS_Store\n${orm === 'prisma' ? 'prisma/migrations/\n*.db\n' : ''}`,
+  // Root files
+  await tmpl.renderTemplateFile(
+    "base/tsconfig.json.eta",
+    path.join(dir, "tsconfig.json"),
+  );
+  await tmpl.renderTemplateFile(
+    "base/.gitignore.eta",
+    path.join(dir, ".gitignore"),
+  );
+  await tmpl.renderTemplateFile(
+    "base/.env.example.eta",
+    path.join(dir, ".env.example"),
+  );
+  await tmpl.renderTemplateFile(
+    "base/.env.example.eta",
+    path.join(dir, ".env"),
+  );
+  await tmpl.renderTemplateFile(
+    "base/README.md.eta",
+    path.join(dir, "README.md"),
   );
 
-  const envLines = [
-    '# Application',
-    'NODE_ENV=development',
-    'PORT=3000',
-    '',
-    '# CORS',
-    'CORS_ORIGIN=http://localhost:3000',
-    '',
-    '# Rate limiter',
-    'RATE_LIMIT_WINDOW_MS=900000',
-    'RATE_LIMIT_MAX=100',
-    '',
-    ...(hasDb ? ['# Database', `DATABASE_URL="${dbExampleUrl(database)}"`, ''] : []),
-    ...(opts.auth === 'jwt'
-      ? ['# JWT Auth', 'JWT_SECRET=your_super_secret_jwt_key_change_me', 'JWT_EXPIRES_IN=1d', '']
-      : []),
-    ...(opts.auth === 'session'
-      ? ['# Session Auth', 'SESSION_SECRET=your_session_secret_key_change_me', '']
-      : []),
-    ...(opts.cache === 'redis'
-      ? ['# Redis Cache', 'REDIS_URL="redis://localhost:6379"', '']
-      : []),
-  ];
-  await writeFile(path.join(dir, '.env.example'), envLines.join('\n'));
-  await writeFile(path.join(dir, '.env'), envLines.join('\n'));
+  // Core src files
+  await tmpl.renderTemplateFile(
+    "base/src/app.ts.eta",
+    path.join(src, "app.ts"),
+  );
+  await tmpl.renderTemplateFile(
+    "base/src/server.ts.eta",
+    path.join(src, "server.ts"),
+  );
 
-  await writeFile(
-    path.join(dir, 'README.md'),
-    `# ${projectName}\n\n> Scaffolded with [create-express-forge](https://github.com/CODE-Y02/create-express-forge)\n\n## Stack\n\n- TypeScript + Express.js\n- Zod validation\n${orm === 'prisma' ? `- Prisma ORM + ${database}\n` : ''}${orm === 'sequelize' ? `- Sequelize ORM + ${database}\n` : ''}${logger !== 'none' ? `- ${logger} logger\n` : ''}${testing !== 'none' ? `- ${testing} tests\n` : ''}${docker ? '- Docker + docker-compose\n' : ''}\n## Quick Start\n\n\`\`\`bash\ncp .env.example .env\n${orm === 'prisma' ? `${opts.packageManager === 'npm' ? 'npm run' : opts.packageManager} db:migrate\n` : ''}${opts.packageManager} run dev\n\`\`\`\n`,
+  // Config
+  await tmpl.renderTemplateFile(
+    "base/src/config/env.ts.eta",
+    path.join(src, "config", "env.ts"),
+  );
+
+  // Utils
+  await tmpl.renderTemplateFile(
+    "base/src/utils/ApiError.ts.eta",
+    path.join(src, "utils", "ApiError.ts"),
+  );
+  await tmpl.renderTemplateFile(
+    "base/src/utils/ApiResponse.ts.eta",
+    path.join(src, "utils", "ApiResponse.ts"),
+  );
+
+  // Middleware
+  await tmpl.renderTemplateFile(
+    "base/src/middleware/errorHandler.ts.eta",
+    path.join(src, "middleware", "errorHandler.ts"),
+  );
+  await tmpl.renderTemplateFile(
+    "base/src/middleware/notFound.ts.eta",
+    path.join(src, "middleware", "notFound.ts"),
+  );
+  await tmpl.renderTemplateFile(
+    "base/src/middleware/rateLimiter.ts.eta",
+    path.join(src, "middleware", "rateLimiter.ts"),
+  );
+  await tmpl.renderTemplateFile(
+    "base/src/middleware/validate.ts.eta",
+    path.join(src, "middleware", "validate.ts"),
+  );
+
+  // Types
+  await tmpl.renderTemplateFile(
+    "base/src/types/express.d.ts.eta",
+    path.join(src, "types", "express.d.ts"),
   );
 }
