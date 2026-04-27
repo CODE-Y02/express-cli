@@ -1,0 +1,6 @@
+<% const dialect = it.database === 'mysql' ? 'mysql' : it.database === 'sqlite' ? 'sqlite' : 'postgres'; %>
+module.exports = {
+  development: { use_env_variable: 'DATABASE_URL', dialect: '<%= dialect %>', logging: console.log },
+  test: { use_env_variable: 'DATABASE_URL', dialect: '<%= dialect %>', logging: false },
+  production: { use_env_variable: 'DATABASE_URL', dialect: '<%= dialect %>', logging: false },
+};

@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.env
+*.log
+logs/
+coverage/
+.DS_Store
+<% if (it.orm === 'prisma') { %>
+prisma/migrations/
+*.db
+<% } %>

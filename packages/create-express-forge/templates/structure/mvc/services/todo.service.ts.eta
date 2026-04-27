@@ -1,0 +1,41 @@
+import { ApiError } from '../utils/ApiError.js';
+
+export interface Todo { 
+  id: string; 
+  title: string; 
+  description?: string; 
+  completed: boolean; 
+  <% if (it.auth !== 'none') { %>userId: string;<% } %>
+}
+
+const store: Todo[] = [];
+
+export const TodoService = {
+  findAll: async (<% if (it.auth !== 'none') { %>userId: string<% } %>) => 
+    store<% if (it.auth !== 'none') { %>.filter(t => t.userId === userId)<% } %>,
+    
+  findById: async (id: string<% if (it.auth !== 'none') { %>, userId: string<% } %>) => { 
+    const t = store.find((t) => t.id === id<% if (it.auth !== 'none') { %> && t.userId === userId<% } %>); 
+    if (!t) throw ApiError.notFound('Todo not found'); 
+    return t; 
+  },
+  
+  create: async (data: Omit<Todo, 'id'>) => { 
+    const t = { id: Math.random().toString(36).substring(7), ...data }; 
+    store.push(t); 
+    return t; 
+  },
+  
+  update: async (id: string, <% if (it.auth !== 'none') { %>userId: string, <% } %>data: Partial<Todo>) => { 
+    const t = store.find((t) => t.id === id<% if (it.auth !== 'none') { %> && t.userId === userId<% } %>); 
+    if (!t) throw ApiError.notFound('Todo not found'); 
+    Object.assign(t, data); 
+    return t; 
+  },
+  
+  remove: async (id: string<% if (it.auth !== 'none') { %>, userId: string<% } %>) => { 
+    const i = store.findIndex((t) => t.id === id<% if (it.auth !== 'none') { %> && t.userId === userId<% } %>); 
+    if (i === -1) throw ApiError.notFound('Todo not found'); 
+    store.splice(i, 1); 
+  },
+};

@@ -1,0 +1,58 @@
+import 'dotenv/config';
+<% if (it.logger !== 'none') { %>
+import { logger } from './logger/index.js';
+<% } %>
+import { app } from './app.js';
+import { env } from './config/env.js';
+
+<% if (it.orm === 'prisma') { %>
+import { prisma } from './config/database.js';
+try {
+  await prisma.$connect();
+  <% if (it.logger !== 'none') { %>logger.info('✅ Database connected');<% } %>
+} catch (err) {
+  <% if (it.logger !== 'none') { %>logger.error('❌ Database connection failed', err);<% } %>
+  process.exit(1);
+}
+<% } %>
+<% if (it.orm === 'sequelize') { %>
+import { connectDB } from './config/database.js';
+await connectDB();
+<% } %>
+
+const server = app.listen(env.PORT, () => {
+  <% if (it.logger !== 'none') { %>
+  logger.info(`🚀 Server running on port ${env.PORT} in ${env.NODE_ENV} mode`);
+  <% } else { %>
+  console.log(`🚀 Server running on port ${env.PORT} in ${env.NODE_ENV} mode`);
+  <% } %>
+});
+
+const shutdown = async (signal: string) => {
+  <% if (it.logger !== 'none') { %>
+  logger.info(`${signal} received — shutting down gracefully`);
+  <% } else { %>
+  console.log(`${signal} received — shutting down gracefully`);
+  <% } %>
+  
+  server.close(async () => {
+    <% if (it.orm === 'prisma') { %>
+    await prisma.$disconnect();
+    <% } %>
+    process.exit(0);
+  });
+  
+  // Force shutdown after 10s
+  setTimeout(() => process.exit(1), 10000);
+};
+
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('uncaughtException', (err) => { 
+  <% if (it.logger !== 'none') { %>logger.error('Uncaught Exception', err);<% } else { %>console.error('Uncaught Exception', err);<% } %>
+  process.exit(1); 
+});
+process.on('unhandledRejection', (reason) => { 
+  <% if (it.logger !== 'none') { %>logger.error('Unhandled Rejection', reason);<% } else { %>console.error('Unhandled Rejection', reason);<% } %>
+  process.exit(1); 
+});

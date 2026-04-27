@@ -1,0 +1,5 @@
+import type { Request, Response } from 'express';
+import { ApiResponse } from '../utils/ApiResponse.js';
+
+export const getHealth = (_req: Request, res: Response) => 
+  ApiResponse.success(res, { status: 'ok', timestamp: new Date().toISOString() }, 'Service healthy');

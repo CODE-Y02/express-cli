@@ -1,0 +1,14 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.4.13/schema.json",
+  "extends": ["./packages/lint-config/biome.base.json"],
+  "files": {
+    "includes": [
+      "!**/dist",
+      "!**/node_modules",
+      "!**/pnpm-lock.yaml",
+      "!.turbo",
+      "!docs/.vitepress/cache",
+      "!docs/.vitepress/dist"
+    ]
+  }
+}

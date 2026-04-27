@@ -1,0 +1,17 @@
+<% const dialect = it.database === 'mysql' ? 'mysql' : it.database === 'sqlite' ? 'sqlite' : 'postgres'; %>
+import { Sequelize } from 'sequelize-typescript';
+import { env } from './env.js';
+<% if (it.auth !== 'none') { %>
+import { User } from '../models/User.js';
+<% } %>
+
+export const sequelize = new Sequelize(env.DATABASE_URL, { 
+  dialect: '<%= dialect %>' as const, 
+  logging: env.NODE_ENV === 'development' ? console.log : false, 
+  models: [<% if (it.auth !== 'none') { %>'User'<% } %>] 
+});
+
+export async function connectDB() { 
+  await sequelize.authenticate(); 
+  console.log('✅ Database connected'); 
+}

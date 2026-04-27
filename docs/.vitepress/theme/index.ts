@@ -3,7 +3,7 @@ import "./custom.css";
 
 export default {
   extends: DefaultTheme,
-  enhanceApp({}) {
+  enhanceApp() {
     // register your custom global components
   },
 };
