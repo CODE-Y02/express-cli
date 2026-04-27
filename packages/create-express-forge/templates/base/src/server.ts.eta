@@ -35,8 +35,14 @@ try {
 const server = app.listen(env.PORT, () => {
   <% if (it.logger !== 'none') { %>
   logger.info(`🚀 Server running on port ${env.PORT} in ${env.NODE_ENV} mode`);
+  <% if (it.openapi) { %>
+  logger.info(`📖 API Documentation available at http://localhost:${env.PORT}/api-docs`);
+  <% } %>
   <% } else { %>
   console.log(`🚀 Server running on port ${env.PORT} in ${env.NODE_ENV} mode`);
+  <% if (it.openapi) { %>
+  console.log(`📖 API Documentation available at http://localhost:${env.PORT}/api-docs`);
+  <% } %>
   <% } %>
 });
 

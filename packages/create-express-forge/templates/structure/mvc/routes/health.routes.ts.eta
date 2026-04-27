@@ -1,19 +1,9 @@
 import { Router } from 'express';
 import { getHealth } from '../controllers/health.controller.js';
+import '../schemas/health.schema.js';
 
 const router = Router();
 
-/**
- * @openapi
- * /api/health:
- *   get:
- *     tags:
- *       - Health
- *     description: Responds if the app is up and running
- *     responses:
- *       200:
- *         description: App is up and running
- */
 router.get('/', getHealth);
 
 export { router as healthRouter };

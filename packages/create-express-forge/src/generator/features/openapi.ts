@@ -14,4 +14,8 @@ export async function generateOpenApi(
     "features/openapi/swagger.ts.eta",
     path.join(docsDir, "swagger.ts"),
   );
+  await tmpl.renderTemplateFile(
+    "features/openapi/registry.ts.eta",
+    path.join(docsDir, "registry.ts"),
+  );
 }

@@ -1,0 +1,35 @@
+import { z } from 'zod';
+<% if (it.openapi) { %>
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
+import { registry } from '../../docs/registry.js';
+
+extendZodWithOpenApi(z);
+
+registry.registerPath({
+  method: 'get',
+  path: '/health',
+  tags: ['Health'],
+  summary: 'Health check endpoint',
+  description: 'Responds if the app is up and running',
+  responses: {
+    200: {
+      description: 'App is up and running',
+      content: {
+        'application/json': {
+          schema: z.object({
+            success: z.boolean(),
+            message: z.string(),
+            timestamp: z.string(),
+          }),
+        },
+      },
+    },
+  },
+});
+<% } %>
+
+export const healthResponseSchema = z.object({
+  success: z.boolean(),
+  message: z.string(),
+  timestamp: z.string(),
+});

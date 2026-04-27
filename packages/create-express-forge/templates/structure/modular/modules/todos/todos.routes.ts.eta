@@ -8,34 +8,6 @@ const router = Router();
 
 <% if (it.auth !== 'none') { %>router.use(auth);<% } %>
 
-/**
- * @openapi
- * /api/v1/todos:
- *   get:
- *     tags:
- *       - Todos
- *     responses:
- *       200:
- *         description: Success
- *   post:
- *     tags:
- *       - Todos
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required: [title]
- *             properties:
- *               title:
- *                 type: string
- *               description:
- *                 type: string
- *     responses:
- *       201:
- *         description: Created
- */
 router.get('/', getTodos);
 router.get('/:id', getTodoById);
 router.post('/', validate(createTodoSchema), createTodo);

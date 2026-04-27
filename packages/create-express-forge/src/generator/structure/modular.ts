@@ -18,6 +18,10 @@ export async function generateModularStructure(
 
   // Health module
   await tmpl.renderTemplateFile(
+    "structure/modular/modules/health/health.schema.ts.eta",
+    path.join(src, "modules", "health", "health.schema.ts"),
+  );
+  await tmpl.renderTemplateFile(
     "structure/modular/modules/health/health.routes.ts.eta",
     path.join(src, "modules", "health", "health.routes.ts"),
   );

@@ -17,6 +17,10 @@ export async function generateMvcStructure(
   }
 
   await tmpl.renderTemplateFile(
+    "structure/mvc/schemas/health.schema.ts.eta",
+    path.join(src, "schemas", "health.schema.ts"),
+  );
+  await tmpl.renderTemplateFile(
     "structure/mvc/schemas/todo.schema.ts.eta",
     path.join(src, "schemas", "todo.schema.ts"),
   );

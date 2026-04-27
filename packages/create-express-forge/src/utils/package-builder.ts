@@ -89,6 +89,7 @@ export function buildPackageJson(opts: CliOptions): PackageJson {
   if (openapi) {
     deps["swagger-jsdoc"] = "^6.2.8";
     deps["swagger-ui-express"] = "^5.0.1";
+    deps["@asteasolutions/zod-to-openapi"] = "^7.3.0";
     devDeps["@types/swagger-jsdoc"] = "^6.0.4";
     devDeps["@types/swagger-ui-express"] = "^4.1.6";
   }

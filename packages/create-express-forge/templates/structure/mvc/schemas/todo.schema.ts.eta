@@ -1,4 +1,65 @@
 import { z } from 'zod';
+<% if (it.openapi) { %>
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
+import { registry } from '../docs/registry.js';
+
+extendZodWithOpenApi(z);
+
+export const TodoSchema = registry.register('Todo', z.object({
+  id: z.string().uuid(),
+  title: z.string().min(1).max(100),
+  description: z.string().max(500).optional(),
+  completed: z.boolean(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+}));
+
+registry.registerPath({
+  method: 'get',
+  path: '/todos',
+  tags: ['Todos'],
+  summary: 'Get all todos',
+  responses: {
+    200: {
+      description: 'List of todos',
+      content: {
+        'application/json': {
+          schema: z.array(TodoSchema),
+        },
+      },
+    },
+  },
+});
+
+registry.registerPath({
+  method: 'post',
+  path: '/todos',
+  tags: ['Todos'],
+  summary: 'Create a new todo',
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: z.object({
+            title: z.string().min(1).max(100),
+            description: z.string().max(500).optional(),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    201: {
+      description: 'Todo created',
+      content: {
+        'application/json': {
+          schema: TodoSchema,
+        },
+      },
+    },
+  },
+});
+<% } %>
 
 export const createTodoSchema = z.object({ 
   body: z.object({ 

@@ -51,7 +51,7 @@ setupSwagger(app);
 <% } %>
 
 <% if (it.pattern === 'modular') { %>
-app.use('/api/health', healthRouter);
+app.use('/api/v1/health', healthRouter);
 app.use('/api/v1/todos', todosRouter);
 <% if (it.auth !== 'none') { %>
 app.use('/api/v1/auth', authRouter);

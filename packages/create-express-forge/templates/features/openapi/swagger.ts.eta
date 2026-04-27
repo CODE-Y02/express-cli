@@ -1,9 +1,20 @@
-import swaggerJsdoc from 'swagger-jsdoc';
+import { OpenApiGeneratorV3 } from '@asteasolutions/zod-to-openapi';
 import swaggerUi from 'swagger-ui-express';
 import type { Express } from 'express';
+import { registry } from './registry.js';
 
-const options: swaggerJsdoc.Options = {
-  definition: {
+export function setupSwagger(app: Express) {
+<% if (it.auth === 'jwt') { %>
+  registry.registerComponent('securitySchemes', 'bearerAuth', {
+    type: 'http',
+    scheme: 'bearer',
+    bearerFormat: 'JWT',
+  });
+<% } %>
+
+  const generator = new OpenApiGeneratorV3(registry.definitions);
+  
+  const swaggerSpec = generator.generateDocument({
     openapi: '3.0.0',
     info: {
       title: '<%= it.projectName %> API',
@@ -12,20 +23,10 @@ const options: swaggerJsdoc.Options = {
     },
     servers: [{ url: '/api/v1' }],
 <% if (it.auth === 'jwt') { %>
-    components: {
-      securitySchemes: {
-        bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }
-      }
-    },
     security: [{ bearerAuth: [] }]
 <% } %>
-  },
-  apis: ['./src/routes/*.ts', './src/modules/**/*.routes.ts', './src/controllers/*.ts'],
-};
+  });
 
-const swaggerSpec = swaggerJsdoc(options);
-
-export function setupSwagger(app: Express) {
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
   app.get('/api-docs.json', (req, res) => {
     res.setHeader('Content-Type', 'application/json');

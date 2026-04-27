@@ -113,7 +113,7 @@ export async function generateProject(
       try {
         await execa(
           "npx",
-          ["--yes", "@biomejs/biome", "format", "--write", "."],
+          ["--yes", "@biomejs/biome@2.4.13", "format", "--write", "."],
           { cwd: targetDir },
         );
         spinner.succeed(chalk.green("Code polished and formatted"));
