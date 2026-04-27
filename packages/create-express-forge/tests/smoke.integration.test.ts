@@ -77,4 +77,12 @@ describe("CLI Integration (Smoke Test)", () => {
     const build = await execa("npm", ["run", "build"], { cwd: targetPath });
     expect(build.exitCode).toBe(0);
   }, 240000); // 4 minutes for build + typecheck
+
+  it("should pass linting checks", async () => {
+    const targetPath = path.join(testDir, projectName);
+
+    console.log("Running lint check in generated project...");
+    const lint = await execa("npm", ["run", "lint"], { cwd: targetPath });
+    expect(lint.exitCode).toBe(0);
+  }, 60000);
 });

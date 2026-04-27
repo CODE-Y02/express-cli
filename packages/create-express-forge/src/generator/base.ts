@@ -15,6 +15,10 @@ export async function generateBaseFiles(
     path.join(dir, "tsconfig.json"),
   );
   await tmpl.renderTemplateFile(
+    "base/biome.json.eta",
+    path.join(dir, "biome.json"),
+  );
+  await tmpl.renderTemplateFile(
     "base/.gitignore.eta",
     path.join(dir, ".gitignore"),
   );

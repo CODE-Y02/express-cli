@@ -1,23 +1,23 @@
 import type { Request, Response } from 'express';
-import { ApiResponse } from '../utils/ApiResponse.js';
+import { sendSuccess, sendCreated, sendNoContent } from '../utils/ApiResponse.js';
 import { TodoService } from '../services/todo.service.js';
 import type { CreateTodoDto, UpdateTodoDto } from '../schemas/todo.schema.js';
 
 export const getTodos = async (req: Request, res: Response) => 
-  ApiResponse.success(res, await TodoService.findAll(<% if (it.auth !== 'none') { %>req.user?.id || 'guest'<% } %>), 'Todos fetched');
+  sendSuccess(res, await TodoService.findAll(<% if (it.auth !== 'none') { %>req.user?.id || 'guest'<% } %>), 'Todos fetched');
 
 export const getTodoById = async (req: Request, res: Response) => 
-  ApiResponse.success(res, await TodoService.findById(req.params.id as string<% if (it.auth !== 'none') { %>, req.user?.id || 'guest'<% } %>));
+  sendSuccess(res, await TodoService.findById(req.params.id as string<% if (it.auth !== 'none') { %>, req.user?.id || 'guest'<% } %>));
 
 export const createTodo = async (req: Request, res: Response) => 
-  ApiResponse.created(res, await TodoService.create({ 
+  sendCreated(res, await TodoService.create({ 
     ...(req.body as CreateTodoDto), 
     completed: false<% if (it.auth !== 'none') { %>, 
     userId: req.user?.id || 'guest'<% } %> 
   }), 'Todo created');
 
 export const updateTodo = async (req: Request, res: Response) => 
-  ApiResponse.success(res, await TodoService.update(
+  sendSuccess(res, await TodoService.update(
     req.params.id as string, 
     <% if (it.auth !== 'none') { %>req.user?.id || 'guest', <% } %>
     req.body as UpdateTodoDto
@@ -25,5 +25,5 @@ export const updateTodo = async (req: Request, res: Response) =>
 
 export const deleteTodo = async (req: Request, res: Response) => { 
   await TodoService.remove(req.params.id as string<% if (it.auth !== 'none') { %>, req.user?.id || 'guest'<% } %>); 
-  return ApiResponse.noContent(res); 
+  return sendNoContent(res); 
 };

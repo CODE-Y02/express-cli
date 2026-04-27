@@ -1,14 +1,24 @@
 import type { Response } from 'express';
 
-export class ApiResponse {
-  static success<T>(res: Response, data: T, message = 'Success', statusCode = 200) {
-    return res.status(statusCode).json({ success: true, message, data });
-  }
-  static created<T>(res: Response, data: T, message = 'Created') {
-    return ApiResponse.success(res, data, message, 201);
-  }
-  static noContent(res: Response) { return res.status(204).send(); }
-  static paginated<T>(res: Response, data: T[], pagination: { total: number; page: number; limit: number; pages: number }, message = 'Success') {
-    return res.status(200).json({ success: true, message, data, pagination });
-  }
+export interface Pagination {
+  total: number;
+  page: number;
+  limit: number;
+  pages: number;
+}
+
+export function sendSuccess<T>(res: Response, data: T, message = 'Success', statusCode = 200) {
+  return res.status(statusCode).json({ success: true, message, data });
+}
+
+export function sendCreated<T>(res: Response, data: T, message = 'Created') {
+  return sendSuccess(res, data, message, 201);
+}
+
+export function sendNoContent(res: Response) {
+  return res.status(204).send();
+}
+
+export function sendPaginated<T>(res: Response, data: T[], pagination: Pagination, message = 'Success') {
+  return res.status(200).json({ success: true, message, data, pagination });
 }

@@ -21,7 +21,7 @@ export const auth = (req: Request, _res: Response, next: NextFunction) => {
 
   try {
     const decoded = jwt.verify(token, env.JWT_SECRET);
-    req.user = decoded as any;
+    req.user = decoded as { id: string; email: string; role: string };
     next();
   } catch (err) {
     next(ApiError.unauthorized('Invalid or expired token'));
