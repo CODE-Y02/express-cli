@@ -56,6 +56,32 @@ create-express-forge/
 └── .github/workflows/           ← CI + Release
 ```
 
+## 🤖 AI & MCP Integration
+
+Create Express Forge is designed to be AI-friendly. We provide a built-in **MCP (Model Context Protocol)** server that lets you chat with your AI assistant about the project, fetch documentation, and generate scaffolding commands.
+
+### Using the MCP Server
+
+1. **Build the project**: `pnpm build`
+2. **Add to your MCP Client**: Add the following configuration to your client (e.g., Claude Desktop).
+
+```json
+{
+  "mcpServers": {
+    "create-express-forge": {
+      "command": "node",
+      "args": ["/absolute/path/to/express-cli/packages/mcp/dist/index.js"]
+    }
+  }
+}
+```
+
+### LLM Documentation
+We also provide machine-readable documentation files for LLMs:
+- **`llms.txt`**: [Project summary](https://code-y02.github.io/express-cli/llms.txt)
+- **`llms-full.txt`**: [Full documentation context](https://code-y02.github.io/express-cli/llms-full.txt)
+- **`ai.json`**: [Capability manifest and CLI flags](https://code-y02.github.io/express-cli/ai.json)
+
 ## Legacy Support (v3.x)
 
 Documentation for the legacy v3.x (LTS) version is available at [https://code-y02.github.io/express-cli/v3/](https://code-y02.github.io/express-cli/v3/).

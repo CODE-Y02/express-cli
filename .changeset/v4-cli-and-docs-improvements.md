@@ -9,6 +9,8 @@
 - Added documentation versioning support with v3 LTS dropdown
 - Enhanced documentation SEO, OpenGraph metadata, and social sharing tags
 - Standardized product naming to "Create Express Forge" across docs and CLI
+- Added a dedicated **MCP Server** (`@create-express-forge/mcp`) for AI-assisted scaffolding and documentation access
+- Automated generation of LLM-friendly documentation files (`llms.txt`, `llms-full.txt`, `ai.json`)
 - Highlighted **Ultra-Fast scaffolding** in the v3 vs v4 comparison (powered by internal refactoring)
 - Updated root and package READMEs with new features and Biome integration
 - Removed deprecated `cef` alias from documentation

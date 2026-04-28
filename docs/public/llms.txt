@@ -1,0 +1,16 @@
+# Create Express Forge
+The ultimate CLI for scaffolding production-ready Express.js TypeScript backends.
+
+## Versions
+- v4.x (Latest): Modern, Biome, Zod-OpenAPI, Path Aliases.
+- v3.x (LTS): Stable, ESLint/Prettier, swagger-jsdoc.
+
+## Quick Start (v4)
+npx create-express-forge@latest my-api
+
+## Quick Start (v3)
+npx create-express-forge@3.3.2 my-api
+
+## Documentation
+- v4 Full Docs: https://code-y02.github.io/express-cli/llms-full.txt
+- v3 Full Docs: https://code-y02.github.io/express-cli/v3/llms-full.txt

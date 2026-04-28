@@ -14,6 +14,8 @@
     "docs:dev": "cd docs && pnpm run dev",
     "docs:build": "cd docs && pnpm run build",
     "docs:preview": "cd docs && pnpm run preview",
+    "mcp:dev": "pnpm --filter @create-express-forge/mcp dev",
+    "mcp:start": "pnpm --filter @create-express-forge/mcp start",
     "prepare": "husky"
   },
   "devDependencies": {
