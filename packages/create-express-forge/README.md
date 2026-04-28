@@ -10,8 +10,8 @@
 
 ---
 
-## 🎯 Why use Express Forge?
-Searching for an **Express TypeScript starter**? Most boilerplates are either too bloated or too empty. Express Forge gives you a modular, configurable, and type-safe foundation using the tools you already love.
+## 🎯 Why use create-express-forge?
+Searching for an **Express TypeScript starter**? Most boilerplates are either too bloated or too empty. create-express-forge gives you a modular, configurable, and type-safe foundation using the tools you already love.
 
 ## 🚀 Quick Start
 Create your new project instantly:
@@ -19,17 +19,23 @@ Create your new project instantly:
 npx create-express-forge@latest my-api
 ```
 
+Or scaffold in your **current directory**:
+```bash
+npx create-express-forge@latest .
+```
+
 ---
 
 ## 🔥 Key Features
 - **🏗️ Smart Architectures**: Choose between **Modular (feature-based)** or **MVC** patterns.
-- **🛡️ Type-Safe by Default**: Fully configured **TypeScript** with **Zod** for environment and request validation.
+- **🛡️ Type-Safe by Default**: Fully configured **TypeScript** with **Path Aliases (`@/`)** and **Zod** for validation.
+- **⚡ Modern Tooling**: **Biome** is used for 20x faster linting and formatting (replaces ESLint/Prettier).
 - **🔐 Professional Auth**: Ready-to-use **JWT Authentication** with **HttpOnly Cookies** or **Bearer Headers**.
 - **🗄️ ORM Flexibility**: Support for **Prisma**, **Sequelize**, or raw drivers.
-- **📜 Automated Documentation**: Built-in **OpenAPI / Swagger** support with a live UI.
+- **📜 Automated Documentation**: **Zero-JSDoc** OpenAPI support — documentation generated directly from Zod schemas.
 - **🐳 DevOps Ready**: One-click **Docker** and **docker-compose** setup.
 - **🪵 Observability**: High-performance logging with **Pino** or **Winston**.
-- **⚡ Performance**: Optimized for fast startup and low overhead.
+- **🚀 Performance**: Optimized for fast startup, low overhead, and developer velocity.
 
 ---
 

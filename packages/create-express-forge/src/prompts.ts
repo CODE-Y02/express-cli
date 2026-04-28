@@ -47,6 +47,9 @@ export async function runCLI(
       installDeps: true,
     };
     const targetDir = path.resolve(process.cwd(), projectName);
+    if (projectName === ".") {
+      options.projectName = path.basename(process.cwd()).toLowerCase().replace(/[^a-z0-9-_]/g, "-");
+    }
     await generateProject(options, targetDir);
     return;
   }
@@ -57,9 +60,9 @@ export async function runCLI(
       message: "Project name:",
       default: "my-express-app",
       validate: (v) =>
-        /^[a-z0-9-_]+$/.test(v)
+        /^[a-z0-9-_.]+$/.test(v)
           ? true
-          : "Use lowercase letters, numbers, hyphens, or underscores",
+          : "Use lowercase letters, numbers, hyphens, underscores, or a period",
     }));
 
   const packageManager = await select<CliOptions["packageManager"]>({
@@ -243,5 +246,8 @@ export async function runCLI(
   };
 
   const targetDir = path.resolve(process.cwd(), projectName);
+  if (projectName === ".") {
+    options.projectName = path.basename(process.cwd()).toLowerCase().replace(/[^a-z0-9-_]/g, "-");
+  }
   await generateProject(options, targetDir);
 }

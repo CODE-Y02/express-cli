@@ -33,7 +33,27 @@ export class TemplateManager {
     templatePath: string,
     destPath: string,
   ): Promise<void> {
-    const rendered = await this.eta.renderAsync(templatePath, this.opts);
+    let rendered = await this.eta.renderAsync(templatePath, this.opts);
+
+    if (this.opts.importAlias && destPath.includes(`${path.sep}src${path.sep}`)) {
+      const srcIndex = destPath.lastIndexOf(`${path.sep}src${path.sep}`);
+      const srcDir = destPath.substring(0, srcIndex + 4); // path/to/src
+
+      const importRegex = /(from\s+|import\(\s*)(['"])(\.\/|\.\.\/)([^'"]+)\2/g;
+      
+      rendered = rendered.replace(importRegex, (match, prefix, quote, dotPrefix, relPath) => {
+        const currentDir = path.dirname(destPath);
+        const absoluteImportPath = path.resolve(currentDir, dotPrefix + relPath);
+        
+        if (absoluteImportPath.startsWith(srcDir)) {
+          let aliasPath = path.relative(srcDir, absoluteImportPath);
+          aliasPath = aliasPath.split(path.sep).join('/'); // Ensure forward slashes
+          return `${prefix}${quote}@/${aliasPath}${quote}`;
+        }
+        return match;
+      });
+    }
+
     await fs.ensureDir(path.dirname(destPath));
     await fs.writeFile(destPath, rendered, "utf-8");
   }

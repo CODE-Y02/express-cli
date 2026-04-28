@@ -43,22 +43,7 @@ src/
   services/     # Business logic
 ```
 
-## 🏷️ Path Aliases (@/)
-
-Regardless of the architecture you choose, Create Express Forge pre-configures **Path Aliases**. This means you can use absolute imports from the `src` directory instead of messy relative paths.
-
-**Instead of this:**
-```typescript
-import { User } from '../../../models/user.js';
-```
-
-**You do this:**
-```typescript
-import { User } from '@/models/user.js';
-```
-
-This ensures that moving files around won't break your imports.
-
 ## Which one should I use?
 
 If you are building a production API that you expect to grow over time, **Modular Architecture** is almost always the better choice. It prevents the "Fat Controller" and "Fat Model" syndromes by keeping related logic close together.
+

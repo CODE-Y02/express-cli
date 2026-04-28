@@ -1,8 +1,3 @@
----
-title: Core Features | Create Express Forge
-description: Explore the production-ready features of Create Express Forge, including JWT Auth, Prisma integration, and automated OpenAPI documentation.
----
-
 # Core Features
 
 Create Express Forge comes packed with everything you need to build robust APIs.
@@ -46,19 +41,13 @@ Stay secure by default with pre-configured industry standards:
 
 ## 📝 Logging & Monitoring
 - **Pino/Winston**: High-performance, structured logging. Pino is used by default for its extreme speed and JSON output, which is perfect for log aggregators like ELK or Datadog.
-- **Pro Fail-Fast**: In production, the app strictly validates database and Redis connections on startup. If a dependency is down, the app fails early to prevent inconsistent states. In development, it provides clear warnings.
-- **Health Checks**: A standard `/api/v1/health` endpoint is included, providing uptime, memory usage, and database connectivity status.
+- **Health Checks**: A standard `/health` endpoint is included, providing uptime, memory usage, and database connectivity status.
 
 ## 📜 OpenAPI Documentation
 Never let your documentation get out of sync:
-- **Swagger UI / Scalar**: Beautiful, integrated UI to explore and test your API endpoints directly from the browser.
-- **Zero-JSDoc Spec**: Documentation is generated directly from your **Zod schemas** and a centralized registry. No more clunky JSDoc comments in your controllers!
-- **Type-Safe Documentation**: Your runtime validation and your API documentation are always 100% in sync.
-
-## ⚡ Modern Tooling
-- **Biome**: Replaces ESLint and Prettier for 20x faster linting and formatting.
-- **Import Aliases**: Pre-configured `@/` paths for clean, absolute imports.
-- **ESM Native**: Built from the ground up for modern Node.js and ECMAScript Modules.
+- **Swagger UI**: Integrated UI to explore and test your API endpoints directly from the browser.
+- **Auto-generated Spec**: The CLI generates a `docs.json` endpoint that is always up-to-date with your code's JSDoc annotations.
+- **Security Schemas**: Pre-configured security definitions for your chosen auth strategy (Cookie or Bearer).
 
 ## 🧱 Graceful Shutdown
 Every Create Express Forge project handles `SIGTERM` and `SIGINT` signals correctly. This ensures that:
@@ -91,17 +80,3 @@ Ensure your frontend team always knows what to expect. Every success response fo
 
 ### Async Error Wrapper
 The provided `asyncHandler` utility eliminates the need for `try-catch` blocks in your controllers, automatically forwarding any promise rejections to the global error handler.
-
-## 🆚 Comparison: v4 vs v3
-
-| Feature | v3.x (Legacy) | v4.x (Latest) |
-| :--- | :--- | :--- |
-| **OpenAPI Docs** | JSDoc-based (`swagger-jsdoc`) | **Zero-JSDoc** (via Zod schemas) |
-| **Linting & Formatting** | ESLint + Prettier | **Biome** (20x faster) |
-| **Path Aliases** | Not supported by default | **Native Support** (`@/` aliases) |
-| **CLI Flexibility** | Only new directories | **Scaffold in `.`** supported |
-| **Scaffolding Speed** | Standard | **Ultra-Fast** (Refactored logic) |
-| **Reliability** | Standard startup | **Pro Fail-Fast** (DB/Redis checks) |
-| **Imports** | Relative only (`../../`) | **Automated Alias resolution** |
-| **Architecture** | Basic Modular/MVC | **Hardened Structures** |
-| **Deployment** | Basic Dockerfiles | **Optimized Multi-stage builds** |

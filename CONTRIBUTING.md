@@ -35,11 +35,11 @@ pnpm run test
 ## Adding a New Generator Feature
 
 1. Add your option to `packages/create-express-forge/src/types.ts`
-2. Add the prompt in `src/prompts.ts`
-3. Create a generator in `src/generator/features/your-feature.ts`
-4. Wire it into `src/generator/index.ts`
-5. Update `src/utils/package-builder.ts` if it adds dependencies
-6. Add a test in `tests/`
+2. Add the prompt in `packages/create-express-forge/src/prompts.ts`
+3. Add templates in `packages/create-express-forge/templates/`
+4. Wire logic into `packages/create-express-forge/src/generator/index.ts`
+5. Update `packages/create-express-forge/src/utils/package-builder.ts` if it adds dependencies
+6. Add a test in `packages/create-express-forge/tests/`
 
 ## Releasing
 

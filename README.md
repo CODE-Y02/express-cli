@@ -10,10 +10,8 @@
 
 ```bash
 npx create-express-forge my-api
-# or
-npm create express-forge my-api
-# or (short alias)
-npx cef my-api
+# or scaffold in current directory
+npx create-express-forge .
 ```
 
 ## What You Get
@@ -31,7 +29,8 @@ Interactive prompts let you choose:
 
 ## Generated Project Includes
 
-- ✅ **TypeScript** + `tsx` hot-reload dev server
+- ✅ **TypeScript** + `tsx` hot-reload dev server + **Path Aliases (`@/`)**
+- ✅ **Biome** — 20x faster linting and formatting (replaces ESLint/Prettier)
 - ✅ **Zod** env validation on startup — fails fast on bad config
 - ✅ **Global centralized error handler** — `ApiError`, `ZodError`, unknown errors all handled
 - ✅ **Request validation middleware** via `validate(schema)`
@@ -42,6 +41,7 @@ Interactive prompts let you choose:
 - ✅ **Graceful shutdown** (SIGTERM / SIGINT)
 - ✅ **Multi-stage Dockerfile** with healthcheck
 - ✅ **docker-compose** with correct DB service
+- ✅ **Automated OpenAPI (Swagger)** — Zero-JSDoc documentation via Zod schemas
 
 ## Repository Structure
 
@@ -50,10 +50,20 @@ create-express-forge/
 ├── packages/
 │   ├── create-express-forge/   ← The published CLI
 │   ├── typescript-config/      ← Shared internal TS config
-│   └── eslint-config/          ← Shared internal ESLint config
+│   └── lint-config/            ← Shared internal Biome/Lint config
 ├── examples/
 │   └── modular-postgres-prisma/ ← Pre-generated example
 └── .github/workflows/           ← CI + Release
+```
+
+## Legacy Support (v3.x)
+
+Documentation for the legacy v3.x (LTS) version is available at [https://code-y02.github.io/express-cli/v3/](https://code-y02.github.io/express-cli/v3/).
+
+To scaffold a project using v3.x, run:
+
+```bash
+npx create-express-forge@3.3.2 [project-name]
 ```
 
 ## Contributing

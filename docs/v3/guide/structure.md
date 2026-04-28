@@ -15,13 +15,14 @@ This structure is organized by **features**. Each module is self-contained.
 │   │       ├── users.service.ts
 │   │       ├── users.routes.ts
 │   │       └── users.schema.ts
-│   ├── middleware/       # Global middleware
-│   ├── utils/            # Shared utilities (ApiResponse, etc.)
-│   ├── docs/             # OpenAPI registry and swagger setup
+│   ├── shared/           # Code shared across modules
+│   │   ├── middleware/
+│   │   ├── utils/
+│   │   └── constants/
 │   ├── config/           # App configuration
 │   └── app.ts            # App initialization
 ├── prisma/               # Database schema (if Prisma chosen)
-├── src/__tests__/        # Integration and unit tests
+├── tests/                # Integration and unit tests
 ├── .env                  # Environment variables
 └── package.json
 ```

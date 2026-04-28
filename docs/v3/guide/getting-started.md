@@ -1,8 +1,3 @@
----
-title: Getting Started | Create Express Forge
-description: Learn how to scaffold a new Express.js project in seconds using Create Express Forge.
----
-
 # Getting Started
  
 Create Express Forge is designed to get you up and running with a production-grade Express backend in seconds.
@@ -12,7 +7,7 @@ Create Express Forge is designed to get you up and running with a production-gra
 The fastest way to create a new project is using `npx`. You don't even need to install the CLI globally!
 
 ```bash
-npx create-express-forge@latest [project-name]
+npx create-express-forge@3.3.2 [project-name]
 ```
 
 ### Instant Scaffolding
@@ -20,13 +15,8 @@ npx create-express-forge@latest [project-name]
 If you want to skip the prompts and use the recommended defaults, use the `--yes` flag:
 
 ```bash
-npx create-express-forge@latest my-api --yes
+npx create-express-forge@3.3.2 my-api --yes
 ```
-
-> [!TIP]
-> You can scaffold a project in your **current directory** by using a period (`.`):
-> `npx create-express-forge@latest .`
-
 
 ## Step-by-Step Guide
 

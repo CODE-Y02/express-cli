@@ -1,48 +1,69 @@
+---
+title: API Documentation | Create Express Forge
+description: Learn how to generate automated, type-safe OpenAPI (Swagger) documentation using Zod schemas with Create Express Forge.
+---
+
 # API Documentation (OpenAPI)
-
-Express Forge integrates **Swagger UI** to provide interactive, live documentation for your API. This allows your frontend team or external partners to test endpoints directly from the browser.
-
+ 
+Create Express Forge uses `@asteasolutions/zod-to-openapi` to provide interactive, type-safe documentation for your API. This ensures that your runtime validation and your API documentation are always in sync.
+ 
 ## Getting Started
-
+ 
 If you enabled OpenAPI during scaffolding, your documentation is available at:
-
-- **Swagger UI**: `http://localhost:3000/docs` (Interactive)
-- **OpenAPI Spec**: `http://localhost:3000/docs.json` (Raw JSON)
-
+ 
+- **Interactive UI**: `http://localhost:3000/api-docs`
+- **OpenAPI Spec**: `http://localhost:3000/api-docs.json` (Raw JSON)
+ 
 > [!TIP]
-> The `/docs.json` endpoint is always available for external tools (like Postman), even if you chose to disable the Swagger UI during scaffolding.
-
-## Configuration
-
-The documentation configuration is located in `src/docs/swagger.ts`. It uses `swagger-jsdoc` to parse JSDoc comments in your route files.
-
-## Documenting Endpoints
-
-To add an endpoint to the Swagger UI, simply add a `@openapi` or `@swagger` block above your route definition.
-
-### Example
-
+> On server startup, the CLI automatically logs the documentation URL for easy access.
+ 
+## Zero-JSDoc Documentation
+ 
+Unlike traditional Express apps that rely on clunky JSDoc comments (`@openapi`), Create Express Forge uses your **Zod schemas** to generate the OpenAPI specification. This makes your documentation:
+1. **DRY (Don't Repeat Yourself)**: Define your schema once, use it for validation and documentation.
+2. **Type-Safe**: Any changes to your Zod schemas are automatically reflected in the Swagger UI.
+3. **Clean**: Your controller files stay free of giant comment blocks.
+ 
+## How it Works
+ 
+### 1. The Registry
+A centralized registry is located at `src/docs/registry.ts`. This registry collects all your path and component definitions.
+ 
+### 2. Documenting a Path
+Paths are registered directly in your `schema.ts` files. This keeps the documentation close to the validation logic.
+ 
 ```typescript
-/**
- * @openapi
- * /users:
- *   get:
- *     summary: Retrieve a list of users
- *     description: Returns a list of users from the database.
- *     responses:
- *       200:
- *         description: A list of users.
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/User'
- */
-router.get('/', userController.getAllUsers);
+import { z } from 'zod';
+import { registry } from '@/docs/registry.js';
+ 
+// Define your schema
+export const UserSchema = registry.register('User', z.object({
+  id: z.string().uuid(),
+  name: z.string(),
+}));
+ 
+// Register the path
+registry.registerPath({
+  method: 'get',
+  path: '/users',
+  summary: 'Get all users',
+  responses: {
+    200: {
+      description: 'List of users',
+      content: {
+        'application/json': {
+          schema: z.array(UserSchema),
+        },
+      },
+    },
+  },
+});
 ```
-
+ 
+### 3. Setting Up Swagger
+The `setupSwagger` function in `src/docs/swagger.ts` generates the final OpenAPI document from the registry and attaches the Swagger UI to your Express app.
+ 
 ## Benefits
 - **Live Testing**: Use the "Try it out" button to make real requests to your development server.
-- **Auto-Sync**: Your documentation lives next to your code, making it easier to keep it updated.
-- **Standardized**: Uses the OpenAPI 3.0 specification, compatible with many other tools (Postman, Insomnia, etc.).
+- **Auto-Sync**: Your documentation is built from your code, ensuring it never gets stale.
+- **Standardized**: Uses the OpenAPI 3.0 specification, compatible with Postman, Insomnia, and code generators.
