@@ -1,6 +1,32 @@
+import os from "node:os";
 import chalk from "chalk";
+import figlet from "figlet";
+import gradient from "gradient-string";
+import chalkAnimation from "chalk-animation";
 
-export function displayBanner(): void {
+export async function displayBanner(): Promise<void> {
+  const username = os.userInfo().username;
+  const capitalizedUser =
+    username.charAt(0).toUpperCase() + username.slice(1).toLowerCase();
+
+  const welcomeText = figlet.textSync(`WELCOME, ${capitalizedUser}!`, {
+    font: "Slant",
+    horizontalLayout: "default",
+  });
+
+  console.log();
+  const rainbow = chalkAnimation.rainbow(welcomeText);
+
+  // Let the rainbow shine for a bit
+  await new Promise((resolve) => setTimeout(resolve, 1500));
+  rainbow.stop();
+
+  console.log();
+  console.log(
+    chalk.bold.hex("#7C3AED")(
+      "  ────────────────────────────────────────────────────────────────",
+    ),
+  );
   console.log();
   console.log(
     chalk.bold.hex("#7C3AED")("  ╔══════════════════════════════════════╗"),

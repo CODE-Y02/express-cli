@@ -6,6 +6,7 @@
 - Implemented automated import alias resolution (`@/`) for scaffolded projects
 - Fixed relative import bug in smoke test template
 - Synchronized documentation with latest v4 features (Zod-to-OpenAPI, Biome, Pro Fail-Fast)
+- Added a **High-Fidelity Personalized Welcome** message using a large gradient-styled font (powered by `figlet` and `gradient-string`) to greet users by name
 - Added documentation versioning support with v3 LTS dropdown
 - Enhanced documentation SEO, OpenGraph metadata, and social sharing tags
 - Standardized product naming to "Create Express Forge" across docs and CLI

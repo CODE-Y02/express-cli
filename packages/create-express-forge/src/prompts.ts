@@ -19,7 +19,7 @@ export async function runCLI(
   initialProjectName?: string,
   cmdOptions: Record<string, string | boolean | undefined> = {},
 ) {
-  displayBanner();
+  await displayBanner();
 
   if (cmdOptions.yes) {
     const projectName = initialProjectName ?? "my-express-app";
