@@ -18,14 +18,14 @@ npx create-express-forge .
 
 Interactive prompts let you choose:
 
-| Option | Choices |
-|--------|---------|
-| **Architecture** | Modular (feature-based) · MVC |
-| **ORM** | Prisma · Sequelize · None |
-| **Database** | PostgreSQL · MySQL · SQLite · None |
-| **Logger** | Winston · Pino · None |
-| **Testing** | Vitest · Jest · None |
-| **Docker** | Dockerfile + docker-compose |
+| Option           | Choices                            |
+| ---------------- | ---------------------------------- |
+| **Architecture** | Modular (feature-based) · MVC      |
+| **ORM**          | Prisma · Sequelize · None          |
+| **Database**     | PostgreSQL · MySQL · SQLite · None |
+| **Logger**       | Winston · Pino · None              |
+| **Testing**      | Vitest · Jest · None               |
+| **Docker**       | Dockerfile + docker-compose        |
 
 ## Generated Project Includes
 
@@ -49,6 +49,7 @@ Interactive prompts let you choose:
 create-express-forge/
 ├── packages/
 │   ├── create-express-forge/   ← The published CLI
+│   ├── mcp/                    ← @create-express-forge/mcp Server
 │   ├── typescript-config/      ← Shared internal TS config
 │   └── lint-config/            ← Shared internal Biome/Lint config
 ├── examples/
@@ -62,9 +63,25 @@ Create Express Forge is designed to be AI-friendly. We provide a built-in **MCP 
 
 ### Using the MCP Server
 
-1. **Build the project**: `pnpm build`
-2. **Add to your MCP Client**: Add the following configuration to your client (e.g., Claude Desktop).
+You can run the MCP server directly via `npx` (recommended) or by building the source.
 
+**Option 1: Using `npx` (Recommended)**
+Add this to your Claude Desktop config or other MCP client:
+
+```json
+{
+  "mcpServers": {
+    "create-express-forge": {
+      "command": "npx",
+      "args": ["-y", "@create-express-forge/mcp"]
+    }
+  }
+}
+```
+
+**Option 2: From Source**
+1. **Build the project**: `pnpm build`
+2. **Add to your MCP Client**:
 ```json
 {
   "mcpServers": {
@@ -77,7 +94,9 @@ Create Express Forge is designed to be AI-friendly. We provide a built-in **MCP 
 ```
 
 ### LLM Documentation
+
 We also provide machine-readable documentation files for LLMs:
+
 - **`llms.txt`**: [Project summary](https://code-y02.github.io/express-cli/llms.txt)
 - **`llms-full.txt`**: [Full documentation context](https://code-y02.github.io/express-cli/llms-full.txt)
 - **`ai.json`**: [Capability manifest and CLI flags](https://code-y02.github.io/express-cli/ai.json)
@@ -98,10 +117,10 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Versioning & Branches
 
-| Branch | npm tag | Description |
-|--------|---------|-------------|
-| `main` | `latest` | Stable releases |
-| `next` | `next` | Pre-releases / beta |
+| Branch | npm tag  | Description         |
+| ------ | -------- | ------------------- |
+| `main` | `latest` | Stable releases     |
+| `next` | `next`   | Pre-releases / beta |
 
 ## License
 

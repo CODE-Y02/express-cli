@@ -6,8 +6,8 @@ import { z } from "zod";
 const DOCS_BASE = "https://code-y02.github.io/express-cli";
 
 const server = new McpServer({
-  name: "create-express-forge",
-  version: "4.1.2",
+  name: "@create-express-forge/mcp",
+  version: "1.0.0",
 });
 
 // ─── Resources ─────────────────────────────────────────────────────────────
