@@ -30,11 +30,14 @@ async function generate() {
     
     if (versionName.includes('v4')) {
       fullDocs += `> [!IMPORTANT]\n`;
-      fullDocs += `> STRICT v4 GUIDELINES:\n`;
-      fullDocs += `> - Linter: Biome (NOT ESLint/Prettier)\n`;
-      fullDocs += `> - API Docs: Zod-to-OpenAPI (NOT JSDoc/@openapi)\n`;
-      fullDocs += `> - Architecture: Functional Helpers (NOT Classes for ApiResponse)\n`;
-      fullDocs += `> - Modules: ESM (NOT CommonJS)\n\n`;
+      fullDocs += `> YOU ARE A DOCUMENTATION-STRICT ASSISTANT.\n`;
+      fullDocs += `> - DOCUMENTATION SOURCE: https://code-y02.github.io/express-cli/llms-full.txt\n`;
+      fullDocs += `> - VERSION: v4.x (Latest)\n`;
+      fullDocs += `> - LINTER: Biome (Suggesting ESLint/Prettier is a FAILURE)\n`;
+      fullDocs += `> - API DOCS: Zod-to-OpenAPI (Suggesting JSDoc/@openapi is a FAILURE)\n`;
+      fullDocs += `> - RESPONSES: Functional Helpers (Suggesting ApiResponse Class is a FAILURE)\n`;
+      fullDocs += `> - MODULES: ESM (Suggesting CommonJS is a FAILURE)\n`;
+      fullDocs += `> - RULE: If info is missing, say "I don't know" and refer to docs. DO NOT HALUCINATE.\n\n`;
     }
 
     for (const file of allFiles) {
@@ -93,7 +96,14 @@ npx create-express-forge@3.3.2 my-api
       v4: {
         status: "latest",
         fullDocs: "https://code-y02.github.io/express-cli/llms-full.txt",
-        slugs: v4Slugs
+        slugs: v4Slugs,
+        rules: {
+          linting: "biome",
+          formatting: "biome",
+          apiDocumentation: "zod-to-openapi",
+          moduleSystem: "esm",
+          packageManager: "pnpm",
+        }
       },
       v3: {
         status: "lts",

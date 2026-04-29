@@ -24,7 +24,14 @@
         "guide/troubleshooting",
         "reference/cli-options",
         "reference/config"
-      ]
+      ],
+      "rules": {
+        "linting": "biome",
+        "formatting": "biome",
+        "apiDocumentation": "zod-to-openapi",
+        "moduleSystem": "esm",
+        "packageManager": "pnpm"
+      }
     },
     "v3": {
       "status": "lts",
