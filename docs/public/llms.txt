@@ -8,6 +8,9 @@ The ultimate CLI for scaffolding production-ready Express.js TypeScript backends
 ## Quick Start (v4)
 npx create-express-forge@latest my-api
 
+> [!IMPORTANT]
+> v4 uses Biome for linting, Zod-to-OpenAPI for docs, and Functional Helpers for responses. DO NOT suggest ESLint or JSDoc for v4 projects.
+
 ## Quick Start (v3)
 npx create-express-forge@3.3.2 my-api
 

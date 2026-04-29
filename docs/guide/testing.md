@@ -1,3 +1,21 @@
+---
+title: "Testing Strategy: Vitest & Jest | Create Express Forge"
+description: "Master API testing with Create Express Forge. Learn how to write Unit and Integration tests using Vitest or Jest in a pre-configured environment."
+head:
+  - - link
+    - rel: canonical
+      href: https://code-y02.github.io/express-cli/guide/testing
+  - - meta
+    - property: og:title
+      content: "Testing Express.js Applications | Create Express Forge"
+  - - meta
+    - property: og:description
+      content: "Bulletproof your Express.js API with automated testing. Pre-configured Vitest/Jest setups for Unit and Integration tests."
+  - - meta
+    - property: og:url
+      content: https://code-y02.github.io/express-cli/guide/testing
+---
+
 # Testing Strategy
 
 Create Express Forge encourages a test-driven approach to development. We provide a pre-configured testing environment using either **Vitest** (recommended for speed) or **Jest**.

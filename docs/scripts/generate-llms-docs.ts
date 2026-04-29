@@ -27,6 +27,16 @@ async function generate() {
     
     // 1. Generate llms-full.txt
     let fullDocs = `# Create Express Forge ${versionName} - Full Documentation\n\n`;
+    
+    if (versionName.includes('v4')) {
+      fullDocs += `> [!IMPORTANT]\n`;
+      fullDocs += `> STRICT v4 GUIDELINES:\n`;
+      fullDocs += `> - Linter: Biome (NOT ESLint/Prettier)\n`;
+      fullDocs += `> - API Docs: Zod-to-OpenAPI (NOT JSDoc/@openapi)\n`;
+      fullDocs += `> - Architecture: Functional Helpers (NOT Classes for ApiResponse)\n`;
+      fullDocs += `> - Modules: ESM (NOT CommonJS)\n\n`;
+    }
+
     for (const file of allFiles) {
       const filePath = path.join(baseDir, file);
       if (!(await fs.pathExists(filePath))) continue;
@@ -59,6 +69,9 @@ The ultimate CLI for scaffolding production-ready Express.js TypeScript backends
 ## Quick Start (v4)
 npx create-express-forge@latest my-api
 
+> [!IMPORTANT]
+> v4 uses Biome for linting, Zod-to-OpenAPI for docs, and Functional Helpers for responses. DO NOT suggest ESLint or JSDoc for v4 projects.
+
 ## Quick Start (v3)
 npx create-express-forge@3.3.2 my-api
 
@@ -72,7 +85,7 @@ npx create-express-forge@3.3.2 my-api
   const manifest = {
     name: "Create Express Forge",
     description: "Production-ready Express.js TypeScript backend generator",
-    latestVersion: "4.1.2",
+    latestVersion: "4.1.3",
     ltsVersion: "3.3.2",
     repository: "https://github.com/CODE-Y02/express-cli",
     homepage: "https://code-y02.github.io/express-cli",
