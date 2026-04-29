@@ -1,7 +1,20 @@
 ---
 layout: home
-title: Create Express Forge | Modern Express.js CLI
-description: The ultimate CLI for scaffolding production-ready, enterprise-grade Express.js backends with TypeScript, Auth, ORM, and OpenAPI.
+title: "Create Express Forge | The Ultimate Express.js CLI"
+description: "The ultimate CLI for scaffolding production-ready, enterprise-grade Express.js backends with TypeScript, Auth, ORM, and OpenAPI."
+head:
+  - - link
+    - rel: canonical
+      href: https://code-y02.github.io/express-cli/
+  - - meta
+    - property: og:title
+      content: "Create Express Forge | Build Better Express APIs, Faster."
+  - - meta
+    - property: og:description
+      content: "Scaffold production-ready Express.js TypeScript backends in seconds. Built-in Auth, ORM, Caching, and OpenAPI documentation."
+  - - meta
+    - property: og:url
+      content: https://code-y02.github.io/express-cli/
 
 hero:
   name: Create Express Forge

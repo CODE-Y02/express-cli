@@ -1,3 +1,21 @@
+---
+title: "Caching in Express.js: Redis & Node-Cache | Create Express Forge"
+description: "Boost your API performance with built-in caching. Learn how to configure Redis for distributed systems or Node-Cache for in-memory speed."
+head:
+  - - link
+    - rel: canonical
+      href: https://code-y02.github.io/express-cli/guide/caching
+  - - meta
+    - property: og:title
+      content: "Redis & In-Memory Caching for Express | Create Express Forge"
+  - - meta
+    - property: og:description
+      content: "Performance-first caching strategies for Express.js. Configure Redis or Node-Cache in seconds with Create Express Forge."
+  - - meta
+    - property: og:url
+      content: https://code-y02.github.io/express-cli/guide/caching
+---
+
 # Caching
 
 Create Express Forge provides a flexible caching layer to boost your API performance and reduce database load. You can choose between **Redis** (distributed) or **Node-Cache** (in-memory) during the scaffolding process.

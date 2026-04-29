@@ -1,3 +1,21 @@
+---
+title: "Modular vs MVC Architecture | Create Express Forge"
+description: "Choose the right architecture for your Express.js project. Compare Modular features-first design with traditional Model-View-Controller patterns."
+head:
+  - - link
+    - rel: canonical
+      href: https://code-y02.github.io/express-cli/guide/architecture
+  - - meta
+    - property: og:title
+      content: "Modular vs MVC Architecture in Express.js | Create Express Forge"
+  - - meta
+    - property: og:description
+      content: "Deep dive into the architecture patterns supported by Create Express Forge. Scalable Modular design vs Traditional MVC."
+  - - meta
+    - property: og:url
+      content: https://code-y02.github.io/express-cli/guide/architecture
+---
+
 # Architecture Patterns
 
 Create Express Forge supports two main architecture patterns to fit your project's needs. Choosing the right one is crucial for long-term maintainability.
