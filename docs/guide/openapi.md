@@ -4,7 +4,7 @@ description: "Learn how to generate automated, type-safe OpenAPI (Swagger) docum
 head:
   - - link
     - rel: canonical
-      href: https://code-y02.github.io/express-cli/guide/openapi
+      href: https://create-express-forge.js.org/guide/openapi
   - - meta
     - property: og:title
       content: "Type-Safe OpenAPI Docs for Express.js | Create Express Forge"
@@ -13,7 +13,7 @@ head:
       content: "Zero-JSDoc documentation for your Express.js API. Sync your Zod schemas with Swagger UI effortlessly."
   - - meta
     - property: og:url
-      content: https://code-y02.github.io/express-cli/guide/openapi
+      content: https://create-express-forge.js.org/guide/openapi
 ---
 
 # API Documentation (OpenAPI)

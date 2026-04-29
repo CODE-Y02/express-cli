@@ -10,7 +10,7 @@
     "url": "git+https://github.com/CODE-Y02/express-cli.git",
     "directory": "packages/create-express-forge"
   },
-  "homepage": "https://github.com/CODE-Y02/express-cli#readme",
+  "homepage": "https://create-express-forge.js.org",
   "bugs": {
     "url": "https://github.com/CODE-Y02/express-cli/issues"
   },

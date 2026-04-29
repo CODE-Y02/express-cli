@@ -4,7 +4,7 @@ description: "Master API testing with Create Express Forge. Learn how to write U
 head:
   - - link
     - rel: canonical
-      href: https://code-y02.github.io/express-cli/guide/testing
+      href: https://create-express-forge.js.org/guide/testing
   - - meta
     - property: og:title
       content: "Testing Express.js Applications | Create Express Forge"
@@ -13,7 +13,7 @@ head:
       content: "Bulletproof your Express.js API with automated testing. Pre-configured Vitest/Jest setups for Unit and Integration tests."
   - - meta
     - property: og:url
-      content: https://code-y02.github.io/express-cli/guide/testing
+      content: https://create-express-forge.js.org/guide/testing
 ---
 
 # Testing Strategy

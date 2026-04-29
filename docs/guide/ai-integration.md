@@ -4,7 +4,7 @@ description: "Build AI-Native Express.js apps. Learn how to use the Create Expre
 head:
   - - link
     - rel: canonical
-      href: https://code-y02.github.io/express-cli/guide/ai-integration
+      href: https://create-express-forge.js.org/guide/ai-integration
   - - meta
     - property: og:title
       content: "AI-Native Express.js Development | Create Express Forge"
@@ -13,7 +13,7 @@ head:
       content: "Supercharge your development with MCP and LLM-friendly documentation. Built for Cursor, Claude, and Antigravity."
   - - meta
     - property: og:url
-      content: https://code-y02.github.io/express-cli/guide/ai-integration
+      content: https://create-express-forge.js.org/guide/ai-integration
 ---
 
 # AI Integration & MCP
@@ -57,5 +57,5 @@ A machine-readable manifest that describes the project's features, available com
 You can customize the AI behavior by modifying the `ai.json` file in your project root or by updating the MCP server settings.
 
 ::: tip PRO TIP
-If you are using Cursor, add `https://code-y02.github.io/express-cli/llms.txt` to your `@docs` to give the AI agent full knowledge of the framework!
+If you are using Cursor, add `https://create-express-forge.js.org/llms.txt` to your `@docs` to give the AI agent full knowledge of the framework!
 :::

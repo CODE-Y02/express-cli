@@ -3,6 +3,15 @@
   "version": "1.0.1",
   "description": "MCP Server for Create Express Forge documentation and tools",
   "type": "module",
+  "homepage": "https://create-express-forge.js.org",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CODE-Y02/express-cli.git",
+    "directory": "packages/mcp"
+  },
+  "bugs": {
+    "url": "https://github.com/CODE-Y02/express-cli/issues"
+  },
   "bin": {
     "create-express-forge-mcp": "./dist/index.js"
   },
