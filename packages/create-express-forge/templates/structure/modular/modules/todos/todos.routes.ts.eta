@@ -1,0 +1,17 @@
+import { Router } from 'express';
+import { getTodos, getTodoById, createTodo, updateTodo, deleteTodo } from './todos.controller.js';
+import { validate } from '../../middleware/validate.js';
+import { createTodoSchema, updateTodoSchema } from './todos.schema.js';
+<% if (it.auth !== 'none') { %>import { auth } from '../../middleware/auth.middleware.js';<% } %>
+
+const router = Router();
+
+<% if (it.auth !== 'none') { %>router.use(auth);<% } %>
+
+router.get('/', getTodos);
+router.get('/:id', getTodoById);
+router.post('/', validate(createTodoSchema), createTodo);
+router.patch('/:id', validate(updateTodoSchema), updateTodo);
+router.delete('/:id', deleteTodo);
+
+export { router as todosRouter };

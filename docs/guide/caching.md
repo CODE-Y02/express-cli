@@ -1,6 +1,6 @@
 # Caching
 
-Express Forge provides a flexible caching layer to boost your API performance and reduce database load. You can choose between **Redis** (distributed) or **Node-Cache** (in-memory) during the scaffolding process.
+Create Express Forge provides a flexible caching layer to boost your API performance and reduce database load. You can choose between **Redis** (distributed) or **Node-Cache** (in-memory) during the scaffolding process.
 
 ## Supported Drivers
 
@@ -47,4 +47,4 @@ await cache.del('user:123');
 ## Best Practices
 1.  **Cache Invalidation**: Always delete or update the cache when the underlying data in the database changes.
 2.  **Serialization**: Since Redis only stores strings, ensure you `JSON.stringify()` your objects before setting and `JSON.parse()` when getting.
-3.  **Fail-Safe**: Express Forge handles Redis connection errors gracefully via the logger, preventing your entire app from crashing if the cache is down.
+3.  **Pro Fail-Fast**: In production, Create Express Forge strictly validates Redis connectivity on startup. If Redis is down, the app fails early to prevent inconsistent states. In development, it provides a clear warning and continues.

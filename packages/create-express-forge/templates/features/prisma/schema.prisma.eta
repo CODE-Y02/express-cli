@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+<% if (it.database === 'sqlite') { %>
+  provider = "sqlite"
+<% } else if (it.database === 'mysql') { %>
+  provider = "mysql"
+<% } else { %>
+  provider = "postgresql"
+<% } %>
+  url      = env("DATABASE_URL")
+}
+
+<% if (it.auth !== 'none') { %>
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  todos     Todo[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Todo {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  completed   Boolean  @default(false)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("todos")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+<% } %>

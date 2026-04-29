@@ -1,0 +1,48 @@
+{
+  "name": "Create Express Forge",
+  "description": "Production-ready Express.js TypeScript backend generator",
+  "latestVersion": "4.1.2",
+  "ltsVersion": "3.3.2",
+  "repository": "https://github.com/CODE-Y02/express-cli",
+  "homepage": "https://code-y02.github.io/express-cli",
+  "versions": {
+    "v4": {
+      "status": "latest",
+      "fullDocs": "https://code-y02.github.io/express-cli/llms-full.txt",
+      "slugs": [
+        "index",
+        "guide/architecture",
+        "guide/auth",
+        "guide/caching",
+        "guide/deployment",
+        "guide/features",
+        "guide/getting-started",
+        "guide/openapi",
+        "guide/structure",
+        "guide/testing",
+        "guide/troubleshooting",
+        "reference/cli-options",
+        "reference/config"
+      ]
+    },
+    "v3": {
+      "status": "lts",
+      "fullDocs": "https://code-y02.github.io/express-cli/v3/llms-full.txt",
+      "slugs": [
+        "index",
+        "guide/architecture",
+        "guide/auth",
+        "guide/caching",
+        "guide/deployment",
+        "guide/features",
+        "guide/getting-started",
+        "guide/openapi",
+        "guide/structure",
+        "guide/testing",
+        "guide/troubleshooting",
+        "reference/cli-options",
+        "reference/config"
+      ]
+    }
+  }
+}

@@ -1,0 +1,23 @@
+# <%= it.projectName %>
+
+> Scaffolded with [create-express-forge](https://github.com/CODE-Y02/create-express-forge)
+
+## Stack
+
+- TypeScript + Express.js
+- Zod validation
+<% if (it.orm === 'prisma') { %>- Prisma ORM + <%= it.database %><% } %>
+<% if (it.orm === 'sequelize') { %>- Sequelize ORM + <%= it.database %><% } %>
+<% if (it.logger !== 'none') { %>- <%= it.logger %> logger<% } %>
+<% if (it.testing !== 'none') { %>- <%= it.testing %> tests<% } %>
+<% if (it.docker) { %>- Docker + docker-compose<% } %>
+
+## Quick Start
+
+```bash
+cp .env.example .env
+<% if (it.orm === 'prisma') { %>
+<%= it.packageManager === 'npm' ? 'npm run' : it.packageManager %> db:migrate
+<% } %>
+<%= it.packageManager %> run dev
+```

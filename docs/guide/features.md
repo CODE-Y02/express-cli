@@ -1,9 +1,14 @@
+---
+title: Core Features | Create Express Forge
+description: Explore the production-ready features of Create Express Forge, including JWT Auth, Prisma integration, and automated OpenAPI documentation.
+---
+
 # Core Features
 
-Express Forge comes packed with everything you need to build robust APIs.
+Create Express Forge comes packed with everything you need to build robust APIs.
 
 ## 🛡️ TypeScript First
-Type safety is at the core of Express Forge. Every scaffolded project includes:
+Type safety is at the core of Create Express Forge. Every scaffolded project includes:
 - Strict TypeScript configuration.
 - Path aliases (e.g., `@/config/env`).
 - Type-safe environment variables via **Zod**.
@@ -22,7 +27,7 @@ Choose your favorite ORM and get started instantly:
 - **Migrations**: Pre-configured scripts to handle database schema changes.
 
 ## 🧪 Testing Suite
-Don't ship broken code. Express Forge sets up a complete testing environment:
+Don't ship broken code. Create Express Forge sets up a complete testing environment:
 - **Vitest/Jest**: Choose your favorite test runner.
 - **Supertest**: For high-level API integration tests.
 - **Example Tests**: Every scaffolded project includes example unit and integration tests.
@@ -41,23 +46,29 @@ Stay secure by default with pre-configured industry standards:
 
 ## 📝 Logging & Monitoring
 - **Pino/Winston**: High-performance, structured logging. Pino is used by default for its extreme speed and JSON output, which is perfect for log aggregators like ELK or Datadog.
-- **Health Checks**: A standard `/health` endpoint is included, providing uptime, memory usage, and database connectivity status.
+- **Pro Fail-Fast**: In production, the app strictly validates database and Redis connections on startup. If a dependency is down, the app fails early to prevent inconsistent states. In development, it provides clear warnings.
+- **Health Checks**: A standard `/api/v1/health` endpoint is included, providing uptime, memory usage, and database connectivity status.
 
 ## 📜 OpenAPI Documentation
 Never let your documentation get out of sync:
-- **Swagger UI**: Integrated UI to explore and test your API endpoints directly from the browser.
-- **Auto-generated Spec**: The CLI generates a `docs.json` endpoint that is always up-to-date with your code's JSDoc annotations.
-- **Security Schemas**: Pre-configured security definitions for your chosen auth strategy (Cookie or Bearer).
+- **Swagger UI / Scalar**: Beautiful, integrated UI to explore and test your API endpoints directly from the browser.
+- **Zero-JSDoc Spec**: Documentation is generated directly from your **Zod schemas** and a centralized registry. No more clunky JSDoc comments in your controllers!
+- **Type-Safe Documentation**: Your runtime validation and your API documentation are always 100% in sync.
+
+## ⚡ Modern Tooling
+- **Biome**: Replaces ESLint and Prettier for 20x faster linting and formatting.
+- **Import Aliases**: Pre-configured `@/` paths for clean, absolute imports.
+- **ESM Native**: Built from the ground up for modern Node.js and ECMAScript Modules.
 
 ## 🧱 Graceful Shutdown
-Every Express Forge project handles `SIGTERM` and `SIGINT` signals correctly. This ensures that:
+Every Create Express Forge project handles `SIGTERM` and `SIGINT` signals correctly. This ensures that:
 1. No new requests are accepted.
 2. Existing requests are finished.
 3. Database connections are closed cleanly.
 4. The process exits without data corruption.
 
 ## 🛠️ Error Handling & Responses
-Express Forge enforces a consistent communication pattern between your API and clients.
+Create Express Forge enforces a consistent communication pattern between your API and clients.
 
 ### Centralized Error Handling
 A global error middleware is the "safety net" for your application. It catches all errors and transforms them into structured JSON responses, handling `Zod` validation errors and custom `ApiError` instances automatically.
@@ -80,3 +91,17 @@ Ensure your frontend team always knows what to expect. Every success response fo
 
 ### Async Error Wrapper
 The provided `asyncHandler` utility eliminates the need for `try-catch` blocks in your controllers, automatically forwarding any promise rejections to the global error handler.
+
+## 🆚 Comparison: v4 vs v3
+
+| Feature | v3.x (Legacy) | v4.x (Latest) |
+| :--- | :--- | :--- |
+| **OpenAPI Docs** | JSDoc-based (`swagger-jsdoc`) | **Zero-JSDoc** (via Zod schemas) |
+| **Linting & Formatting** | ESLint + Prettier | **Biome** (20x faster) |
+| **Path Aliases** | Not supported by default | **Native Support** (`@/` aliases) |
+| **CLI Flexibility** | Only new directories | **Scaffold in `.`** supported |
+| **Scaffolding Speed** | Standard | **Ultra-Fast** (Refactored logic) |
+| **Reliability** | Standard startup | **Pro Fail-Fast** (DB/Redis checks) |
+| **Imports** | Relative only (`../../`) | **Automated Alias resolution** |
+| **Architecture** | Basic Modular/MVC | **Hardened Structures** |
+| **Deployment** | Basic Dockerfiles | **Optimized Multi-stage builds** |

@@ -1,6 +1,6 @@
 # Project Structure
 
-Express Forge scaffolds a clean, professional directory structure. Depending on your chosen architecture, the structure will vary slightly.
+Create Express Forge scaffolds a clean, professional directory structure. Depending on your chosen architecture, the structure will vary slightly.
 
 ## 📦 Modular Architecture
 
@@ -15,14 +15,13 @@ This structure is organized by **features**. Each module is self-contained.
 │   │       ├── users.service.ts
 │   │       ├── users.routes.ts
 │   │       └── users.schema.ts
-│   ├── shared/           # Code shared across modules
-│   │   ├── middleware/
-│   │   ├── utils/
-│   │   └── constants/
+│   ├── middleware/       # Global middleware
+│   ├── utils/            # Shared utilities (ApiResponse, etc.)
+│   ├── docs/             # OpenAPI registry and swagger setup
 │   ├── config/           # App configuration
 │   └── app.ts            # App initialization
 ├── prisma/               # Database schema (if Prisma chosen)
-├── tests/                # Integration and unit tests
+├── src/__tests__/        # Integration and unit tests
 ├── .env                  # Environment variables
 └── package.json
 ```

@@ -1,0 +1,47 @@
+import { z } from 'zod';
+<% if (it.openapi) { %>
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
+import { registry } from '../../docs/registry.js';
+
+extendZodWithOpenApi(z);
+
+export const AuthSchema = registry.register('Auth', z.object({
+  token: z.string(),
+}));
+
+registry.registerPath({
+  method: 'post',
+  path: '/auth/login',
+  tags: ['Auth'],
+  summary: 'Login to get a JWT token',
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: z.object({
+            email: z.string().email(),
+            password: z.string().min(8),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: 'Login successful',
+      content: {
+        'application/json': {
+          schema: AuthSchema,
+        },
+      },
+    },
+  },
+});
+<% } %>
+
+export const loginSchema = z.object({ 
+  body: z.object({ 
+    email: z.string().email(), 
+    password: z.string().min(8) 
+  }) 
+});

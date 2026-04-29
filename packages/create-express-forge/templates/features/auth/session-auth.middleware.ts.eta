@@ -1,0 +1,9 @@
+import type { Request, Response, NextFunction } from 'express';
+import { ApiError } from '../utils/ApiError.js';
+
+export const auth = (req: Request, _res: Response, next: NextFunction) => {
+  if (!req.session || !(req.session as any).user) {
+    return next(ApiError.unauthorized('Session expired or invalid'));
+  }
+  next();
+};

@@ -1,0 +1,9 @@
+import { Router } from 'express';
+import { getHealth } from '../controllers/health.controller.js';
+import '../schemas/health.schema.js';
+
+const router = Router();
+
+router.get('/', getHealth);
+
+export { router as healthRouter };

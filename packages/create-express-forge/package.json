@@ -1,6 +1,6 @@
 {
   "name": "create-express-forge",
-  "version": "3.3.2",
+  "version": "4.1.4",
   "description": "⚡ Scaffold production-ready Express.js TypeScript backends in seconds",
   "license": "MIT",
   "type": "module",
@@ -37,6 +37,7 @@
   },
   "files": [
     "dist",
+    "templates",
     "README.md",
     "CHANGELOG.md"
   ],
@@ -47,23 +48,30 @@
     "dev": "tsx src/index.ts",
     "build": "tsup",
     "check-types": "tsc --noEmit",
-    "lint": "eslint . --max-warnings 0",
+    "lint": "biome lint .",
     "test": "vitest run",
     "test:smoke": "vitest run tests/smoke.integration.test.ts"
   },
   "dependencies": {
     "@inquirer/prompts": "^7.1.0",
     "chalk": "^5.3.0",
+    "chalk-animation": "^2.0.3",
     "commander": "^12.1.0",
+    "eta": "^3.5.0",
     "execa": "^9.3.0",
+    "figlet": "^1.11.0",
     "fs-extra": "^11.2.0",
-    "ora": "^8.1.1"
+    "gradient-string": "^3.0.0",
+    "ora": "^8.1.1",
+    "pkg-types": "^1.2.0"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
+    "@repo/lint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "eslint": "^8.57.0",
+    "@types/chalk-animation": "^1.6.3",
+    "@types/figlet": "^1.7.0",
     "@types/fs-extra": "^11.0.4",
+    "@types/gradient-string": "^1.1.6",
     "@types/node": "^20.14.0",
     "tsup": "^8.1.0",
     "tsx": "^4.15.0",

@@ -1,17 +1,22 @@
 ---
 layout: home
+title: Create Express Forge | Modern Express.js CLI
+description: The ultimate CLI for scaffolding production-ready, enterprise-grade Express.js backends with TypeScript, Auth, ORM, and OpenAPI.
 
 hero:
-  name: Express Forge
+  name: Create Express Forge
   text: Build Better Express APIs, Faster.
   tagline: The definitive CLI for scaffolding production-ready, enterprise-grade Express.js backends.
   image:
     src: /logo.svg
-    alt: Express Forge Logo
+    alt: Create Express Forge Logo
   actions:
     - theme: brand
       text: Get Started
       link: /guide/getting-started
+    - theme: alt
+      text: 🆚 v4 vs v3
+      link: /guide/features#comparison-v4-vs-v3
     - theme: alt
       text: ⭐ Star on GitHub
       link: https://github.com/CODE-Y02/express-cli
@@ -34,7 +39,7 @@ features:
     details: Pre-configured JWT or Session-based authentication with best-practice security.
   - icon: 📜
     title: OpenAPI Docs
-    details: Automatically generated Swagger documentation from your Zod schemas and routes.
+    details: Zero-JSDoc documentation generated directly from your Zod schemas and registry.
   - icon: 🔴
     title: Redis Caching
     details: Built-in support for Redis and Node-Cache to boost your API performance.
@@ -55,10 +60,10 @@ features:
 
 ### 🛠 Built With
 
-TypeScript · Express.js · Prisma · Docker · Vitest · Zod · Pino
+TypeScript · Express.js · Prisma · Docker · Vitest · Zod · Biome · Pino
 
 ---
 
 ### ❤️ Support the Project
 
-If Express Forge has saved you time, please consider giving us a star on [GitHub](https://github.com/CODE-Y02/express-cli)! It helps us reach more developers and continue improving the project.
+If Create Express Forge has saved you time, please consider giving us a star on [GitHub](https://github.com/CODE-Y02/express-cli)! It helps us reach more developers and continue improving the project.

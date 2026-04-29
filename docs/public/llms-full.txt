@@ -1,0 +1,714 @@
+# Create Express Forge v4.x (Latest) - Full Documentation
+
+
+
+--- FILE: index.md ---
+
+### 🚀 Key Benefits
+
+- **Zero Configuration**: Sensible defaults that work out of the box.
+- **Enterprise Patterns**: Modular architecture that grows with your team.
+- **Developer Experience**: Auto-reloading, linting, and formatting pre-configured.
+- **Security First**: Best practices for CORS, rate limiting, and environment management.
+
+### 🛠 Built With
+
+TypeScript · Express.js · Prisma · Docker · Vitest · Zod · Biome · Pino
+
+---
+
+### ❤️ Support the Project
+
+If Create Express Forge has saved you time, please consider giving us a star on [GitHub](https://github.com/CODE-Y02/express-cli)! It helps us reach more developers and continue improving the project.
+
+
+--- FILE: guide/architecture.md ---
+
+# Architecture Patterns
+
+Create Express Forge supports two main architecture patterns to fit your project's needs. Choosing the right one is crucial for long-term maintainability.
+
+## 📦 Modular Architecture (Recommended)
+
+This is the default and recommended pattern for medium to large applications. It organizes code by **features** (modules) rather than technical roles (controllers, models).
+
+### Why choose Modular?
+- **Scalability**: Each module is self-contained, making it easier to manage as the app grows.
+- **Isolation**: Changes to one feature are less likely to break another.
+- **Team-Friendly**: Different developers can work on different modules without merge conflicts.
+
+### Structure:
+```text
+src/
+  modules/
+    users/
+      users.controller.ts  # Request handling
+      users.service.ts     # Business logic
+      users.routes.ts      # Route definitions
+      users.schema.ts      # Validation schemas
+    products/
+      ...
+```
+
+---
+
+## 🏛 MVC Architecture
+
+A classic Model-View-Controller pattern. Best for smaller projects or those who prefer a traditional separation of concerns based on technical layers.
+
+### Why choose MVC?
+- **Familiarity**: Most developers are familiar with this pattern from frameworks like Rails or Django.
+- **Simplicity**: For very small apps, it might be quicker to navigate.
+
+### Structure:
+```text
+src/
+  controllers/  # All controllers in one place
+  models/       # Database models
+  routes/       # All route definitions
+  services/     # Business logic
+```
+
+## 🏷️ Path Aliases (@/)
+
+Regardless of the architecture you choose, Create Express Forge pre-configures **Path Aliases**. This means you can use absolute imports from the `src` directory instead of messy relative paths.
+
+**Instead of this:**
+```typescript
+import { User } from '../../../models/user.js';
+```
+
+**You do this:**
+```typescript
+import { User } from '@/models/user.js';
+```
+
+This ensures that moving files around won't break your imports.
+
+## Which one should I use?
+
+If you are building a production API that you expect to grow over time, **Modular Architecture** is almost always the better choice. It prevents the "Fat Controller" and "Fat Model" syndromes by keeping related logic close together.
+
+
+--- FILE: guide/auth.md ---
+
+# Authentication
+
+Create Express Forge provides two battle-tested authentication strategies: **JWT** (JSON Web Tokens) and **Sessions**.
+
+## Strategies
+
+### 🔐 JWT (Stateless)
+The modern standard for web APIs. Highly scalable and perfect for mobile apps and SPAs.
+- **Middleware**: `src/middleware/auth.ts`
+- **Storage Options**:
+  - **🍪 Cookie**: More secure against XSS. Uses `httpOnly` and `secure` flags.
+  - **📨 Header**: Standard `Authorization: Bearer <token>`. Recommended for mobile apps.
+- **Config**: Set `JWT_SECRET` and `JWT_EXPIRES_IN` in your `.env`.
+
+### 🍪 Session (Stateful)
+Traditional cookie-based authentication. Excellent for server-side rendered apps or when you need built-in session management.
+- **Middleware**: `src/middleware/auth.ts`
+- **Config**: Set `SESSION_SECRET` in your `.env`.
+
+## Using the Auth Middleware
+
+To protect a route, simply add the `auth` middleware to your route definition.
+
+```typescript
+import { auth } from '../middleware/auth.js';
+import { todosController } from '../modules/todos/todos.controller.js';
+
+// Protected route
+router.get('/', auth, todosController.getTodos);
+```
+
+## Accessing the User
+
+Once a user is authenticated, their information is attached to the `req.user` object (for JWT) or `req.session.user` (for Sessions).
+
+```typescript
+export const getProfile = (req: Request, res: Response) => {
+  const user = req.user; // For JWT
+  return ApiResponse.success(res, user);
+};
+```
+
+## Security Best Practices
+1.  **Secret Management**: Never commit your `JWT_SECRET` or `SESSION_SECRET` to version control. Use `.env` files.
+2.  **HTTPS**: Always serve your API over HTTPS in production to protect tokens and session cookies.
+3.  **HTTP-Only Cookies**: If using sessions, Create Express Forge pre-configures cookies to be `httpOnly` to prevent XSS attacks.
+
+
+--- FILE: guide/caching.md ---
+
+# Caching
+
+Create Express Forge provides a flexible caching layer to boost your API performance and reduce database load. You can choose between **Redis** (distributed) or **Node-Cache** (in-memory) during the scaffolding process.
+
+## Supported Drivers
+
+### 🔴 Redis
+Recommended for production environments and distributed systems where multiple server instances need to share a cache.
+- **Requirement**: A running Redis instance.
+- **Config**: Set `REDIS_URL` in your `.env` file.
+
+### 💾 Node-Cache
+An in-memory caching solution that requires zero external dependencies. Perfect for simple applications or single-server setups.
+- **Requirement**: None.
+- **Config**: Automatic.
+
+## Usage
+
+The caching logic is encapsulated in `src/cache/index.ts`. It provides a unified interface regardless of the driver you chose.
+
+### Getting a Value
+```typescript
+import { cache } from '../cache/index.js';
+
+const user = await cache.get('user:123');
+if (user) {
+  return JSON.parse(user);
+}
+```
+
+### Setting a Value
+You can optionally set a Time-To-Live (TTL) in seconds.
+```typescript
+import { cache } from '../cache/index.js';
+
+// Cache for 1 hour (3600 seconds)
+await cache.set('user:123', JSON.stringify(userData), 3600);
+```
+
+### Deleting a Value
+```typescript
+import { cache } from '../cache/index.js';
+
+await cache.del('user:123');
+```
+
+## Best Practices
+1.  **Cache Invalidation**: Always delete or update the cache when the underlying data in the database changes.
+2.  **Serialization**: Since Redis only stores strings, ensure you `JSON.stringify()` your objects before setting and `JSON.parse()` when getting.
+3.  **Pro Fail-Fast**: In production, Create Express Forge strictly validates Redis connectivity on startup. If Redis is down, the app fails early to prevent inconsistent states. In development, it provides a clear warning and continues.
+
+
+--- FILE: guide/deployment.md ---
+
+# Deployment
+
+Create Express Forge provides production-ready configurations to help you ship your API with confidence.
+
+## 🐳 Docker Deployment (Recommended)
+
+The easiest way to deploy is using the provided multi-stage `Dockerfile`.
+
+### Build Image
+```bash
+docker build -t my-express-api .
+```
+
+### Run Container
+```bash
+docker run -p 3000:3000 --env-file .env my-express-api
+```
+
+### Why Multi-stage?
+Our Dockerfile uses multi-stage builds to:
+1. **Reduce Image Size**: The final image only contains the compiled JavaScript and production dependencies.
+2. **Security**: Source code and build tools are not included in the final production image.
+
+## ☁️ Cloud Platforms
+
+### Railway / Render / Fly.io
+Most modern PaaS platforms will automatically detect the `Dockerfile` or the `start` script in `package.json`.
+
+1. Connect your GitHub repository.
+2. Configure your environment variables (copy from `.env`).
+3. Set the build command to `npm run build` (if not using Docker).
+   > **Note for Prisma users**: The generated `package.json` includes a `postinstall: "prisma generate"` script, which ensures your Prisma client is generated automatically before the build step on most PaaS platforms.
+4. Set the start command to `npm start`.
+
+## 🛡️ Production Checklist
+
+Before going live, ensure:
+- [ ] **Environment Variables**: `NODE_ENV` is set to `production`.
+- [ ] **Database**: Migrations have been run on the production database.
+- [ ] **Logging**: Log level is set appropriately (e.g., `info` or `error`).
+- [ ] **Security**: CORS is restricted to your frontend domain.
+- [ ] **Rate Limiting**: Configured for your production traffic.
+
+
+--- FILE: guide/features.md ---
+
+# Core Features
+
+Create Express Forge comes packed with everything you need to build robust APIs.
+
+## 🛡️ TypeScript First
+Type safety is at the core of Create Express Forge. Every scaffolded project includes:
+- Strict TypeScript configuration.
+- Path aliases (e.g., `@/config/env`).
+- Type-safe environment variables via **Zod**.
+- Automated scaffolding with your choice of **npm**, **pnpm**, **yarn**, or **bun**.
+
+## 🔐 Flexible Authentication
+Scaffold a complete authentication system with a single choice:
+- **JWT Authentication**: Choose between **HttpOnly Cookies** (recommended for web) or **Bearer Headers** (recommended for mobile/API clients).
+- **Session Auth**: Battle-tested session management for stateful applications.
+- **Protected Routes**: Every boilerplate includes a protected resource showing you exactly how to use the auth middleware.
+
+## 💾 Database Integration
+Choose your favorite ORM and get started instantly:
+- **Prisma**: Modern ORM with auto-generated client and type-safe queries.
+- **Sequelize**: The most popular traditional ORM for Node.js.
+- **Migrations**: Pre-configured scripts to handle database schema changes.
+
+## 🧪 Testing Suite
+Don't ship broken code. Create Express Forge sets up a complete testing environment:
+- **Vitest/Jest**: Choose your favorite test runner.
+- **Supertest**: For high-level API integration tests.
+- **Example Tests**: Every scaffolded project includes example unit and integration tests.
+
+## 🐳 Docker Support
+Ship to production with confidence:
+- **Multi-stage Build**: Optimized Dockerfiles for smaller production images.
+- **Docker Compose**: Includes a `docker-compose.yml` with a database setup for local development.
+
+## 🔐 Security Best Practices
+Stay secure by default with pre-configured industry standards:
+- **Helmet**: Automatically sets security-related HTTP headers to protect against common vulnerabilities.
+- **CORS**: Flexible Cross-Origin Resource Sharing configuration.
+- **Rate Limiting**: Integrated `express-rate-limit` to prevent brute-force attacks and DDoS.
+- **Dotenv & Zod**: Every environment variable is validated on startup. If a variable is missing or malformed, the app fails fast with a clear error message.
+
+## 📝 Logging & Monitoring
+- **Pino/Winston**: High-performance, structured logging. Pino is used by default for its extreme speed and JSON output, which is perfect for log aggregators like ELK or Datadog.
+- **Pro Fail-Fast**: In production, the app strictly validates database and Redis connections on startup. If a dependency is down, the app fails early to prevent inconsistent states. In development, it provides clear warnings.
+- **Health Checks**: A standard `/api/v1/health` endpoint is included, providing uptime, memory usage, and database connectivity status.
+
+## 📜 OpenAPI Documentation
+Never let your documentation get out of sync:
+- **Swagger UI / Scalar**: Beautiful, integrated UI to explore and test your API endpoints directly from the browser.
+- **Zero-JSDoc Spec**: Documentation is generated directly from your **Zod schemas** and a centralized registry. No more clunky JSDoc comments in your controllers!
+- **Type-Safe Documentation**: Your runtime validation and your API documentation are always 100% in sync.
+
+## ⚡ Modern Tooling
+- **Biome**: Replaces ESLint and Prettier for 20x faster linting and formatting.
+- **Import Aliases**: Pre-configured `@/` paths for clean, absolute imports.
+- **ESM Native**: Built from the ground up for modern Node.js and ECMAScript Modules.
+
+## 🧱 Graceful Shutdown
+Every Create Express Forge project handles `SIGTERM` and `SIGINT` signals correctly. This ensures that:
+1. No new requests are accepted.
+2. Existing requests are finished.
+3. Database connections are closed cleanly.
+4. The process exits without data corruption.
+
+## 🛠️ Error Handling & Responses
+Create Express Forge enforces a consistent communication pattern between your API and clients.
+
+### Centralized Error Handling
+A global error middleware is the "safety net" for your application. It catches all errors and transforms them into structured JSON responses, handling `Zod` validation errors and custom `ApiError` instances automatically.
+
+### Custom `ApiError` Class
+Stop throwing generic strings. Use the built-in `ApiError` class to provide context, status codes, and operational flags:
+- `ApiError.notFound('User not found')`
+- `ApiError.unauthorized()`
+- `ApiError.badRequest('Invalid input', validationErrors)`
+
+### Standardized `ApiResponse`
+Ensure your frontend team always knows what to expect. Every success response follows a predictable schema:
+```json
+{
+  "success": true,
+  "message": "Operation successful",
+  "data": { ... }
+}
+```
+
+### Async Error Wrapper
+The provided `asyncHandler` utility eliminates the need for `try-catch` blocks in your controllers, automatically forwarding any promise rejections to the global error handler.
+
+## 🆚 Comparison: v4 vs v3
+
+| Feature | v3.x (Legacy) | v4.x (Latest) |
+| :--- | :--- | :--- |
+| **OpenAPI Docs** | JSDoc-based (`swagger-jsdoc`) | **Zero-JSDoc** (via Zod schemas) |
+| **Linting & Formatting** | ESLint + Prettier | **Biome** (20x faster) |
+| **Path Aliases** | Not supported by default | **Native Support** (`@/` aliases) |
+| **CLI Flexibility** | Only new directories | **Scaffold in `.`** supported |
+| **Scaffolding Speed** | Standard | **Ultra-Fast** (Refactored logic) |
+| **Reliability** | Standard startup | **Pro Fail-Fast** (DB/Redis checks) |
+| **Imports** | Relative only (`../../`) | **Automated Alias resolution** |
+| **Architecture** | Basic Modular/MVC | **Hardened Structures** |
+| **Deployment** | Basic Dockerfiles | **Optimized Multi-stage builds** |
+
+
+--- FILE: guide/getting-started.md ---
+
+# Getting Started
+ 
+Create Express Forge is designed to get you up and running with a production-grade Express backend in seconds.
+
+## Quick Start
+
+The fastest way to create a new project is using `npx`. You don't even need to install the CLI globally!
+
+```bash
+npx create-express-forge@latest [project-name]
+```
+
+### Instant Scaffolding
+
+If you want to skip the prompts and use the recommended defaults, use the `--yes` flag:
+
+```bash
+npx create-express-forge@latest my-api --yes
+```
+
+> [!TIP]
+> You can scaffold a project in your **current directory** by using a period (`.`):
+> `npx create-express-forge@latest .`
+
+
+## Step-by-Step Guide
+
+### 1. Initialize Project
+Run the command and follow the interactive prompts. You'll be asked to:
+- Give your project a **name**.
+- Select your preferred **package manager** (npm, pnpm, yarn).
+- Choose an **architecture** (Modular or MVC).
+- Select an **ORM** (Prisma, Sequelize, or none).
+- Choose a **Testing Framework** (Vitest or Jest).
+
+### 2. Enter Directory
+```bash
+cd my-awesome-api
+```
+
+### 3. Start Development
+```bash
+npm run dev
+```
+
+Your API will now be running at `http://localhost:3000` with hot-reloading enabled.
+
+## Next Steps
+
+- Explore the [Architecture Patterns](./architecture) to understand how your code is organized.
+- Check out the [Core Features](./features) to see what's included out of the box.
+- Configure your environment variables in the `.env` file.
+
+
+--- FILE: guide/openapi.md ---
+
+# API Documentation (OpenAPI)
+ 
+Create Express Forge uses `@asteasolutions/zod-to-openapi` to provide interactive, type-safe documentation for your API. This ensures that your runtime validation and your API documentation are always in sync.
+ 
+## Getting Started
+ 
+If you enabled OpenAPI during scaffolding, your documentation is available at:
+ 
+- **Interactive UI**: `http://localhost:3000/api-docs`
+- **OpenAPI Spec**: `http://localhost:3000/api-docs.json` (Raw JSON)
+ 
+> [!TIP]
+> On server startup, the CLI automatically logs the documentation URL for easy access.
+ 
+## Zero-JSDoc Documentation
+ 
+Unlike traditional Express apps that rely on clunky JSDoc comments (`@openapi`), Create Express Forge uses your **Zod schemas** to generate the OpenAPI specification. This makes your documentation:
+1. **DRY (Don't Repeat Yourself)**: Define your schema once, use it for validation and documentation.
+2. **Type-Safe**: Any changes to your Zod schemas are automatically reflected in the Swagger UI.
+3. **Clean**: Your controller files stay free of giant comment blocks.
+ 
+## How it Works
+ 
+### 1. The Registry
+A centralized registry is located at `src/docs/registry.ts`. This registry collects all your path and component definitions.
+ 
+### 2. Documenting a Path
+Paths are registered directly in your `schema.ts` files. This keeps the documentation close to the validation logic.
+ 
+```typescript
+import { z } from 'zod';
+import { registry } from '@/docs/registry.js';
+ 
+// Define your schema
+export const UserSchema = registry.register('User', z.object({
+  id: z.string().uuid(),
+  name: z.string(),
+}));
+ 
+// Register the path
+registry.registerPath({
+  method: 'get',
+  path: '/users',
+  summary: 'Get all users',
+  responses: {
+    200: {
+      description: 'List of users',
+      content: {
+        'application/json': {
+          schema: z.array(UserSchema),
+        },
+      },
+    },
+  },
+});
+```
+ 
+### 3. Setting Up Swagger
+The `setupSwagger` function in `src/docs/swagger.ts` generates the final OpenAPI document from the registry and attaches the Swagger UI to your Express app.
+ 
+## Benefits
+- **Live Testing**: Use the "Try it out" button to make real requests to your development server.
+- **Auto-Sync**: Your documentation is built from your code, ensuring it never gets stale.
+- **Standardized**: Uses the OpenAPI 3.0 specification, compatible with Postman, Insomnia, and code generators.
+
+
+--- FILE: guide/structure.md ---
+
+# Project Structure
+
+Create Express Forge scaffolds a clean, professional directory structure. Depending on your chosen architecture, the structure will vary slightly.
+
+## 📦 Modular Architecture
+
+This structure is organized by **features**. Each module is self-contained.
+
+```text
+.
+├── src/
+│   ├── modules/          # Feature modules
+│   │   └── users/        # Example module
+│   │       ├── users.controller.ts
+│   │       ├── users.service.ts
+│   │       ├── users.routes.ts
+│   │       └── users.schema.ts
+│   ├── middleware/       # Global middleware
+│   ├── utils/            # Shared utilities (ApiResponse, etc.)
+│   ├── docs/             # OpenAPI registry and swagger setup
+│   ├── config/           # App configuration
+│   └── app.ts            # App initialization
+├── prisma/               # Database schema (if Prisma chosen)
+├── src/__tests__/        # Integration and unit tests
+├── .env                  # Environment variables
+└── package.json
+```
+
+## 🏛 MVC Architecture
+
+A traditional technical-layer separation.
+
+```text
+.
+├── src/
+│   ├── controllers/      # Route handlers
+│   ├── models/           # Data models
+│   ├── services/         # Business logic
+│   ├── routes/           # Route definitions
+│   ├── middleware/       # Global middleware
+│   ├── config/
+│   └── app.ts
+├── ...
+```
+
+## Key Files
+
+- **`src/app.ts`**: The entry point where Express is initialized, middleware is registered, and routes are attached.
+- **`src/config/`**: Contains configuration for the database, logger, and environment variables.
+- **`prisma/schema.prisma`**: (Optional) Defines your database models and relationships.
+- **`docker-compose.yml`**: Defines the local development environment (e.g., PostgreSQL/MySQL containers).
+
+
+--- FILE: guide/testing.md ---
+
+# Testing Strategy
+
+Create Express Forge encourages a test-driven approach to development. We provide a pre-configured testing environment using either **Vitest** (recommended for speed) or **Jest**.
+
+## 🧪 Types of Tests
+
+### Unit Tests
+Focused on testing individual functions or services in isolation.
+- **Location**: `src/modules/**/__tests__/*.unit.spec.ts`
+- **Focus**: Business logic, utility functions, validation.
+
+### Integration Tests
+Testing the full API flow, including database interactions.
+- **Location**: `tests/*.int.spec.ts`
+- **Focus**: HTTP status codes, API responses, database persistence.
+
+## 🚀 Running Tests
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Generate coverage report
+npm run test:coverage
+```
+
+## 🛠 Testing Tools
+
+- **Supertest**: Used for making HTTP requests to your app without starting a real server.
+- **Prisma Mocking**: (If using Prisma) We provide patterns for mocking the Prisma client for unit tests.
+- **Test Database**: Integration tests automatically use a separate test database defined in `.env.test`.
+
+## Example Integration Test
+
+```typescript
+import request from 'supertest';
+import { app } from '../src/app';
+
+describe('GET /health', () => {
+  it('should return 200 OK', async () => {
+    const response = await request(app).get('/health');
+    expect(response.status).toBe(200);
+    expect(response.body.status).toBe('ok');
+  });
+});
+```
+ 
+---
+
+## 🛠 Contributing: CLI Smoke Testing
+
+If you are contributing to the `Create Express Forge` CLI itself, you should run the automated smoke test to verify your changes. This test scaffolds a project, runs a full TypeScript type-check, and builds the resulting app.
+
+```bash
+cd packages/Create Express Forge
+pnpm run test:smoke
+```
+
+
+--- FILE: guide/troubleshooting.md ---
+
+# Troubleshooting
+
+Common issues and how to resolve them when using Create Express Forge.
+
+## 💾 Database Issues
+
+### Prisma migration failed
+**Issue**: `prisma migrate dev` fails with a connection error.
+**Solution**: 
+1. Ensure your database container is running: `docker compose up -d`.
+2. Check your `DATABASE_URL` in the `.env` file. If running locally (not in Docker), use `localhost` instead of the service name.
+3. Ensure the database user has sufficient permissions.
+
+### Sequelize connection error
+**Issue**: `Unable to connect to the database`.
+**Solution**: Check the `dialect` and `port` in your `.env` file. Ensure the database service is reachable from your host machine.
+
+## 🐳 Docker Issues
+
+### Permission Denied
+**Issue**: Error when running Docker commands.
+**Solution**: Run the commands with `sudo` or add your user to the `docker` group.
+
+### Port already in use
+**Issue**: `Bind for 0.0.0.0:3000 failed: port is already allocated`.
+**Solution**: Another process is using port 3000. You can change the port in your `.env` file or kill the existing process.
+
+## 🚀 Runtime Issues
+
+### Environment variables are missing
+**Issue**: Zod validation error on startup.
+**Solution**: Create Express Forge validates your `.env` on startup. Ensure all required variables listed in `src/config/index.ts` are present in your `.env` file.
+
+### Modules not found (Path Aliases)
+**Issue**: TypeScript can't find modules starting with `@`.
+**Solution**: This is usually handled by `tsconfig-paths`. Ensure you are starting the app with `npm run dev`. If you've added new modules, you might need to restart the dev server.
+
+## 🧪 Testing Issues
+
+### Tests hanging
+**Issue**: Tests don't exit after completion.
+**Solution**: Ensure you are closing your database connections and server in an `afterAll` hook. Create Express Forge handles this by default in the generated boilerplate.
+
+---
+
+Still having trouble? [Open an issue on GitHub](https://github.com/CODE-Y02/express-cli/issues)
+
+
+--- FILE: reference/cli-options.md ---
+
+# CLI Reference
+
+The `Create Express Forge` command can be used with various flags to bypass the interactive prompts and speed up your workflow.
+
+## Usage
+
+```bash
+npx create-express-forge [project-name] [options]
+```
+
+## Options
+
+| Flag | Description | Values |
+|------|-------------|--------|
+| `--help` | Show help information | - |
+| `--version` | Show current version | - |
+| `--pattern` | Architecture pattern | `modular`, `mvc` |
+| `--orm` | ORM to use | `prisma`, `sequelize`, `none` |
+| `--db` | Database type | `postgres`, `mysql`, `sqlite` |
+| `--logger` | Logging library | `winston`, `pino` |
+| `--test` | Testing framework | `vitest`, `jest` |
+| `--docker` | Include Docker setup | `true`, `false` |
+| `--install` | Auto-install dependencies | `true`, `false` |
+
+## Example
+
+Scaffold a modular project with Prisma and Vitest:
+
+```bash
+npx create-express-forge my-api --pattern modular --orm prisma --test vitest --install true
+```
+
+
+--- FILE: reference/config.md ---
+
+# Configuration Reference
+
+Every project created with Create Express Forge uses a centralized configuration system powered by environment variables.
+
+## 🌍 Environment Variables
+
+Create a `.env` file in the root of your project.
+
+| Variable | Description | Default | Required |
+|----------|-------------|---------|----------|
+| `PORT` | The port the server listens on | `3000` | No |
+| `NODE_ENV` | `development`, `production`, `test` | `development` | No |
+| `DATABASE_URL` | Connection string for your DB | - | Yes* |
+| `LOG_LEVEL` | `fatal`, `error`, `warn`, `info`, `debug`, `trace` | `debug` | No |
+| `CORS_ORIGIN` | Allowed origins (comma separated) | `*` | No |
+| `RATE_LIMIT_MAX` | Max requests per window | `100` | No |
+| `RATE_LIMIT_WINDOW` | Window size in minutes | `15` | No |
+
+*\*Required if an ORM is selected.*
+
+## ⚙️ App Configuration
+
+Configuration is managed in `src/config/index.ts`. This file:
+1. Validates environment variables using **Zod**.
+2. Exports a typed configuration object.
+3. Provides default values for optional variables.
+
+## 💾 Database Config
+
+If you chose Prisma, your configuration is primarily in `prisma/schema.prisma`. 
+
+For Sequelize, configuration is found in `src/config/database.ts`, which handles the connection pooling and dialect-specific settings.
+
+## 📝 Logger Config
+
+Logging configuration is found in `src/config/logger.ts`. You can toggle between `pretty-print` (for development) and `JSON` (for production) logging here.

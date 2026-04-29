@@ -5,7 +5,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+    "format": "biome format --write .",
     "check-types": "turbo run check-types",
     "test": "turbo run test",
     "changeset": "changeset",
@@ -14,13 +14,14 @@
     "docs:dev": "cd docs && pnpm run dev",
     "docs:build": "cd docs && pnpm run build",
     "docs:preview": "cd docs && pnpm run preview",
+    "mcp:dev": "pnpm --filter @create-express-forge/mcp dev",
+    "mcp:start": "pnpm --filter @create-express-forge/mcp start",
     "prepare": "husky"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.4.13",
     "@changesets/cli": "^2.27.7",
-    "eslint": "^8.57.0",
     "husky": "^9.1.7",
-    "prettier": "^3.3.3",
     "turbo": "^2.0.9",
     "typescript": "5.5.3"
   },

@@ -1,0 +1,20 @@
+import type { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
+import { sendSuccess } from '../../utils/ApiResponse.js';
+import { env } from '../../config/env.js';
+
+export const login = async (req: Request, res: Response) => {
+  // Demo logic: accept any valid email/password
+  const token = jwt.sign(
+    { email: req.body.email }, 
+    env.JWT_SECRET, 
+    { expiresIn: env.JWT_EXPIRES_IN as jwt.SignOptions['expiresIn'] }
+  );
+  
+<% if (it.jwtStorage === 'cookie') { %>
+  res.cookie('token', token, { httpOnly: true, secure: env.NODE_ENV === 'production' });
+  return sendSuccess(res, { token }, 'Logged in successfully');
+<% } else { %>
+  return sendSuccess(res, { token }, 'Logged in successfully');
+<% } %>
+};

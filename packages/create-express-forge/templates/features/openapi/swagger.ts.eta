@@ -1,0 +1,35 @@
+import { OpenApiGeneratorV3 } from '@asteasolutions/zod-to-openapi';
+import swaggerUi from 'swagger-ui-express';
+import type { Express } from 'express';
+import { registry } from './registry.js';
+
+export function setupSwagger(app: Express) {
+<% if (it.auth === 'jwt') { %>
+  registry.registerComponent('securitySchemes', 'bearerAuth', {
+    type: 'http',
+    scheme: 'bearer',
+    bearerFormat: 'JWT',
+  });
+<% } %>
+
+  const generator = new OpenApiGeneratorV3(registry.definitions);
+  
+  const swaggerSpec = generator.generateDocument({
+    openapi: '3.0.0',
+    info: {
+      title: '<%= it.projectName %> API',
+      version: '0.1.0',
+      description: 'API documentation for <%= it.projectName %>',
+    },
+    servers: [{ url: '/api/v1' }],
+<% if (it.auth === 'jwt') { %>
+    security: [{ bearerAuth: [] }]
+<% } %>
+  });
+
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  app.get('/api-docs.json', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swaggerSpec);
+  });
+}
