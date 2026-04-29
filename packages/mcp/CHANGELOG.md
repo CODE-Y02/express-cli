@@ -1,5 +1,11 @@
 # @create-express-forge/mcp
 
+## 1.0.2
+
+### Patch Changes
+
+- 516d219: Updated documentation domain to create-express-forge.js.org and synchronized NPM metadata across all packages. Hardened AI prompts and injected strict v4 guidelines into LLM context files.
+
 ## 1.0.1
 
 ### Patch Changes

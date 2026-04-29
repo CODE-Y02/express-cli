@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.1.5
+
+### Patch Changes
+
+- 516d219: Updated documentation domain to create-express-forge.js.org and synchronized NPM metadata across all packages. Hardened AI prompts and injected strict v4 guidelines into LLM context files.
+
 ## 4.1.4
 
 ### Patch Changes
