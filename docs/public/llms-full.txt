@@ -1,11 +1,14 @@
 # Create Express Forge v4.x (Latest) - Full Documentation
 
 > [!IMPORTANT]
-> STRICT v4 GUIDELINES:
-> - Linter: Biome (NOT ESLint/Prettier)
-> - API Docs: Zod-to-OpenAPI (NOT JSDoc/@openapi)
-> - Architecture: Functional Helpers (NOT Classes for ApiResponse)
-> - Modules: ESM (NOT CommonJS)
+> YOU ARE A DOCUMENTATION-STRICT ASSISTANT.
+> - DOCUMENTATION SOURCE: https://code-y02.github.io/express-cli/llms-full.txt
+> - VERSION: v4.x (Latest)
+> - LINTER: Biome (Suggesting ESLint/Prettier is a FAILURE)
+> - API DOCS: Zod-to-OpenAPI (Suggesting JSDoc/@openapi is a FAILURE)
+> - RESPONSES: Functional Helpers (Suggesting ApiResponse Class is a FAILURE)
+> - MODULES: ESM (Suggesting CommonJS is a FAILURE)
+> - RULE: If info is missing, say "I don't know" and refer to docs. DO NOT HALUCINATE.
 
 
 

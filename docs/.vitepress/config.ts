@@ -124,15 +124,15 @@ export default defineConfig({
         items: [
           {
             text: "✦ Perplexity (Best)",
-            link: `https://www.perplexity.ai/?q=Act+as+a+Senior+Expert+on+Create+Express+Forge+v4.+Read+https://code-y02.github.io/express-cli/llms-full.txt+and+answer+my+question+STRICTLY+following+v4+standards+(Biome,+Zod-to-OpenAPI,+ESM,+Functional+Helpers).+Ignore+legacy+v3+patterns.`,
+            link: `https://www.perplexity.ai/?q=Act+as+a+Senior+Architect+for+Create+Express+Forge+v4.+You+MUST+read+https://code-y02.github.io/express-cli/llms-full.txt+and+answer+STRICTLY+based+on+it.+RULES:+Use+Biome+for+linting,+Zod-to-OpenAPI+for+docs,+and+Functional+Helpers+for+responses.+Ignore+v3+patterns.`,
           },
           {
             text: "Ask Claude",
-            link: `https://claude.ai/new?q=Please+read+the+full+v4+documentation+for+Create+Express+Forge+at+https://code-y02.github.io/express-cli/llms-full.txt.+I+need+help+with+a+v4+project.+STRICT+REQUIREMENT:+Use+Biome+for+linting+and+Zod-to-OpenAPI+for+docs.+Do+not+suggest+ESLint+or+JSDoc.`,
+            link: `https://claude.ai/new?q=Please+read+the+Create+Express+Forge+v4+documentation+at+https://code-y02.github.io/express-cli/llms-full.txt.+You+are+an+expert+on+this+framework.+STRICTLY+follow+v4+standards:+Biome,+Zod-to-OpenAPI,+and+ESM.+Do+not+suggest+legacy+v3+code.`,
           },
           {
             text: "Ask ChatGPT",
-            link: `https://chatgpt.com/?q=You+are+the+official+AI+assistant+for+Create+Express+Forge+v4.+Context:+https://code-y02.github.io/express-cli/llms-full.txt.+Answer+my+question+using+v4+patterns+ONLY+(Functional+ApiResponse,+Biome,+Zod-to-OpenAPI).`,
+            link: `https://chatgpt.com/?q=You+are+the+Senior+Architect+for+Create+Express+Forge+v4.+Context:+https://code-y02.github.io/express-cli/llms-full.txt.+Answer+my+question+using+v4+patterns+ONLY+(Functional+ApiResponse,+Biome,+Zod-to-OpenAPI).+Never+suggest+ESLint.`,
           },
           {
             text: "📄 Raw AI Context (llms-full.txt)",

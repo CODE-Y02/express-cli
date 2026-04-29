@@ -57,5 +57,5 @@ A machine-readable manifest that describes the project's features, available com
 You can customize the AI behavior by modifying the `ai.json` file in your project root or by updating the MCP server settings.
 
 ::: tip PRO TIP
-If you are using Cursor, add `https://expressforge.com/llms.txt` to your `@docs` to give the AI agent full knowledge of the framework!
+If you are using Cursor, add `https://code-y02.github.io/express-cli/llms.txt` to your `@docs` to give the AI agent full knowledge of the framework!
 :::
