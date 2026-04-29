@@ -3,7 +3,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 
-const DOCS_BASE = "https://code-y02.github.io/express-cli";
+const DOCS_BASE = "https://create-express-forge.js.org";
 
 const server = new McpServer({
   name: "@create-express-forge/mcp",

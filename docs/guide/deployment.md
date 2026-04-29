@@ -4,7 +4,7 @@ description: "Deploy your Express.js API with confidence. Learn how to use multi
 head:
   - - link
     - rel: canonical
-      href: https://code-y02.github.io/express-cli/guide/deployment
+      href: https://create-express-forge.js.org/guide/deployment
   - - meta
     - property: og:title
       content: "Production Deployment for Express.js | Create Express Forge"
@@ -13,7 +13,7 @@ head:
       content: "Step-by-step deployment guide for Create Express Forge projects. Docker, CI/CD, and production optimization."
   - - meta
     - property: og:url
-      content: https://code-y02.github.io/express-cli/guide/deployment
+      content: https://create-express-forge.js.org/guide/deployment
 ---
 
 # Deployment

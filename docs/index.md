@@ -5,7 +5,7 @@ description: "The ultimate CLI for scaffolding production-ready, enterprise-grad
 head:
   - - link
     - rel: canonical
-      href: https://code-y02.github.io/express-cli/
+      href: https://create-express-forge.js.org/
   - - meta
     - property: og:title
       content: "Create Express Forge | Build Better Express APIs, Faster."
@@ -14,7 +14,7 @@ head:
       content: "Scaffold production-ready Express.js TypeScript backends in seconds. Built-in Auth, ORM, Caching, and OpenAPI documentation."
   - - meta
     - property: og:url
-      content: https://code-y02.github.io/express-cli/
+      content: https://create-express-forge.js.org/
 
 hero:
   name: Create Express Forge

@@ -4,7 +4,7 @@ description: "Boost your API performance with built-in caching. Learn how to con
 head:
   - - link
     - rel: canonical
-      href: https://code-y02.github.io/express-cli/guide/caching
+      href: https://create-express-forge.js.org/guide/caching
   - - meta
     - property: og:title
       content: "Redis & In-Memory Caching for Express | Create Express Forge"
@@ -13,7 +13,7 @@ head:
       content: "Performance-first caching strategies for Express.js. Configure Redis or Node-Cache in seconds with Create Express Forge."
   - - meta
     - property: og:url
-      content: https://code-y02.github.io/express-cli/guide/caching
+      content: https://create-express-forge.js.org/guide/caching
 ---
 
 # Caching

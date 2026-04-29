@@ -4,7 +4,7 @@ description: "Choose the right architecture for your Express.js project. Compare
 head:
   - - link
     - rel: canonical
-      href: https://code-y02.github.io/express-cli/guide/architecture
+      href: https://create-express-forge.js.org/guide/architecture
   - - meta
     - property: og:title
       content: "Modular vs MVC Architecture in Express.js | Create Express Forge"
@@ -13,7 +13,7 @@ head:
       content: "Deep dive into the architecture patterns supported by Create Express Forge. Scalable Modular design vs Traditional MVC."
   - - meta
     - property: og:url
-      content: https://code-y02.github.io/express-cli/guide/architecture
+      content: https://create-express-forge.js.org/guide/architecture
 ---
 
 # Architecture Patterns

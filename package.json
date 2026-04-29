@@ -1,6 +1,14 @@
 {
   "name": "express-cli-monorepo",
   "private": true,
+  "homepage": "https://create-express-forge.js.org",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CODE-Y02/express-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/CODE-Y02/express-cli/issues"
+  },
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",

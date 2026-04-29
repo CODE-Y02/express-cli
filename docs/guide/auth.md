@@ -4,7 +4,7 @@ description: "Implement secure authentication in Express.js. Choose between stat
 head:
   - - link
     - rel: canonical
-      href: https://code-y02.github.io/express-cli/guide/auth
+      href: https://create-express-forge.js.org/guide/auth
   - - meta
     - property: og:title
       content: "JWT & Session Auth for Express.js | Create Express Forge"
@@ -13,7 +13,7 @@ head:
       content: "Battle-tested authentication strategies for production Express.js apps. JWT vs Sessions, Cookie security, and Middleware usage."
   - - meta
     - property: og:url
-      content: https://code-y02.github.io/express-cli/guide/auth
+      content: https://create-express-forge.js.org/guide/auth
 ---
 
 # Authentication

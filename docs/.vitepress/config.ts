@@ -2,7 +2,7 @@ import { defineConfig } from "vitepress";
 
 // Detect if we are running in GitHub Actions and set the base path accordingly
 const rawBase = process.env.VITEPRESS_BASE || "/express-cli/";
-const base = rawBase.endsWith("/") ? rawBase : `${rawBase}/`;
+const base = "/";
 
 export default defineConfig({
   title: "Create Express Forge",
@@ -11,11 +11,11 @@ export default defineConfig({
   cleanUrls: true,
   lastUpdated: true,
   sitemap: {
-    hostname: "https://code-y02.github.io/express-cli",
+    hostname: "https://create-express-forge.js.org",
   },
   // Collected during transformHead, consumed in buildEnd
   transformHead(ctx) {
-    const siteUrl = "https://code-y02.github.io/express-cli";
+    const siteUrl = "https://create-express-forge.js.org";
     const slug = ctx.page.replace(/\.md$/, "").replace(/^index$/, "home");
     const title = ctx.pageData.title || ctx.title || "Create Express Forge";
     const description = ctx.pageData.description || ctx.description || "";
@@ -124,19 +124,19 @@ export default defineConfig({
         items: [
           {
             text: "✦ Perplexity (Best)",
-            link: `https://www.perplexity.ai/?q=Act+as+a+Senior+Architect+for+Create+Express+Forge+v4.+You+MUST+read+https://code-y02.github.io/express-cli/llms-full.txt+and+answer+STRICTLY+based+on+it.+RULES:+Use+Biome+for+linting,+Zod-to-OpenAPI+for+docs,+and+Functional+Helpers+for+responses.+Ignore+v3+patterns.`,
+            link: `https://www.perplexity.ai/?q=Read+https://create-express-forge.js.org/llms-full.txt+then+answer+my+question+about+Create+Express+Forge+v4.+STRICTLY+follow+the+patterns+in+the+docs+(Biome,+Zod-to-OpenAPI,+Functional+Helpers).`,
           },
           {
             text: "Ask Claude",
-            link: `https://claude.ai/new?q=Please+read+the+Create+Express+Forge+v4+documentation+at+https://code-y02.github.io/express-cli/llms-full.txt.+You+are+an+expert+on+this+framework.+STRICTLY+follow+v4+standards:+Biome,+Zod-to-OpenAPI,+and+ESM.+Do+not+suggest+legacy+v3+code.`,
+            link: `https://claude.ai/new?q=Read+https://create-express-forge.js.org/llms-full.txt+then+answer+my+question+about+Create+Express+Forge+v4.+I+need+help+with+a+v4+project.+STRICT+REQUIREMENT:+Use+Biome+for+linting+and+Zod-to-OpenAPI.`,
           },
           {
             text: "Ask ChatGPT",
-            link: `https://chatgpt.com/?q=You+are+the+Senior+Architect+for+Create+Express+Forge+v4.+Context:+https://code-y02.github.io/express-cli/llms-full.txt.+Answer+my+question+using+v4+patterns+ONLY+(Functional+ApiResponse,+Biome,+Zod-to-OpenAPI).+Never+suggest+ESLint.`,
+            link: `https://chatgpt.com/?q=Read+https://create-express-forge.js.org/llms-full.txt+then+answer+my+question+about+Create+Express+Forge+v4.+Context:+https://create-express-forge.js.org/llms-full.txt.+Answer+using+v4+patterns+ONLY.`,
           },
           {
             text: "📄 Raw AI Context (llms-full.txt)",
-            link: "https://code-y02.github.io/express-cli/llms-full.txt",
+            link: "https://create-express-forge.js.org/llms-full.txt",
           },
           {
             text: "📘 AI Integration Guide",
