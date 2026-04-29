@@ -1,21 +1,3 @@
----
-title: "Deployment Guide: Docker & Production | Create Express Forge"
-description: "Deploy your Express.js API with confidence. Learn how to use multi-stage Docker builds, environment variables, and production best practices."
-head:
-  - - link
-    - rel: canonical
-      href: https://code-y02.github.io/express-cli/guide/deployment
-  - - meta
-    - property: og:title
-      content: "Production Deployment for Express.js | Create Express Forge"
-  - - meta
-    - property: og:description
-      content: "Step-by-step deployment guide for Create Express Forge projects. Docker, CI/CD, and production optimization."
-  - - meta
-    - property: og:url
-      content: https://code-y02.github.io/express-cli/guide/deployment
----
-
 # Deployment
 
 Create Express Forge provides production-ready configurations to help you ship your API with confidence.

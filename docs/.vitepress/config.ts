@@ -13,48 +13,6 @@ export default defineConfig({
   sitemap: {
     hostname: "https://code-y02.github.io/express-cli",
   },
-  // Collected during transformHead, consumed in buildEnd
-  transformHead(ctx) {
-    const siteUrl = "https://code-y02.github.io/express-cli";
-    const slug = ctx.page.replace(/\.md$/, "").replace(/^index$/, "home");
-    const title = ctx.pageData.title || ctx.title || "Create Express Forge";
-    const description = ctx.pageData.description || ctx.description || "";
-
-    // Store for buildEnd (we'll manually manage the list to avoid build-time issues)
-    const ogImageUrl = `${siteUrl}/og/${slug}.png`;
-    
-    return [
-      ["meta", { property: "og:image", content: ogImageUrl }],
-      ["meta", { name: "twitter:image", content: ogImageUrl }],
-    ];
-  },
-
-  async buildEnd(siteConfig) {
-    console.log('\n🚀 [og-image] Generating dynamic OG images...');
-    
-    // We need to scrape the pages to generate images for them
-    // For simplicity in this environment, we'll import the generator
-    const { generateOgImages } = await import("./og-image.js");
-    
-    // Define the pages we want images for (matching the sidebar and guide)
-    const pages = [
-      { slug: "home", title: "Create Express Forge", description: "Build Better Express APIs, Faster." },
-      { slug: "guide/getting-started", title: "Getting Started", description: "Scaffold your Express.js project in seconds." },
-      { slug: "guide/architecture", title: "Architecture Patterns", description: "Modular vs MVC patterns for Express.js." },
-      { slug: "guide/structure", title: "Project Structure", description: "Understanding the Create Express Forge directory layout." },
-      { slug: "guide/features", title: "Core Features", description: "Explore JWT Auth, ORM integration, and more." },
-      { slug: "guide/auth", title: "Authentication", description: "Secure your API with JWT or Session-based Auth." },
-      { slug: "guide/caching", title: "Caching", description: "Boost performance with Redis or Node-Cache." },
-      { slug: "guide/openapi", title: "API Documentation", description: "Type-safe OpenAPI docs with Zod." },
-      { slug: "guide/ai-integration", title: "AI Integration & MCP", description: "Build AI-Native apps with MCP and LLM context." },
-      { slug: "guide/deployment", title: "Deployment", description: "Production-ready Docker and CI/CD setups." },
-      { slug: "guide/testing", title: "Testing Strategy", description: "Pre-configured Vitest and Jest suites." },
-      { slug: "guide/troubleshooting", title: "Troubleshooting", description: "Common issues and how to resolve them." },
-    ];
-
-    await generateOgImages(siteConfig.outDir, pages);
-    console.log('✅ [og-image] Done.\n');
-  },
 
   head: [
     ["link", { rel: "icon", href: `${base}logo.svg` }],
@@ -75,9 +33,26 @@ export default defineConfig({
         content: "create-express-forge | The Ultimate Express + TypeScript Generator",
       },
     ],
-    ["meta", { property: "og:description", content: "Scaffold production-ready Express.js TypeScript backends in seconds with built-in Auth, ORM, and OpenAPI support." }],
+    [
+      "meta",
+      {
+        property: "og:description",
+        content:
+          "Scaffold production-ready Express.js TypeScript backends in seconds with built-in Auth, ORM, and OpenAPI support.",
+      },
+    ],
+    ["meta", { property: "og:image", content: `${base}og-image.png` }],
     ["meta", { name: "twitter:card", content: "summary_large_image" }],
     ["meta", { name: "twitter:site", content: "@code_y02" }],
+    ["meta", { name: "twitter:title", content: "Create Express Forge" }],
+    [
+      "meta",
+      {
+        name: "twitter:description",
+        content: "⚡ Production-ready Express backends in seconds",
+      },
+    ],
+    ["meta", { name: "twitter:image", content: `${base}og-image.png` }],
     [
       "script",
       { type: "application/ld+json" },
@@ -120,31 +95,6 @@ export default defineConfig({
         ],
       },
       {
-        text: "🤖 Ask AI",
-        items: [
-          {
-            text: "✦ Perplexity (Best)",
-            link: `https://www.perplexity.ai/?q=Act+as+a+Senior+Expert+on+Create+Express+Forge+v4.+Read+https://code-y02.github.io/express-cli/llms-full.txt+and+answer+my+question+STRICTLY+following+v4+standards+(Biome,+Zod-to-OpenAPI,+ESM,+Functional+Helpers).+Ignore+legacy+v3+patterns.`,
-          },
-          {
-            text: "Ask Claude",
-            link: `https://claude.ai/new?q=Please+read+the+full+v4+documentation+for+Create+Express+Forge+at+https://code-y02.github.io/express-cli/llms-full.txt.+I+need+help+with+a+v4+project.+STRICT+REQUIREMENT:+Use+Biome+for+linting+and+Zod-to-OpenAPI+for+docs.+Do+not+suggest+ESLint+or+JSDoc.`,
-          },
-          {
-            text: "Ask ChatGPT",
-            link: `https://chatgpt.com/?q=You+are+the+official+AI+assistant+for+Create+Express+Forge+v4.+Context:+https://code-y02.github.io/express-cli/llms-full.txt.+Answer+my+question+using+v4+patterns+ONLY+(Functional+ApiResponse,+Biome,+Zod-to-OpenAPI).`,
-          },
-          {
-            text: "📄 Raw AI Context (llms-full.txt)",
-            link: "https://code-y02.github.io/express-cli/llms-full.txt",
-          },
-          {
-            text: "📘 AI Integration Guide",
-            link: "/guide/ai-integration",
-          },
-        ],
-      },
-      {
         text: "⭐ Star on GitHub",
         link: "https://github.com/CODE-Y02/express-cli",
       },
@@ -168,7 +118,6 @@ export default defineConfig({
             { text: "Authentication", link: "/guide/auth" },
             { text: "Caching", link: "/guide/caching" },
             { text: "API Documentation", link: "/guide/openapi" },
-            { text: "AI Integration", link: "/guide/ai-integration" },
           ],
         },
         {

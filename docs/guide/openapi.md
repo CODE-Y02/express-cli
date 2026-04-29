@@ -1,19 +1,6 @@
 ---
-title: "API Documentation (OpenAPI) | Create Express Forge"
-description: "Learn how to generate automated, type-safe OpenAPI (Swagger) documentation using Zod schemas with Create Express Forge."
-head:
-  - - link
-    - rel: canonical
-      href: https://code-y02.github.io/express-cli/guide/openapi
-  - - meta
-    - property: og:title
-      content: "Type-Safe OpenAPI Docs for Express.js | Create Express Forge"
-  - - meta
-    - property: og:description
-      content: "Zero-JSDoc documentation for your Express.js API. Sync your Zod schemas with Swagger UI effortlessly."
-  - - meta
-    - property: og:url
-      content: https://code-y02.github.io/express-cli/guide/openapi
+title: API Documentation | Create Express Forge
+description: Learn how to generate automated, type-safe OpenAPI (Swagger) documentation using Zod schemas with Create Express Forge.
 ---
 
 # API Documentation (OpenAPI)

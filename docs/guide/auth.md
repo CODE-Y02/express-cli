@@ -1,21 +1,3 @@
----
-title: "Authentication Strategies: JWT & Sessions | Create Express Forge"
-description: "Implement secure authentication in Express.js. Choose between stateless JWT (Cookies/Headers) or stateful Sessions with pre-configured middleware."
-head:
-  - - link
-    - rel: canonical
-      href: https://code-y02.github.io/express-cli/guide/auth
-  - - meta
-    - property: og:title
-      content: "JWT & Session Auth for Express.js | Create Express Forge"
-  - - meta
-    - property: og:description
-      content: "Battle-tested authentication strategies for production Express.js apps. JWT vs Sessions, Cookie security, and Middleware usage."
-  - - meta
-    - property: og:url
-      content: https://code-y02.github.io/express-cli/guide/auth
----
-
 # Authentication
 
 Create Express Forge provides two battle-tested authentication strategies: **JWT** (JSON Web Tokens) and **Sessions**.
